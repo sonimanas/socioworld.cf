@@ -1,0 +1,24 @@
+<div class="aswb_users">
+    <a style="background-image:url('{{USER avatar}}')" class="user_ava" href="{{LINK @}}{{USER username}}" data-load="?link1=timeline&id={{USER username}}"></a>
+
+    <?php if($data['USER_DATA']->id !== $ask->user->id) {?>
+
+        <?php if(IsUserFollow( $data['USER_DATA']->id , $ask->user->id)) {?>
+            <button title="Follow" class="btn follow btn-default follow-id-{{USER id}}" data-id="{{USER id}}" onclick="FollowSuggestion({{USER id}}, 'default')" style="color: rgb(255, 255, 255); background-color: rgb(12, 166, 120);">
+                <svg class="user hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15,14C12.33,14 7,15.33 7,18V20H23V18C23,15.33 17.67,14 15,14M6,10V7H4V10H1V12H4V15H6V12H9V10M15,12A4,4 0 0,0 19,8A4,4 0 0,0 15,4A4,4 0 0,0 11,8A4,4 0 0,0 15,12Z" /></svg>
+                <svg class="true " version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="45.701px" height="45.7px" viewBox="0 0 45.701 45.7" style="enable-background:new 0 0 45.701 45.7;fill: #ffffff;" xml:space="preserve"> <g> <g> <path d="M20.687,38.332c-2.072,2.072-5.434,2.072-7.505,0L1.554,26.704c-2.072-2.071-2.072-5.433,0-7.504 c2.071-2.072,5.433-2.072,7.505,0l6.928,6.927c0.523,0.522,1.372,0.522,1.896,0L36.642,7.368c2.071-2.072,5.433-2.072,7.505,0 c0.995,0.995,1.554,2.345,1.554,3.752c0,1.407-0.559,2.757-1.554,3.752L20.687,38.332z"></path></g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>
+            </button>
+        <?php }else{ ?>
+            <button title="Follow" class="btn follow btn-default follow-id-{{USER id}}" data-id="{{USER id}}" onclick="FollowSuggestion({{USER id}}, 'default')">
+                <svg class="user" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15,14C12.33,14 7,15.33 7,18V20H23V18C23,15.33 17.67,14 15,14M6,10V7H4V10H1V12H4V15H6V12H9V10M15,12A4,4 0 0,0 19,8A4,4 0 0,0 15,4A4,4 0 0,0 11,8A4,4 0 0,0 15,12Z" /></svg>
+                <svg class="true hidden" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="45.701px" height="45.7px" viewBox="0 0 45.701 45.7" style="enable-background:new 0 0 45.701 45.7;fill: #ffffff;" xml:space="preserve"> <g> <g> <path d="M20.687,38.332c-2.072,2.072-5.434,2.072-7.505,0L1.554,26.704c-2.072-2.071-2.072-5.433,0-7.504 c2.071-2.072,5.433-2.072,7.505,0l6.928,6.927c0.523,0.522,1.372,0.522,1.896,0L36.642,7.368c2.071-2.072,5.433-2.072,7.505,0 c0.995,0.995,1.554,2.345,1.554,3.752c0,1.407-0.559,2.757-1.554,3.752L20.687,38.332z"></path></g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>
+            </button>
+        <?php } ?>
+
+    <?php } ?>
+
+    <div class="user_info">
+        <a href="{{LINK @}}{{USER username}}" data-load="?link1=timeline&id={{USER username}}">{{USER name}}</a>
+        <p>@{{USER username}}</p>
+    </div>
+</div>

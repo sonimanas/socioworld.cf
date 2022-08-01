@@ -1,1 +1,1 @@
-# socioworld.cf
+# socioworld.github.io

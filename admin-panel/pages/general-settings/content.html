@@ -1,0 +1,142 @@
+<div class="container-fluid">
+    <div class="block-header">
+        <h2>Settings > General Settings</h2>
+    </div>
+    <div class="row">
+    <!-- Vertical Layout -->
+        <div class="col-lg-6 col-md-6 ">
+            <div class="card">
+                <div class="header">
+                    <h2>User Settings</h2>
+                </div>
+                <div class="body">
+                    <div class="alert alert-success user-settings-alert"></div>
+                    <form class="user-settings" method="POST">
+                        <label for="user_registration">User Registration</label>
+                        <div class="form-group">
+                            <input type="radio" name="user_registration" id="user_registration-enabled" value="on" <?php echo ($ask->config->user_registration == 'on') ? 'checked': '';?>>
+                            <label for="user_registration-enabled">Enabled</label>
+                            <input type="radio" name="user_registration" id="user_registration-disabled" value="off" <?php echo ($ask->config->user_registration == 'off') ? 'checked': '';?>>
+                            <label for="user_registration-disabled" class="m-l-20">Disabled</label>
+                        </div>
+                        <label for="validation">User E-mail Verification</label>
+                        <div class="form-group">
+                            <input type="radio" name="validation" id="validation-enabled" value="on" <?php echo ($ask->config->validation == 'on') ? 'checked': '';?>>
+                            <label for="validation-enabled">Enabled</label>
+                            <input type="radio" name="validation" id="validation-disabled" value="off" <?php echo ($ask->config->validation == 'off') ? 'checked': '';?>>
+                            <label for="validation-disabled" class="m-l-20">Disabled</label>
+                        </div>
+                        <label for="delete_account">Delete User Account</label>
+                        <div class="form-group">
+                            <input type="radio" name="delete_account" id="delete_account-enabled" value="on" <?php echo ($ask->config->delete_account == 'on') ? 'checked': '';?>>
+                            <label for="delete_account-enabled">Enabled</label>
+                            <input type="radio" name="delete_account" id="delete_account-disabled" value="off" <?php echo ($ask->config->delete_account == 'off') ? 'checked': '';?>>
+                            <label for="delete_account-disabled" class="m-l-20">Disabled</label>
+                        </div>
+			   
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" name="max_post_per_hour" class="form-control" value="{{CONFIG max_post_per_hour}}">
+                                <label class="form-label">How many posts user can post every hour?</label>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" name="max_user_reg_hour" class="form-control" value="{{CONFIG max_user_reg_hour}}">
+                                <label class="form-label">How many users can be registered from same IP within an hour?</label>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" name="post_text_limit" class="form-control" value="{{CONFIG post_text_limit}}">
+                                <label class="form-label">Post text limit.</label>
+                            </div>
+                        </div>
+                       
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" name="nearby_question_distance" class="form-control" value="{{CONFIG nearby_question_distance}}">
+                                <label class="form-label">Near by question search in KM.</label>
+                            </div>
+                        </div>
+                  <!--       <label for="user_registration">Invite Links System</label>
+                        <div class="form-group">
+                             <input type="radio" name="invite_links_system" id="invite_links_system-enabled" value="1" <?php echo ($ask->config->invite_links_system == 1) ? 'checked': '';?>>
+                            <label for="invite_links_system-enabled">Enabled</label>
+                            <input type="radio" name="invite_links_system" id="invite_links_system-disabled" value="0" <?php echo ($ask->config->invite_links_system == 0) ? 'checked': '';?>>
+                            <label for="invite_links_system-disabled" class="m-l-20">Disabled</label>
+                        </div>
+ -->
+                         <label for="login_auth">Two-factor authentication<span class="black" data-toggle="popover" data-trigger="hover" data-content="Send confirmation code to email or to SMS when user logins"><i class="fa fa-question-circle fa-fw"></i></span></label>
+                        <div class="form-group">
+                            <input type="radio" name="two_factor" id="two_factor-enabled" value="1" <?php echo ($ask->config->two_factor == 1) ? 'checked': '';?>>
+                            <label for="two_factor-enabled">Enabled</label>
+                            <input type="radio" name="two_factor" id="two_factor-disabled" value="0" <?php echo ($ask->config->two_factor == 0) ? 'checked': '';?>>
+                            <label for="two_factor-disabled" class="m-l-20">Disabled</label>
+                        </div>
+
+                         <label for="login_auth">Send Two-factor authentication code to</label>
+                        <div class="form-group">
+                            <input type="radio" name="two_factor_type" id="two_factor_type-email" value="email" <?php echo ($ask->config->two_factor_type == 'email') ? 'checked': '';?>>
+                            <label for="two_factor_type-email">Email</label>
+                            <input type="radio" name="two_factor_type" id="two_factor_type-phone" value="phone" <?php echo ($ask->config->two_factor_type == 'phone') ? 'checked': '';?>>
+                            <label for="two_factor_type-phone" class="m-l-20">Phone</label>
+                            <input type="radio" name="two_factor_type" id="two_factor_type-both" value="both" <?php echo ($ask->config->two_factor_type == 'both') ? 'checked': '';?>>
+                            <label for="two_factor_type-both" class="m-l-20">Both</label>
+                        </div>
+                        
+                        <hr>
+             
+                        <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
+                    </form>
+
+
+                </div>
+            </div>
+
+                        
+            </div>
+
+        
+        </div>
+
+        
+
+
+    <!-- #END# Vertical Layout -->
+<script>
+    
+
+$(function() {
+    "use strict";
+    $('#upload_system_type').change(function(event) {
+        if ($(this).val() == 1) {
+            $('#p_f_users_').removeClass('hidden');
+            $('#all_users_').addClass('hidden');
+        }
+        else{
+            $('#all_users_').removeClass('hidden');
+            $('#p_f_users_').addClass('hidden');
+        }
+    });
+
+    var form_user_settings = $('form.user-settings');
+
+    form_user_settings.ajaxForm({
+        url: '{{LINK aj/ap/save-settings}}',
+        beforeSend: function() {
+            form_user_settings.find('button').text("{{LANG please_wait}}");
+        },
+        success: function(data) {
+            if (data.status == 200) {
+                form_user_settings.find('button').text('Save');
+                $('.user-settings-alert').html('<i class="fa fa-check"></i> Settings updated successfully');
+                setTimeout(function () {
+                    $('.user-settings-alert').empty();
+                }, 2000);
+            }
+        }
+    });
+
+});
+</script>

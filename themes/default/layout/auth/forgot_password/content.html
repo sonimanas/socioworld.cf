@@ -1,0 +1,64 @@
+<div class="login_page">
+    <div class="login-page">
+        <div class="login-form">
+            <h4>{{LANG forget_your_password}}</h4>
+            <p id="enter_your_email_blow">{{LANG enter_your_email_address}}</p>
+            <div class="forgetpassword-alert"></div>
+            <form class="forgetpassword-form" method="POST">
+                <div class="pp_mat_input">
+                    <input type="text" name="email" id="email" placeholder="{{LANG email_id}}" required autofocus>
+                    <i class="fas fa-envelope fab_w"></i>
+                </div>
+                <div class="recaptcha">{{RECAPTCHA}}</div>
+                <div class="login_signup_combo">
+                    <div class="login__">
+                        <button type="submit" class="btn btn-block btn-primary u-btn-primary transition-3d-hover">{{LANG request_reset_link}}</button>
+                    </div>
+                    <div class="signup__">
+                        <p><a class="dec u-link-muted" data-load="?link1=login" href="{{LINK login}}">{{LANG back_to_login}}</a></p>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(function() {
+    "use strict";
+        $('form').submit(function(){
+            $(this).find('button[type=submit]').attr('disabled','disabled');
+        });
+        $('.button').on('click', function () {
+            if ($('#email').val()) {
+                $(this).val("{{LANG please_wait}}");
+            }
+        });
+        let form = $('form.forgetpassword-form');
+        form.ajaxForm({
+            url: '{{LINK aj/forget_password}}?hash=' + $('.main_session').val(),
+            dataTyep:'json',
+            beforeSend: function() {
+                form.find('button').text("{{LANG please_wait}}");
+            },
+            success: function(data) {
+                if (data.status == 200) {
+                    $('.forgetpassword-alert').html($('<div>',{
+                        class: "alert alert-success",
+                        html: data.message
+                    }));
+                    $('.forgetpassword-alert').fadeIn(300);
+                    $('.forgetpassword-form').hide();
+                    $('#enter_your_email_blow').hide();
+                }
+                else {
+                    $('.forgetpassword-alert').html($('<div>',{
+                        class: "alert alert-danger",
+                        html: data.message
+                    }));
+                    form.find('button').replaceWith('<button type="submit" class="btn btn-block btn-primary u-btn-primary transition-3d-hover">{{LANG request_reset_link}}</button>');
+                }
+            }
+        });
+    });
+</script>

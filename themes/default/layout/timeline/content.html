@@ -1,0 +1,27 @@
+<div class="container small_container page_margin">
+    <div class="ask_profile">
+        {{COVER_AVATAR}}
+        {{HEADER_AD}}
+        <div class="row">
+            <div class="col-md-7">
+                <?php if(IS_LOGGED == true) {?>
+                {{PUBLISHER_BOX}}
+                <?php }?>
+                {{POST_AREA}}
+            </div>
+            <div class="col-md-5">
+                <div class="sidebar">
+                    {{SIDE_AD}}
+                    {{ABOUT_ME}}
+
+                    {{FOOTER_AD}}
+                    {{SIDEBAR_FOOTER}}
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <input type="hidden" id="profile-id" value="{{USER id}}">
+    <input type="hidden" id="loadmore_mode" value="timeline">
+</div>

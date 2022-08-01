@@ -1,0 +1,22 @@
+<div class="container small_container page_margin">
+    <input type="hidden" id="profile-id" value="{{USER id}}">
+    <div class="ask_profile">
+        <br>
+        <div class="row">
+            <div class="col-md-7">
+                {{POST_AREA}}
+            </div>
+            <div class="col-md-5">
+                <div class="sidebar">
+                    <?php if (IS_LOGGED == true) {?>
+                    {{PEOPLE_SUGGESTION}}
+                    <?php } ?>
+                    {{TRENDING_HASHTAG}}
+                    {{SIDEBAR_FOOTER}}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

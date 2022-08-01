@@ -1,0 +1,59 @@
+<form class="as_form" id="notifications-settings" method="POST">
+    <div class="setting-notifications-alert"></div>
+    <div class="row">
+        <div class="col-md-4">
+            <b>{{LANG Email me when}}</b>
+        </div>
+        <div class="col-md-8">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="notification_on_answered_question" name="notifications[]" value="notification_on_answered_question" <?php echo ($ask->settings->notification_on_answered_question == 1) ? 'checked': '';?>>
+                <label class="custom-control-label" for="notification_on_answered_question">{{LANG Someone answered my questions}}</label>
+            </div>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input"  id="notification_on_visit_profile" name="notifications[]" value="notification_on_visit_profile" <?php echo ($ask->settings->notification_on_visit_profile == 1) ? 'checked': '';?>>
+                <label class="custom-control-label" for="notification_on_visit_profile">{{LANG Someone visited my profile}}</label>
+            </div>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input"  id="notification_on_like_question" name="notifications[]" value="notification_on_like_question" <?php echo ($ask->settings->notification_on_like_question == 1) ? 'checked': '';?>>
+                <label class="custom-control-label" for="notification_on_like_question">{{LANG Someone liked my questions}}</label>
+            </div>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input"  id="notification_on_shared_question" name="notifications[]" value="notification_on_shared_question" <?php echo ($ask->settings->notification_on_shared_question == 1) ? 'checked': '';?>>
+                <label class="custom-control-label" for="notification_on_shared_question">{{LANG Someone shared my questions}}</label>
+            </div>
+            <input type="hidden" name="hash_id" value="<?php echo CreateSession()?>">
+            <input type="hidden" name="user_id" value="{{USER id}}">
+        </div>
+    </div>
+    <div class="btn_footer">
+        <button type="submit" class="btn btn-primary u-btn-primary transition-3d-hover">{{LANG save}}</button>
+    </div>
+</form>
+<script>
+    $(function() {
+    "use strict";
+        var form = $('form#notifications-settings');
+        form.ajaxForm({
+            url: '{{LINK aj/user/update-notifications}}?hash=' + $('.main_session').val(),
+            beforeSend: function() {
+                form.find('button').text("{{LANG please_wait}}");
+            },
+            success: function(data) {
+                scrollToTop();
+                if (data.status == 200) {
+                    $('.setting-notifications-alert').html('<div class="alert alert-success">' + data.message + '</div>');
+                    $('.alert-success').fadeIn('fast', function() {
+                        $(this).delay(2500).slideUp(500, function() {
+                            $(this).remove();
+                        });
+                    });
+                } else if (data.errors) {
+                    var errors = data.errors.join("<br>");
+                    $('.setting-notifications-alert').html('<div class="alert alert-danger">' + errors + '</div>');
+                    $('.alert-danger').fadeIn(300);
+                }
+                form.find('button').replaceWith('<button type="submit" class="btn btn-primary u-btn-primary transition-3d-hover">{{LANG save}}</button>');
+            }
+        });
+    });
+</script>

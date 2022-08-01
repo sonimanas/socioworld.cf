@@ -1,0 +1,27 @@
+<ul class="list-unstyled mb-0 sett_acc_menu">
+    <!--<li>
+        <a href="{{LINK settings/blocked/}}{{USER username}}" data-load="?link1=settings&page=blocked&user={{USER username}}"><i class="fas fa-ban fab_w"></i> {{LANG blocked_users}}</a>
+    </li>-->
+	<?php if (IsAdmin() == false) {?>
+		<li>
+			<a href="{{LINK settings/verification/}}{{USER username}}" data-load="?link1=settings&page=verification&user={{USER username}}"><i class="fas fa-check-circle fab_w"></i> {{LANG verification}}</a>
+		</li>
+	<?php } ?>
+
+	<?php if( $ask->config->two_factor == '1' ){?>
+		<li>
+			<a href="{{LINK settings/two-factor/}}{{USER username}}" data-load="?link1=settings&page=two-factor&user={{USER username}}"><i class="fas fa-shield-alt fab_w"></i> {{LANG two-factor_authentication}}</a>
+		</li>
+	<?php } ?>
+    <li>
+        <a href="{{LINK settings/password/}}{{USER username}}" data-load="?link1=settings&page=password&user={{USER username}}"><i class="fas fa-key fab_w"></i> {{LANG change_password}}</a>
+    </li>
+    <?php if( !$ask->is_settings_admin && $ask->config->delete_account == 'on' ) :?>
+    <li>
+        <a href="{{LINK settings/delete/}}{{USER username}}" data-load="?link1=settings&page=delete&user={{USER username}}"><i class="fas fa-trash fab_w"></i> {{LANG delete_account}}</a>
+    </li>
+    <li>
+        <a href="{{LINK logout}}"><i class="fas fa-power-off fab_w"></i> {{LANG log_out}}</a>
+    </li>
+    <?php endif;?>
+</ul>

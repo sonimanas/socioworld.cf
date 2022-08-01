@@ -1,0 +1,21 @@
+
+	<div class="post-fetched-url wo_post_fetch_link" id="fullsizeimg">
+		<a href="{{QUESTION postLink}}" target="_blank">
+			<?php if (!empty($data['QUESTION_DATA']->postLinkImage)) {?>
+				<div class="post-fetched-url-con">
+					<img src="{{QUESTION postLinkImage}}" class="" alt="{{QUESTION postLinkTitle}}"/>
+					<div class="url">
+						<?php 
+							$parse = parse_url($data['QUESTION_DATA']->postLink);
+							echo $parse['host'];
+						?>
+					</div>
+				</div>
+			<?php } ?>
+			<div class="fetched-url-text">
+				<h4>{{QUESTION postLinkTitle}}</h4>
+				<div class="description">{{QUESTION postLinkContent}}</div>
+			</div>
+			<div class="clear"></div>
+		</a>
+	</div>

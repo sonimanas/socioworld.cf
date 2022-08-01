@@ -1,0 +1,41 @@
+<div class="container page_margin">
+    <div class="row">
+        <div class="col-md-7">
+            <div class="ask_settings">
+                <div class="as_head">
+                    <div class="ash_profile">
+                        <a href="{{LINK @}}{{ME username}}" data-load="?link1=timeline&id={{USER username}}"><img src="{{USER avatar}}" alt="{{USER username}}" /></a>
+                        <a href="{{LINK @}}{{ME username}}" data-load="?link1=timeline&id={{USER username}}"><h3>{{USER name}}</h3></a>
+                    </div>
+                    <ul class="list-unstyled mb-0">
+                        <li <?php echo ($ask->setting_page == 'general') ? 'class="active"': '';?>>
+                            <a href="{{LINK settings/general/}}{{USER username}}" data-load="?link1=settings&page=general&user={{USER username}}">{{LANG general}}</a>
+                        </li>
+                        <li <?php echo ($ask->setting_page == 'profile') ? 'class="active"': '';?>>
+                            <a href="{{LINK settings/profile/}}{{USER username}}" data-load="?link1=settings&page=profile&user={{USER username}}">{{LANG profile}}</a>
+                        </li>
+                        <li <?php echo ($ask->setting_page == 'notifications') ? 'class="active"': '';?>>
+                            <a href="{{LINK settings/notifications/}}{{USER username}}" data-load="?link1=settings&page=notifications&user={{USER username}}">{{LANG notifications}}</a>
+                        </li>
+                        <li <?php echo ($ask->setting_page == 'account') ? 'class="active"': '';?>>
+                            <a href="{{LINK settings/account/}}{{USER username}}" data-load="?link1=settings&page=account&user={{USER username}}">{{LANG account}}</a>
+                        </li>
+                    </ul>
+                </div>
+                {{SETTINGSPAGE}} 
+            </div>
+        </div>
+        <!-- Sidebar  -->
+        <div class="col-md-5">
+            <div class="sidebar">
+                <!-- People Suggestion  -->
+                {{PEOPLE_SUGGESTION}}
+                <!-- End People Suggestion  -->
+                {{TRENDING_HASHTAG}}
+                <!-- Sidebar Footer  -->
+                {{SIDEBAR_FOOTER}}
+                <!-- End Sidebar Footer  -->
+            </div>
+        </div>
+    </div>
+</div>

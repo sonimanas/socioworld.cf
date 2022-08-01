@@ -1,0 +1,125 @@
+<script src="https://checkout.stripe.com/checkout.js"></script>
+<div class="container page_margin">
+    <div class="row">
+		<div class="col-md-3"><?php echo LoadPage('ads/includes/header'); ?></div>
+		<div class="col-md-9">
+			<div class="ask_side_widget ads-cont-wrapper">
+				<h2>{{LANG Advertising}}</h2>
+			<?php if (count($ask->ads) > 0): ?>
+				<div class="table-responsive">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>{{LANG id}}</th>
+								<th>{{LANG status}}</th>
+								<!--<th>{{LANG media}}</th>-->
+								<th>{{LANG company}}</th>
+								<th>{{LANG bidding}}</th>
+								<th>{{LANG clicks}}</th>
+								<th>{{LANG views}}</th>
+								<th style="min-width: 100px;">{{LANG action}}</th>
+							</tr>
+						</thead>
+						<tbody id="user-ads">
+							<?php foreach ($ask->ads as $wo['ad']): ?>
+								<?php echo LoadPage('ads/includes/ads-list',['AD_DATA' => $wo['ad']]);?>
+							<?php endforeach; ?>
+						</tbody>
+					</table>
+				</div>
+			<?php else: ?>
+				<div class="not-data">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#444" d="M4,2A2,2 0 0,0 2,4V16A2,2 0 0,0 4,18H8V21A1,1 0 0,0 9,22H9.5V22C9.75,22 10,21.9 10.2,21.71L13.9,18H20A2,2 0 0,0 22,16V4C22,2.89 21.1,2 20,2H4M4,4H20V16H13.08L10,19.08V16H4V4M12.19,5.5C11.3,5.5 10.59,5.68 10.05,6.04C9.5,6.4 9.22,7 9.27,7.69C0.21,7.69 6.57,7.69 11.24,7.69C11.24,7.41 11.34,7.2 11.5,7.06C11.7,6.92 11.92,6.85 12.19,6.85C12.5,6.85 12.77,6.93 12.95,7.11C13.13,7.28 13.22,7.5 13.22,7.8C13.22,8.08 13.14,8.33 13,8.54C12.83,8.76 12.62,8.94 12.36,9.08C11.84,9.4 11.5,9.68 11.29,9.92C11.1,10.16 11,10.5 11,11H13C13,10.72 13.05,10.5 13.14,10.32C13.23,10.15 13.4,10 13.66,9.85C14.12,9.64 14.5,9.36 14.79,9C15.08,8.63 15.23,8.24 15.23,7.8C15.23,7.1 14.96,6.54 14.42,6.12C13.88,5.71 13.13,5.5 12.19,5.5M11,12V14H13V12H11Z"></path></svg> {{LANG No ads found}}
+				</div>
+			<?php endif; ?>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="delete-ad" >
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><?php echo __('delete_ad'); ?></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></button>
+            </div>
+            <div class="modal-body">
+                <p><?php echo __('confirm_delete_ad'); ?></p>
+            </div>
+            <div class="modal-footer">
+                <button  type="button" onclick="DeleteAd($('#delete-ad').attr('data-userad-id'))" class="btn  btn-main"><?php echo __('delete'); ?></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    jQuery(document).ready(function($) {
+        $(document).on('click', '.delete-ad', function(event) {
+            var self = $(this);
+            $("#delete-ad").attr('data-userad-id',self.attr('id')).modal("show");
+
+        });
+    });
+
+    $(document).on('click', '.toggle-user-ad-status', function(event) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        var self      = $(this);
+        var ad_id     = self.attr('id');
+        var ad_status = self.attr('data-status');
+        $.ajax({
+            url: '{{LINK aj/ads/ts}}?hash=' + $('.main_session').val(),
+            type: 'GET',
+            dataType: 'json',
+            data: {user_id:<?php echo $ask->user->id?>,ad_id:ad_id,status:ad_status},
+        })
+            .done(function(data) {
+                if (data.status == 200) {
+                    $("[data-ad-status='"+ad_id+"']").find('span').text(data.ad);
+                    if (ad_status == 0) {
+                        self.html('<svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -107 512 512" width="30px"><path d="m0 149.332031c0 82.347657 67.007812 149.335938 149.332031 149.335938h213.335938c82.324219 0 149.332031-66.988281 149.332031-149.335938 0-82.34375-67.007812-149.332031-149.332031-149.332031h-213.335938c-82.324219 0-149.332031 66.988281-149.332031 149.332031zm0 0" fill="#00bcd4"/><path d="m448 149.332031c0 47.128907-38.203125 85.335938-85.332031 85.335938-47.128907 0-85.335938-38.207031-85.335938-85.335938 0-47.128906 38.207031-85.332031 85.335938-85.332031 47.128906 0 85.332031 38.203125 85.332031 85.332031zm0 0" fill="#fafafa"/></svg>');
+                        self.attr('data-status',1);
+                    }
+                    else{
+                        self.html('<svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -107 512 512" width="30px"><path d="m362.667969 0h-213.335938c-82.324219 0-149.332031 66.988281-149.332031 149.332031 0 82.347657 67.007812 149.335938 149.332031 149.335938h213.335938c82.324219 0 149.332031-66.988281 149.332031-149.335938 0-82.34375-67.007812-149.332031-149.332031-149.332031zm0 0" fill="#607d8b"/><path d="m234.667969 149.332031c0 47.128907-38.207031 85.335938-85.335938 85.335938-47.128906 0-85.332031-38.207031-85.332031-85.335938 0-47.128906 38.203125-85.332031 85.332031-85.332031 47.128907 0 85.335938 38.203125 85.335938 85.332031zm0 0" fill="#fafafa"/></svg>');
+                        self.attr('data-status',0);
+                    }
+                }
+            })
+            .fail(function() {
+                console.log("error");
+            })
+
+    });
+
+    function DeleteAd(id){
+        if (id && id > 0) {
+            $.ajax({
+                url: '{{LINK aj/ads/remove}}?hash=' + $('.main_session').val(),
+                type: 'POST',
+                dataType: 'json',
+                data: {user_id:<?php echo $ask->user->id?>,id:id},
+            })
+                .done(function(data) {
+                    if (data.status == 200) {
+                        $("tr[data-ad-id="+id+"]").slideUp(function(){
+                            $(this).remove();
+                            var rowCount = $('#user-ads tr').length;
+                            if(rowCount== 0){
+                                $('#user-ads').html('<tr><td colspan="8" class="text-center" style="height: 200px;">{{LANG No ads found}}</td></tr>');
+                            }
+                        })
+
+
+                        $("#delete-ad").modal("hide");
+                    }
+                })
+                .fail(function() {
+                    console.log("error");
+                })
+        }
+    }
+
+</script>

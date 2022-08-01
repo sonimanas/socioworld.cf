@@ -1,0 +1,187 @@
+<h3 class="ask_acc_title_hd">
+    <a href="{{LINK settings/account/}}{{USER username}}" data-load="?link1=settings&page=account&user={{USER username}}" title="Go back">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" /></svg>
+    </a> {{LANG Two-factor authentication}}
+</h3>
+                        <form class="form-horizontal setting-change-password-form as_form" method="post">
+                            <div class="setting-password-alert setting-update-alert"></div>
+							<div class="text-center mb-3">
+								<svg height="110" viewBox="0 0 192 192" width="110" xmlns="http://www.w3.org/2000/svg" class="mb-3"><linearGradient id="New_Gradient_Swatch_2" gradientUnits="userSpaceOnUse" x1="32" x2="160" y1="112" y2="-16"><stop offset="0" stop-color="#34cdfa"/><stop offset="1" stop-color="#e8d9f1"/></linearGradient><path d="m8 8h176v80h-176z" fill="url(#New_Gradient_Swatch_2)"/><path d="m184 96h-176a8 8 0 0 1 -8-8v-80a8 8 0 0 1 8-8h176a8 8 0 0 1 8 8v80a8 8 0 0 1 -8 8zm-168-16h160v-64h-160z" fill="#ccf2fe"/><path d="m170.53 47.589-5.06-15.178-13.47 4.49v-12.901h-16v12.901l-13.47-4.49-2.53 7.589-2.53-7.589-13.47 4.49v-12.901h-16v12.901l-13.47-4.49-2.53 7.589-2.53-7.589-13.47 4.49v-12.901h-16v12.901l-13.47-4.49-5.06 15.178 11.72 3.907-6.847 6.847 11.314 11.314 10.343-10.344 10.343 10.344 11.314-11.314-6.847-6.847 9.19-3.063 9.19 3.063-6.847 6.847 11.314 11.314 10.343-10.344 10.343 10.344 11.314-11.314-6.847-6.847 9.19-3.063 9.19 3.063-6.847 6.847 11.314 11.314 10.343-10.344 10.343 10.344 11.314-11.314-6.847-6.847z" fill="#fff"/><path d="m187.882 155.021-42.694-66.411a24 24 0 0 0 -40.376 0l-42.694 66.411a24 24 0 0 0 20.189 36.979h85.386a24 24 0 0 0 20.189-36.979z" fill="#67d9fb"/><path d="m107.307 184a24 24 0 0 1 -20.189-36.979l42.694-66.411a24.037 24.037 0 0 1 1.571-2.157 24 24 0 0 0 -26.571 10.157l-42.694 66.411a24 24 0 0 0 20.189 36.979h85.386a23.63 23.63 0 0 0 17.9-8z" fill="#01c0f9"/><g fill="#e6f9fe"><path d="m117 112h16v32h-16z"/><path d="m117 152h16v16h-16z"/></g></svg>
+							</div>
+							
+                            <!-- Form Name -->
+
+                                <?php if ($ask->config->two_factor_type == 'both' || $ask->config->two_factor_type == 'phone') { ?>
+								<div class="pp_mat_input">
+									<input type="text" name="phone_number" id="phone_number" placeholder="{{LANG Phone}}" value="<?php echo $ask->user->phone_number?>">
+									<i class="fas fa-phone fab_w"></i>
+								</div>
+                                <?php } ?>
+								<div class="pp_mat_input">
+									<select id="two_factor_select" name="two_factor">
+                                            <option value="enable" <?php echo ($ask->user->two_factor == '1')   ? 'selected' : '';?> >{{LANG Enable}}</option>
+                                            <option value="disable" <?php echo ($ask->user->two_factor == '0')   ? 'selected' : '';?> >{{LANG Disable}}</option>
+                                        </select>
+									<i class="fas fa-shield-alt fab_w"></i>
+								</div>
+                                <small>{{LANG Turn on 2-step login to level-up your account's security, Once turned on, you'll use both your password and a 6-digit security code sent to your phone or email to log in.}}</small>
+
+							<input type="hidden" id="user-id" name="user_id" value="{{USER id}}">
+							<div class="btn_footer">
+			<button type="button" class="btn btn-primary u-btn-primary transition-3d-hover" id="submit_two_factor_btn">{{LANG Save}}</button>
+		</div>
+                        </form>
+               
+     
+<script type="text/javascript">
+    $(document).on('click', '#submit_two_factor_btn', function(event) {
+        $.ajax({
+            url: "{{LINK aj}}/user/update_two_factor?hash=" + $('.main_session').val()+ '&s=' + $('#two_factor_select').val(),
+            type: 'POST',
+            data:$('form.setting-change-password-form').serialize(),
+            beforeSend: function() {
+                $('.wo_settings_page').find('.last-sett-btn .ball-pulse').fadeIn(100);
+                $('#setting-password-alert').removeClass("alert-success").addClass('alert-danger');
+                $('#setting-password-alert').empty();
+                $("#submit_two_factor_btn").text("{{LANG Please wait..}}");
+            },
+            success: function(data) {
+                if (data.status == 200) {
+                    $('.setting-password-alert').html('<div class="alert alert-success">' + data.message + '</div>');
+                    $('.alert-success').fadeIn('fast', function() {
+                        $(this).delay(2000).slideUp(500, function() {
+                            $(this).remove();
+                            if ($('#two_factor_select').val() == 'enable') {
+                                $('#confirmation_code_form_user_id').val('{{USER id}}');
+                                $('#verify_code').modal('show');
+                            }
+                        });
+                    });
+                } else if (data.status == 400) {
+                    $('.setting-password-alert').html('<div class="alert alert-danger">' + data.message + '</div>');
+                    $('.alert-danger').fadeIn(300);
+                } else {
+                    $('.setting-password-alert').html('<div class="alert alert-danger">{{LANG Something went wrong, please try again later.}}</div>');
+                    $('.alert-danger').fadeIn(300);
+                }
+                $("#submit_two_factor_btn").text("{{LANG Save}}");
+                $('.wo_settings_page').find('.last-sett-btn .ball-pulse').fadeOut(100);
+            }
+        });
+    });
+    $(function() {
+        $('form.confirmation_code_form').ajaxForm({
+            url: "{{LINK aj}}/user/update_two_factor?hash=" + $('.main_session').val() + '&s=verify',
+
+            beforeSend: function() {
+                $('#confirmation_code_form_btn').text('{{LANG Please wait..}}');
+            },
+            success: function(data) {
+                if (data.status == 200) {
+                    $('#confirmation_code_form_alert').html('<div class="alert alert-success">' + data.message + '</div>');
+                    $('#confirmation_code_form_alert').fadeIn('fast', function() {
+                        $(this).delay(2500).slideUp(500, function() {
+                            $(this).remove();
+                            $('#verify_code').modal('hide');
+                            location.reload();
+                        });
+                    });
+                } else if (data.status == 400) {
+                    $('#confirmation_code_form_alert').html('<div class="alert alert-danger">' + data.message + '</div>');
+                    $('.alert-danger').fadeIn(300);
+                }
+                $('#confirmation_code_form_btn').text('{{LANG Send}}');
+            }
+        });
+    });
+</script>
+<div class="modal fade mat_box" id="verify_code" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="two_factor_title">
+                    <?php
+                        if ($ask->config->two_factor_type == 'both') {
+                    echo lang('A confirmation message and email were sent.');
+                    }
+                    elseif ($ask->config->two_factor_type == 'email') {
+                    echo lang('A confirmation email has been sent.');
+                    }
+                    elseif ($ask->config->two_factor_type == 'phone') {
+                    echo lang('A confirmation message was sent.');
+                    }
+                    ?>
+                </h5>
+            </div>
+            <form id="confirmation_code_form" class="confirmation_code_form" method="POST">
+                <div class="modal-body">
+                    <div id="confirmation_code_form_alert"></div>
+                    <span class="verfy_sett_email_phone_ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M21,13.34C20.37,13.12 19.7,13 19,13A6,6 0 0,0 13,19C13,19.34 13.03,19.67 13.08,20H3A2,2 0 0,1 1,18V6C1,4.89 1.89,4 3,4H19A2,2 0 0,1 21,6V13.34M23.5,17L18.5,22L15,18.5L16.5,17L18.5,19L22,15.5L23.5,17M3,6V8L11,13L19,8V6L11,11L3,6Z" /></svg></span>
+                    <p id="two_factor_desc">
+                        <?php
+                            if ($ask->config->two_factor_type == 'both') {
+                        echo lang('We have sent a message and an email that contain the confirmation code to enable two-factor authentication');
+                        }
+                        elseif ($ask->config->two_factor_type == 'email') {
+                        echo lang('We have sent an email that contains the confirmation code to enable Two-factor authentication.');
+                        }
+                        elseif ($ask->config->two_factor_type == 'phone') {
+                        echo lang('We have sent a message that contains the confirmation code to enable Two-factor authentication.');
+                        }
+                        ?>
+                    </p>
+                    <div class="form-group verfy_sett_email_phone">
+                        <input type="text" class="form-control" name="code" placeholder="{{LANG Confirmation code}}">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button data-dismiss="modal" class="btn btn-default">{{LANG Cancel}}</button>
+                    <button id="confirmation_code_form_btn" type="submit" class="btn btn-primary">{{LANG Save}}</button>
+                </div>
+                <input type="hidden" id="confirmation_code_form_user_id" name="user_id" value="">
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade mat_box" id="verify_email_phone" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="verify_email_phone_title">
+                    <?php
+                        if ($ask->config->sms_or_email == 'mail') {
+                    echo lang('A confirmation message and email were sent.');
+                    }
+                    elseif ($ask->config->sms_or_email == 'sms') {
+                    echo lang('A confirmation message was sent.');
+                    }
+                    ?>
+                </h5>
+            </div>
+            <form id="verify_email_phone_form" class="verify_email_phone_form" method="POST">
+                <div class="modal-body">
+                    <div id="verify_email_phone_form_alert"></div>
+                    <span class="verfy_sett_email_phone_ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M17,19V5H7V19H17M17,1A2,2 0 0,1 19,3V21A2,2 0 0,1 17,23H7C5.89,23 5,22.1 5,21V3C5,1.89 5.89,1 7,1H17M9,7H15V9H9V7M9,11H13V13H9V11Z" /></svg></span>
+                    <p id="verify_email_phone_desc">
+                        <?php
+                            if ($ask->config->sms_or_email == 'mail') {
+                        echo lang('We have sent an email that contains the confirmation code to enable Two-factor authentication.');
+                        }
+                        elseif ($ask->config->sms_or_email == 'sms') {
+                        echo lang('We have sent a message that contains the confirmation code to enable Two-factor authentication.');
+                        }
+                        ?>
+                    </p>
+                    <div class="form-group verfy_sett_email_phone">
+                        <input type="text" class="form-control" name="code" placeholder="{{LANG Confirmation code}}">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button data-dismiss="modal" class="btn btn-default">{{LANG Cancel}}</button>
+                    <button id="verify_email_phone_form_btn" type="submit" class="btn btn-primary">{{LANG Save}}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

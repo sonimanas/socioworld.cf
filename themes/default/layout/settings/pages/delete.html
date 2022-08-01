@@ -1,0 +1,48 @@
+<h3 class="ask_acc_title_hd">
+    <a href="{{LINK settings/account/}}{{USER username}}" data-load="?link1=settings&page=account&user={{USER username}}" title="Go back">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" /></svg>
+    </a> {{LANG delete_account}}
+</h3>
+<form class="as_form" id="delete-settings" method="POST">
+    <div class="setting-delete-alert"></div>
+    <p>{{LANG delete_warn1}}</p>
+    <p>{{LANG delete_warn2}}</p>
+    <div class="pp_mat_input">
+        <input type="password" name="current_password" id="current_password" placeholder="{{LANG current_password}}" autofocus>
+        <i class="fas fa-key fab_w"></i>
+    </div>
+    <input type="hidden" name="hash_id" value="<?php echo CreateSession()?>">
+    <input type="hidden" name="user_id" value="{{USER id}}">
+    <div class="btn_footer">
+        <button type="submit" class="btn btn-primary u-btn-primary transition-3d-hover">{{LANG delete}}</button>
+    </div>
+</form>
+<script>
+    $(function() {
+    "use strict";
+        var form = $('form#delete-settings');
+        form.ajaxForm({
+            url: '{{LINK aj/user/delete}}?hash=' + $('.main_session').val(),
+            beforeSend: function() {
+                form.find('button').text("{{LANG please_wait}}");
+            },
+            success: function(data) {
+                scrollToTop();
+                if (data.status == 200) {
+                    $('.setting-delete-alert').html('<div class="alert alert-success">' + data.message + '</div>');
+                    $('.alert-success').fadeIn('fast', function() {
+                        $(this).delay(2500).slideUp(500, function() {
+                            $(this).remove();
+                        });
+                    });
+                    window.location.href = data.url;
+                } else if (data.errors) {
+                    var errors = data.errors.join("<br>");
+                    $('.setting-delete-alert').html('<div class="alert alert-danger">' + errors + '</div>');
+                    $('.alert-danger').fadeIn(300);
+                }
+                form.find('button').replaceWith('<button type="submit" class="btn btn-primary u-btn-primary transition-3d-hover">{{LANG delete}}</button>');
+            }
+        });
+    });
+</script>

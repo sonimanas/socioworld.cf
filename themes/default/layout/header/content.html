@@ -1,0 +1,18 @@
+<!-- Header  -->
+<header id="header" class="u-header u-header--abs-top-md u-header--show-hide-md u-header--untransitioned js-header-fix-moment">
+    <div class="u-header__section">
+        <div id="logoAndNav" class="container">
+            <!-- Nav -->
+            <nav class="js-mega-menu navbar navbar-expand-md u-header__navbar hs-menu-initialized hs-menu-horizontal">
+                <!-- Logo -->
+                <a class="navbar-brand u-header__navbar-brand u-header__navbar-brand-top-space <?php if (IS_LOGGED == true) { ?>only_logged_hd_logo<?php } ?>" href="{{CONFIG site_url}}" aria-label="Front">
+                    <img src="{{CONFIG theme_url}}/img/logo.png" alt="Logo">
+                </a>
+                <!-- End Logo -->
+                {{SIDE_HEADER}}
+            </nav>
+            <!-- End Nav -->
+        </div>
+    </div>
+</header>
+<!-- End Header  -->

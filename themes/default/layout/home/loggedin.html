@@ -1,0 +1,44 @@
+<div class="container small_container page_margin">
+    <div class="container small_container page_margin announcement-renderer">{{ANNOUNCEMENT}}</div>
+    {{HEADER_AD}}
+    <div class="row">
+        <div class="col-md-7">
+            <!-- publisher box -->
+            {{PUBLISHER_BOX}}
+            <!-- END publisher box -->
+            <!-- Post Area  -->
+            {{POST_AREA}}
+            <!-- End Post Area  -->
+        </div>
+
+        <!-- Sidebar  -->
+        <div class="col-md-5">
+            <div class="sidebar">
+                {{SIDE_AD}}
+                <!-- User Info Card  -->
+                {{USER_INFO_CARD}}
+                <!-- End User Info Card  -->
+
+                <?php
+                    foreach (GetSideBarAds() as $wo['sidebar-ad']) {
+                        echo LoadPage('ads/includes/sidebar-ad' , ['AD_DATA' => $wo['sidebar-ad']]);
+                    }
+                ?>
+
+                <!-- People Suggestion  -->
+                {{PEOPLE_SUGGESTION}}
+                <!-- End People Suggestion  -->
+
+                {{TRENDING_HASHTAG}}
+
+                {{FOOTER_AD}}
+                <!-- Sidebar Footer  -->
+                {{SIDEBAR_FOOTER}}
+                <!-- End Sidebar Footer  -->
+            </div>
+        </div>
+        <!-- End Sidebar  -->
+    </div>
+    <input type="hidden" id="profile-id" value="{{USER id}}">
+    <input type="hidden" id="loadmore_mode" value="home">
+</div>

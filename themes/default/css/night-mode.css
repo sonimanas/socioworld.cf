@@ -1,0 +1,229 @@
+.question-time {
+    color: #9197a3 !important;
+    font-size: 10.5px !important;
+}
+
+body {
+    background: #131313 !important;
+    color: #dfdfdf;
+}
+.u-header__section, header .header_drop_menu > .btn, header .header_notif_menu .dropdown > .btn, .dropdown-menu, .ask_box, .ask_side_widget, .btn_load_more, .ask_post, .ask_post .ap_head .post_option .btn, .modal-content, .modal.matdialog .modal-header, .ask_photo_poll .app_photos::before, .ask_photo_poll .app_photos::after, .ask_post .ap_poll .vs, .modal.matdialog .modal-footer, .ask_settings, .ask_contact .login_page .login-page, .terms_page .page_margin, .ask_profile > .ap_head, .ask_steps.login-page .login-form, .search_user_wrapper .srch_users, .ask_prof_load_more {
+    background: #212121 !important;
+}
+header .ask_header_menu li.nav-item a.u-header__nav-link, header .ask_header_menu li.nav-item .dropdown > .btn {
+	color: #b7b7b7;
+}
+header .ask_header_menu li.nav-item a.u-header__nav-link:hover, header .ask_header_menu li.nav-item .dropdown > .btn:hover, .ask_post .ap_ques h2, .home_footer .imp_links li a:hover, .sidebar_foot .imp_links li a:hover, .ask_box .ab_head .abh_options.active, .ask_usr_info .aui_info ul li span b, a:hover {
+	color: #fff;
+}
+.dropdown-menu li a, .dropdown-menu>a, .ask_post .ap_ques .ask_ques_answered, .ask_post .ap_head .user_info span:not(.question-time), .ask_post .ap_head .post_option .btn, .ask_post .no_post, .ask_side_widget .asw_head, .not-data, .dropdown-menu, .ask_side_widget .asw_body .aswb_users .user_info a, .ask_settings .sett_block_list .asb_users .user_info a, .ask_box .ab_form .abf_foot .media label, .ask_photo_poll .app_foot .media label, #ask_edit_question .media label, .ask_box .ab_form textarea, .ask_usr_info .aui_info ul .menu_list, p, .ask_box .ab_head .abh_options:hover, .ask_photo_poll textarea, .modal.matdialog .modal-title, .ask_photo_poll .app_photos::after, .ask_post .ap_poll .vs, .my_ballnc h5, .pp_mat_input input, .pp_mat_input textarea, .pp_mat_input select, .ask_settings .as_head .ash_profile h3, .ask_settings .sett_acc_menu li a, .ask_settings .ask_acc_title_hd, .h1>a, .h2>a, .h3>a, .h4>a, .h5>a, .h6>a, h1>a, h2>a, h3>a, h4>a, h5>a, h6>a, .ask_profile .sidebar .about_me .about_me_info li, .ask_profile .ap_user_info .stats_me a, .ask_steps.login-page .login-form h4, .search_user_wrapper .srch_users .su_name, .ask_prof_load_more {
+    color: #e5e5e5 !important;
+}
+.dropdown-menu li a:hover, .dropdown-menu li a:focus, .dropdown-menu>a:hover, .dropdown-menu>a:focus {
+    background: #333 !important;
+}
+hr, .ask_side_widget .asw_body .aswb_users, .ask_usr_info .aui_info ul li:last-child, .ask_usr_info .aui_info ul .menu_list.settings, header .header_notif_menu .dropdown-menu .ask_notifs a::after, .my_ballnc, .pp_mat_input input, .pp_mat_input textarea, .pp_mat_input select, .ask_settings .as_head, .ask_settings .as_head ul li, .ask_settings .sett_acc_menu li, .dt_selct_avatar {
+    border-color: #424242 !important;
+}
+.ask_post .ap_foot .stat-item {
+    color: #b9b9b9;
+    background: rgba(255, 255, 255, 0.05);
+}
+.ask_post .ap_foot .stat-item.like_question {
+    background-color: rgba(255, 149, 142, 0.2);
+}
+.ask_post .no_post svg path, .not-data svg path, .ask_photo_poll .app_photos .icon_upload_image > span svg path {
+	fill: #e5e5e5 !important;
+}
+.ask_side_widget .asw_body .aswb_users .follow, .ask_settings .sett_block_list .asb_users .unlock {
+	background: #212121;
+}
+.ask_box .ab_head .abh_options {
+    color: #bdbdbd;
+}
+.ask_box .ab_form .abf_foot .media .u-checkbox-switch__slider, .ask_photo_poll .app_foot .u-checkbox-switch__slider, #ask_edit_question .u-checkbox-switch__slider {
+    background-color: rgb(107, 107, 107);
+}
+.ask_box .ab_form textarea, .ask_photo_poll textarea {
+	background-color: #333333;
+    border-color: #3a3a3a;
+}
+header .header_notif_menu .dropdown-menu h5 {
+    background: linear-gradient(#292626, #292626);
+}
+header .header_notif_menu .dropdown-menu .ask_notifs .n_detail time {
+    color: #b3b3b3;
+}
+.ask_photo_poll .app_photos .upload_file+label {
+	background-color: #333333;
+}
+.ask_photo_poll .app_photos .icon_upload_image > span {
+	background-color: #4a4a4a;
+}
+.ads-cont-wrapper h2 {
+    background: #272727;
+    border-color: #333333;
+}
+.ads_nav li a {
+    color: #b9b9b9;
+}
+.ads_nav li.active a {
+    border-color: #bfbfbf;
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+.my_ballnc {
+    color: #b1b1b1;
+}
+.add_mon_walt, #amount {
+	background-color: #2d2d2d;
+    border-color: #3c3c3c;color: white;
+}
+.pp_mat_input input, .pp_mat_input textarea, .pp_mat_input select, .fcov_image {
+	background: #363636 !important;
+}
+.pp_mat_input i {
+    color: #a5a5a5;
+}
+.pp_mat_input input:focus, .pp_mat_input textarea:focus, .pp_mat_input select:focus {
+    border-color: #0ca678 !important;
+}
+footer.ask_footer hr {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+.ask_side_widget .asw_body.user_trend_container > div .htag_bottom {
+    color: #cacaca;
+}
+.container .ask_search_tabs li a {
+    color: #e0e0e0;
+    background-color: #2b2b2b;
+}
+.ask_settings .as_head ul li a {
+    color: #bfbfbf;
+}
+.ask_settings .as_head ul li.active {
+    border-color: #0ca678 !important;
+}
+.ask_settings .ask_acc_title_hd {
+    background-color: #101010;
+}
+.ask_profile .ap_user_info .stats_me p {
+    color: #8a8a8a !important;
+}
+.dt_selct_avatar {
+	background: #363636;
+}
+.steps_header .line, .steps_header .line .dot-move, .steps_header .line .dot {
+	background-color: #3a3a3a;
+}
+.steps_header .line .dot {
+	border-color: #6d6d6d;
+}
+.slider-one-active .dot.zero, .slider-two-active .dot.full {
+    background: #0ca678;
+}
+.ask_photo_vote .btn {
+    color: #ffffff;
+background-color: #424242;}
+.search_user_wrapper .srch_users {
+box-shadow: 0 0 0 1px #2e2e2e;}
+
+
+.ask_post .ab_answer .aba_form.question-replay, .ask_post .ab_answer .aba_form.question-answer,
+.ask_post .ab_answer .aba_foot{
+    background-color: #484848;
+}
+
+.login-page{
+    background: #212121;
+}
+
+.no-more-posts-to-show {
+    background-color: #131313;
+}
+.white-loading {
+    margin-top: 15px;
+    background: #212121;
+}
+header .header_notif_menu .dropdown-menu .ask_notifs .n_detail p {
+    color: #9E9E9E!important;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+.table td, .table th {
+    border-top: 1px solid #373737;
+}
+.table thead th {
+    border-bottom: 2px solid #393939;
+}
+.ad_action svg:hover {
+    color: #fff;
+}
+
+.messages-sidebar .search-box input {
+    background-color: rgb(255 255 255 / 7%);
+    color: white;
+}
+.messages-sidebar ul li a .user-name, .user-send-message textarea {
+    color: #ffffff;
+}
+.pt_msg_header, .messages-sidebar ul li {
+    border-bottom: 1px solid #393939;
+}
+.user-send-message {
+	border-top: 1px solid #393939;
+}
+.user-messages .messages .message.incming_msg .user-message {
+    background-color: #393939;
+}
+.loading_post {
+    background: #212121;
+    box-shadow: 0 1px 0 0 #353535, 0 0 0 1px #2d2d2d;
+}
+.loading_post_child, .loading_post_child2 {
+    background-image: radial-gradient(circle 30px at 60px 30px,#3f3f3f 99%,transparent 0),linear-gradient(100deg,rgba(255,255,255,0),hsl(0 0% 13% / 0.5) 50%,rgba(255,255,255,0) 80%),linear-gradient(#3f3f3f 15px,transparent 0),linear-gradient(#3f3f3f 10px,transparent 0),linear-gradient(#3f3f3f 10px,transparent 0),linear-gradient(#3f3f3f 10px,transparent 0);
+    background-repeat: repeat-y;
+    background-size: 100px 200px,50px 200px,150px 200px,350px 200px,300px 200px,250px 200px;
+    background-position: 0 0,0 0,120px 0,120px 40px,120px 60px,120px 80px;
+}
+.pay_method {
+    border: 1px solid #4c4c4c;
+}
+.pay_method .btn {
+    color: #f2f2f2;
+    border-bottom: 1px solid #484848;
+}
+.swal2-modal {
+    background-color: #2d2d2d !important;
+}
+.swal2-modal .swal2-title, .add-amount h5 input {
+    color: #ffffff;
+}
+.swal2-modal .swal2-content {
+    color: #e0e0e0;
+}
+.wo_post_fetch_link {
+    background: #2d2d2d;
+}
+.post-fetched-url .fetched-url-text h4, .ask_side_ads.aui_name h3 {
+    color: #fff;
+}
+.wo_post_fetch_link .fetched-url-text .description {
+    color: #a4a4a4;
+}
+.post-fetched-url:hover {
+    background: #353535;
+}
+.modal.matdialog .matbtn:hover {
+    background: #353535;
+}
+
+
+
+@media (min-width: 992px){
+.pt_msg_area::-webkit-scrollbar {background-color: #212121;}
+.pt_msg_area::-webkit-scrollbar-track {background-color:#212121}
+.pt_msg_area::-webkit-scrollbar-thumb {border:5px solid #212121}
+}

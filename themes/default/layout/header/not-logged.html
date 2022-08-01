@@ -1,0 +1,12 @@
+<div id="navBar" class="navbar-collapse py-0 ask_header_menu">
+    <ul class="navbar-nav u-header__navbar-nav ml-lg-auto">
+        <li class="nav-item pl-3">
+            <a class="btn btn-l u-btn-primary--air u-btn-primary transition-3d-hover" data-load="?link1=login" href="{{LINK login}}">{{LANG login}}</a>
+        </li>
+        <?php if ($config['user_registration'] == 'on') : ?>
+        <li class="nav-item pl-3">
+            <a class="btn btn-l btn-primary u-btn-primary transition-3d-hover" data-load="?link1=register" href="{{LINK register}}">{{LANG Register}}</a>
+        </li>
+        <?php endif; ?>
+    </ul>
+</div>

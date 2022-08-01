@@ -1,0 +1,78 @@
+<div class="ask_contact">
+    <div class="terms_page minh">
+        <div class="gray_wrapper">
+            <div class="container">
+                <h1>{{LANG contact_us}}</h1>
+            </div>
+        </div>
+    </div>
+    <div class="login_page">
+        <div class="login-page">
+            <div class="login-form">
+                <form class="contact-us-form" method="POST">
+                    <div class="contact-us-alert"></div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="pp_mat_input">
+                                <input type="text" name="first_name" id="first_name" placeholder="{{LANG first_name}}" autofocus>
+                                <i class="fas fa-user-circle fab_w"></i>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="pp_mat_input">
+                                <input type="text" name="last_name" id="last_name" placeholder="{{LANG last_name}}">
+                                <i class="fas fa-user-circle fab_w"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pp_mat_input">
+                        <input type="text" name="email" id="email" placeholder="{{LANG email_id}}" required>
+                        <i class="fas fa-envelope fab_w"></i>
+                    </div>
+                    <div class="pp_mat_input">
+                        <textarea name="message" id="message" placeholder="{{LANG how_can_we_help}}" rows="3"></textarea>
+                        <i class="fas fa-info-circle fab_w"></i>
+                    </div>
+                    <div class="login_signup_combo">
+                        <div class="login__">
+                            <button type="submit" name="send" id="send" class="btn btn-block btn-primary u-btn-primary transition-3d-hover">{{LANG send}}</button>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function() {
+    "use strict";
+        $('form').submit(function(){
+            $(this).find('button[type=submit]').attr('disabled','disabled');
+        });
+        var form = $('form.contact-us-form');
+        form.ajaxForm({
+            url: '{{LINK aj/contact_us}}?hash=' + $('.main_session').val(),
+            dataTyep:'json',
+            beforeSend: function() {
+                form.find('button').text("{{LANG please_wait}}");
+            },
+            success: function(data) {
+                if (data.status == 200) {
+                    $('.contact-us-alert').html($('<div>',{
+                        class: "alert alert-success",
+                        html: data.message
+                    }));
+                    $('.alert-success').fadeIn(300);
+                }
+                else {
+                    $('.contact-us-alert').html($('<div>',{
+                        class: "alert alert-danger",
+                        html: data.message
+                    }));
+                }
+                form.find('button').replaceWith('<button type="submit" name="send" id="send" class="btn btn-block btn-primary u-btn-primary transition-3d-hover">{{LANG send}}</button>');
+            }
+        });
+    });
+</script>

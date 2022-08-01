@@ -1,0 +1,215 @@
+<div class="modal fade matdialog" id="wallet_payment_modal" tabindex="-1" role="dialog" aria-labelledby="track_unreported" aria-hidden="true" data-id="0">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">{{LANG Choose a payment method.}}</h5>
+			</div>
+            <div class="modal-body">
+				<div class="pay_method">
+                    <button class="btn" onclick="purchaseWalletPaypal($(this),'{{PRICE}}')" id="btn-wallet-paypal-payment" data-id="" data-title="" data-price="{{PRICE}}">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M20.067 8.478c.492.88.556 2.014.3 3.327-.74 3.806-3.276 5.12-6.514 5.12h-.5a.805.805 0 0 0-.794.68l-.04.22-.63 3.993-.032.17a.804.804 0 0 1-.794.679H7.72a.483.483 0 0 1-.477-.558L7.418 21h1.518l.95-6.02h1.385c4.678 0 7.75-2.203 8.796-6.502zm-2.96-5.09c.762.868.983 1.81.752 3.285-.019.123-.04.24-.062.36-.735 3.773-3.089 5.446-6.956 5.446H8.957c-.63 0-1.174.414-1.354 1.002l-.014-.002-.93 5.894H3.121a.051.051 0 0 1-.05-.06l2.598-16.51A.95.95 0 0 1 6.607 2h5.976c2.183 0 3.716.469 4.523 1.388z" fill="currentColor"></path></svg> {{LANG PayPal}}
+                    </button>
+
+                    <?php if($ask->config->stripe_payment == 'on'){?>
+                        <button class="btn-cart btn" onclick="CheckOutCard(1, '{pro_type_description}', '{{PRICE}}', 'credit_card');">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M3 3h18a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm17 9H4v7h16v-7zm0-4V5H4v3h16z" fill="currentColor"></path></svg> {{LANG Credit Card}} 
+                        </button>
+                    <?php } ?>
+					
+                    <?php if($ask->config->bank_payment == 'yes'){?>
+						<button class="btn" onclick="purchaseWalletBank($(this),'{{PRICE}}', '{{QUESTION_ID}}')" id="btn-wallet-bank-payment" data-id="" data-title="" >
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M2 20h20v2H2v-2zm2-8h2v7H4v-7zm5 0h2v7H9v-7zm4 0h2v7h-2v-7zm5 0h2v7h-2v-7zM2 7l10-5 10 5v4H2V7zm2 1.236V9h16v-.764l-8-4-8 4zM12 8a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" fill="currentColor"></path></svg> {{LANG Bank transfer}}
+						</button>
+                    <?php } ?>
+				</div>
+            </div>
+        </div>
+    </div>
+	<input id="wallet_amount" type="hidden" value="{{PRICE}}">
+</div>
+
+<div class="modal fade matdialog" id="bank_transfer_modal_response" tabindex="-1" role="dialog" aria-labelledby="bank_transfer_modal_response" aria-hidden="true" data-id="0">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="no-track-found" style="padding: 30px 10px;">
+                    <span id="bank_transfer_modal_response_txt"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bank_transfer_modal modal fade matdialog" tabindex="-1" role="dialog" aria-hidden="true" data-id="0">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content dt_bank_trans_modal">
+            <div class="modal-header">
+                <h5 class="modal-title">{{LANG Bank Transfer}}</h5>
+            </div>
+            <div class="modal-body">
+            	<div id="blog-alert"></div>
+                <?php if( $ask->config->bank_description !== '' ){?>
+                <div class="bank_info"><?php echo htmlspecialchars_decode($ask->config->bank_description);?></div>
+                <?php }?>
+                <?php if( $ask->config->bank_transfer_note !== '' ){ ?>
+                <div class="dt_user_profile hide_alert_info_bank_trans">
+                    <ul class="browser-default dt_prof_vrfy">
+                        <li id="bank_note"><?php echo $ask->config->bank_transfer_note;?></li>
+                    </ul>
+                </div>
+                <?php }?>
+                <p class="dt_bank_trans_upl_rec">
+                    <a href="javascript:void(0);" onclick="$('.bank_transfer_modal').addClass('up_rec_active'); return false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M13.5,16V19H10.5V16H8L12,12L16,16H13.5M13,9V3.5L18.5,9H13Z"></path>
+                        </svg> {{LANG Upload Receipt}}
+                    </a>
+                </p>
+                <div class="upload_bank_receipts">
+                    <div onclick="document.getElementById('receipt_img').click(); return false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M13.5,16V19H10.5V16H8L12,12L16,16H13.5M13,9V3.5L18.5,9H13Z"></path></svg>
+                        <p>{{LANG Upload Receipt}}</p>
+                        <img id="receipt_img_preview" src="">
+                    </div>
+                </div>
+                <input type="file" id="receipt_img" class="hidden" accept="image/x-png, image/gif, image/jpeg" name="receipt_img">
+            </div>
+            <!--<span style="display: block;text-align: center;" id="receipt_img_path"></span>-->
+            <div class="modal-footer">
+                <div class="bank_transfr_progress hide" id="img_upload_progress">
+                    <div class="progress">
+                        <div id="img_upload_progress_bar" class="determinate progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                    </div>
+                </div>
+                <button class="btn btn-default" data-dismiss="modal">{{LANG cancel}}</button>
+                <button class="btn btn-primary btn-mat" disabled id="btn-upload-receipt" data-selected="" data-mode="" data-question="" data-id="" data-title="" data-price="">{{LANG Confirm}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function purchaseWalletPaypal(element) {
+        ElementText = element.text();
+        element.text("{{LANG Please wait..}}");
+        element.attr('disabled', 'true');
+        $.get('{{LINK aj/get-wallet-url?price={{PRICE}}}}', function (data) {
+            if (data.status == 200) {
+                element.text("{{LANG Redirecting..}}");
+                location.href = data.url;
+            } else {
+                element.text("{{LANG Oops, an error found.}}");
+                element.removeAttr('disabled');
+                console.log(data.error);
+            }
+        });
+    }
+
+
+
+  
+    function purchaseWalletBank(element,price) {
+        var title = '{{LANG Replenish My Balance}}';
+
+        $('#btn-upload-receipt').attr('data-id', 1);
+        $('#btn-upload-receipt').attr('data-mode', 'wallet');
+        $('#btn-upload-receipt').attr('data-title', title);
+        $('#btn-upload-receipt').attr('data-price', price);
+
+        $('#receipt_img_path').html('');
+        $('#receipt_img_preview').attr('src', '');
+        $('.bank_transfer_modal').removeClass('up_rec_img_ready, up_rec_active');
+        $('.bank_transfer_modal').modal('show');
+       
+    }
+
+
+
+    document.getElementById('receipt_img').removeEventListener("change", handleReceiptImgChange, true);
+    document.getElementById('receipt_img').addEventListener('change', handleReceiptImgChange, { passive: false });
+    function handleReceiptImgChange(){
+        let imgPath = $(this)[0].files[0].name;
+        if (typeof(FileReader) != "undefined") {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                $('#receipt_img_preview').attr('src', e.target.result);
+            };
+            reader.readAsDataURL(this.files[0]);
+        }
+        $('#receipt_img_path').html(imgPath);
+        $('.bank_transfer_modal').addClass('up_rec_img_ready');
+        $('#btn-upload-receipt').removeAttr('disabled');
+        $('#btn-upload-receipt').removeClass('btn-flat').addClass('btn-success');
+    }
+    document.getElementById('btn-upload-receipt').addEventListener('click', function(e) {
+        e.preventDefault();
+        let bar = $('#img_upload_progress');
+        let percent = $('#img_upload_progress_bar');
+/*
+        let id = $(this).attr("data-id");
+        if (!id) {
+            return false;
+        }*/
+        let title = $(this).attr("data-title");
+        let price = $(this).attr("data-price");
+        let mode = $(this).attr("data-mode");
+        let question_id = $(this).attr("data-question");
+
+        let formData = new FormData();
+        formData.append("hash_id",'<?php echo createMainSession();?>');
+        formData.append("description",title);
+        formData.append("price", price);
+        formData.append("mode", mode);
+        formData.append("question_id", question_id);
+        // formData.append("track_id", id);
+        formData.append("receipt_img", $("#receipt_img")[0].files[0], $("#receipt_img")[0].files[0].value);
+        bar.removeClass('hide');
+        $.ajax({
+            xhr: function() {
+                let xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress", function(evt){
+                    if (evt.lengthComputable) {
+                        let percentComplete = evt.loaded / evt.total;
+                        percentComplete = parseInt(percentComplete * 100);
+                        //status.html( percentComplete + "%");
+                        percent.width(percentComplete + '%');
+                        percent.html(percentComplete + '%');
+                        if (percentComplete === 100) {
+                            bar.addClass('hide');
+                            percent.width('0%');
+                            percent.html('0%');
+                        }
+                    }
+                }, false);
+                return xhr;
+            },
+            url: '{{LINK aj/wallet/upload-receipt}}',
+            type: "POST",
+            async: true,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 60000,
+            dataType: false,
+            data: formData,
+            success: function(data) {
+                if( data['status'] == 200 ){
+                   
+
+                    $("#blog-alert").html('<div class="alert alert-success">'+ data['message'] +'</div>');
+
+                    
+
+                    setTimeout(function () {
+                       window.location = "<?php echo $ask->config->site_url;?>";
+		    		$(".prv-img").html('<div class="thumbnail-rendderer"><div><div class="error-text-renderer"></div><div><p>{{LINK Browse To Upload}}</p></div></div> </div>');
+		    		$("#blog-alert").html('');
+		    		$('#configreset').click();
+                    },3000);
+                    return false;
+                }
+            }
+        });
+    });
+</script>

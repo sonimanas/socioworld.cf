@@ -1,0 +1,315 @@
+* {
+	direction: rtl;
+}
+body {
+	text-align: right;
+}
+.list-unstyled {
+    padding-right: 0;
+}
+.ads_nav li a {
+    padding: 0 20px 0 5px;
+}
+.ads_nav li.active a {
+	padding-left: 5px;
+    padding-right: 18px;
+	border: 0;
+    border-right: 2px solid #000;
+}
+.my_ballnc h5 {
+    margin: 0;
+    margin-right: auto;
+}
+.my_ballnc svg {
+	margin: 0;
+    margin-left: 5px;
+}
+.pay_method .btn svg {
+	margin: 0;
+    margin-left: 12px;
+}
+.pp_mat_input input, .pp_mat_input textarea, .pp_mat_input select {
+    padding: 8px 40px 8px 10px;
+}
+.pp_mat_input i {
+    left: auto;right: 11px;
+}
+.close {
+    float: left;
+}
+.modal-header .close {
+    margin: -1rem auto -1rem -1rem;
+}
+.ask_announce > span {
+    right: auto;
+    left: 10px;
+}
+.mr-2, .mx-2 {
+    margin-right: 0 !important;
+	margin-left: .5rem!important;
+}
+.navbar-brand {
+    margin-right: 0;margin-left: 1rem;
+}
+.navbar-nav {
+    float: right;padding-right: 0;
+}
+.navbar-nav>li {
+    float: right;
+}
+.pl-3, .px-3 {
+    padding-left: 0!important;padding-right: 1rem!important;
+}
+header .ask_header_menu > ul > li {
+    margin-left: 0;margin-right: 10px;
+}
+.dropdown-menu-right {
+    right: auto;
+    left: 0;
+}
+.custom-control {
+    padding-left: 0;padding-right: 1.5rem;
+}
+.custom-control-label::before, .custom-control-label::after {
+    left: auto;right: -1.5rem;
+}
+.mr-1, .mx-1 {
+    margin-right: 0!important;margin-left: .25rem!important;
+}
+.sidebar_foot .social_links {
+    float: right;
+}
+.ask_side_widget .asw_head > svg {
+    margin-right: 0;margin-left: 6px;
+}
+.ask_side_widget .asw_head .refresh {
+    margin-left: 0;margin-right: auto;
+}
+.ask_post .ap_head .user_info svg {
+    margin-right: 0;margin-left: 5px;
+}
+.ask_post .ap_head .user_info {
+    margin-right: 0;margin-left: 40px;
+}
+.ask_post .ap_head .post_option {
+    float: left;
+}
+.question-time {
+    padding-left: 0;padding-right: 5px;
+}
+.ask_post .ap_foot .ques_lik_usrs {
+    margin-right: 1px;
+    margin-left: 6px;
+}
+.ask_post .ap_foot .answer_it {
+    float: left;
+}
+.ask_post .ap_foot .answer_it .btn {
+    padding: 3px 10px 3px 4px;
+}
+.ask_post .ap_foot .answer_it .btn svg {
+    margin: -0.5px 3px 0 0;
+    transform: rotate(180deg);
+}
+.ask_post .ap_head .user_info img {
+    margin-right: 0;margin-left: 7px;
+}
+.ask_post .ab_answer .aba_foot .btn {
+    margin-left: 0;
+    margin-right: 8px;
+}
+.ask_side_widget .asw_body .aswb_users .user_ava, .ask_settings .sett_block_list .asb_users .user_ava {
+    margin-right: 0;
+    margin-left: 10px;
+    float: right;
+}
+.ask_side_widget .asw_body .aswb_users .follow, .ask_settings .sett_block_list .asb_users .unlock {
+    float: left;
+}
+.ask_side_widget .asw_body .aswb_users .user_info, .ask_settings .sett_block_list .asb_users .user_info {
+    margin-right: 0;
+    margin-left: 50px;
+}
+.ask_side_widget .asw_body .aswb_users .user_info {
+    margin-right: 0;
+    margin-left: 95px;
+}
+.ask_box .ab_head .abh_options {
+    margin-right: 0;
+    margin-left: 25px;
+}
+.ask_box .ab_head .abh_options svg {
+    margin-right: 0;
+    margin-left: 6px;
+}
+.ask_box .ab_form .abf_foot .media .chk_body, #ask_edit_question .media .chk_body {
+    padding-left: 0;
+    padding-right: 12px;
+}
+.ask_photo_poll .app_foot .media .chk_body {
+    margin-left: 0;
+    margin-right: 10px;
+}
+.ask_photo_poll .app_foot .media {
+    margin-right: 0;margin-left: auto;
+}
+.ask_usr_info .aui_head img {
+    right: 0;
+    left: 0;
+    transform: translateY(-50%);
+}
+.ask_usr_info .aui_ava {
+    margin-right: 0;
+    margin-left: 12px;
+}
+.ask_usr_info .aui_info ul li:last-child {
+    border-left: 0;
+    border-right: 1px solid #e9e9e9;
+}
+.ask_side_widget .asw_body .aswb_users .follow svg {
+    margin-right: 0;
+    margin-left: 5px;
+}
+.messages-sidebar ul li a .user-avatar {
+    float: right;
+    margin: 0px 5px 0px 15px;
+}
+.countunseen {
+    float: left;
+}
+.pull-left {
+    float: right!important;
+}
+.pull-right {
+    float: left!important;
+}
+.user-messages .messages .message .user-message {
+    margin-left: 0;
+    margin-right: 20px;
+}
+#night_mode_toggle svg {
+    margin-left: 0;
+    margin-right: auto;
+}
+.trend_tags .tren_search input {
+    padding: 6px 44px 6px 12px;
+}
+.trend_tags .tren_search i {
+    left: auto;
+    right: 10px;
+}
+.container .ask_search_tabs li a svg {
+    margin-right: 0;
+    margin-left: 3px;
+}
+.ask_side_widget .asw_head .clear_search {
+    margin-left: 0;
+    margin-right: auto;
+}
+.ask_settings .as_head .ash_profile img {
+    margin-right: 0;
+    margin-left: 10px;
+}
+.ask_settings .sett_acc_menu li a i {
+    margin-right: 0;
+    margin-left: 5px;
+}
+.ask_settings .ask_acc_title_hd a {
+    margin-right: 0;
+    margin-left: 11px;
+}
+.steps_header .step-one {
+    left: auto;
+    right: 25%;
+}
+.steps_header .step-two {
+    left: auto;
+    right: 75%;
+}
+.steps_header .steps > div {
+    transform: translate(50%);
+}
+.steps_header .line .dot-move {
+    left: auto;
+    right: 25%;
+    transform: translate(50%, -50%);
+}
+.steps_header .line .dot {
+    left: auto;
+    right: 0;
+    transform: translate(50%, -50%) scale(.5);
+}
+.steps_header .line .dot.zero {
+    left: auto;
+    right: 25%;
+}
+.steps_header .line .dot.full {
+    left: auto;
+    right: 75%;
+}
+.slider-two-active .line .dot-move {
+    left: auto;
+    right: 75%;
+}
+.user-messages .messages .message.incming_msg .user-message {
+    margin-left: 0;
+    margin-right: 40px;
+}
+.user-messages .messages .message .user-avatar {
+    float: right;
+}
+header .header_notif_menu .dropdown-menu .ask_notifs .avatar {
+    margin: 0 0 0 12px;
+}
+header .header_notif_menu .dropdown-menu .ask_notifs .n_detail {
+    margin-right: 0;
+    margin-left: 5px;text-align: right;
+}
+.dropdown-toggle:after {
+    margin-left: 0;
+    margin-right: .5rem;
+}
+.ask_profile .ap_cover img {
+    right: 50%;
+    left: 0;
+    transform: translate(50%,-50%);
+}
+.ask_profile .ap_user_info .avatar_container {
+    margin-right: 0;
+    margin-left: 20px;
+}
+.ask_profile .ap_user_info .stats_me b {
+    margin-right: 0;
+    margin-left: 5px;
+}
+.ask_profile .ap_user_info .ap_options {
+    margin-left: 0;
+    margin-right: auto;
+}
+.ask_profile .sidebar .about_me .about_me_info li {
+    padding-left: 0;
+    padding-right: 28px;
+}
+.ask_profile .sidebar .about_me .about_me_info li svg {
+    margin: -3px 3px 0 7px;
+    left: auto;
+    right: 0;
+}
+
+
+
+
+
+
+
+@media (min-width: 992px) {
+.ml-lg-auto, .mx-lg-auto {
+    margin-left: 0!important;margin-right: auto!important;
+}
+}
+
+@media (max-width: 992px) {
+header .ask_header_menu ul.ml-lg-auto {
+    margin: 0;margin-right: auto;
+}
+}

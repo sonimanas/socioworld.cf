@@ -1,0 +1,29 @@
+<div class="container small_container page_margin">
+    <div class="row">
+        <div class="col-md-7">
+            <!-- Post Area  -->
+            {{POST_AREA}}
+            <!-- End Post Area  -->
+        </div>
+
+        <!-- Sidebar  -->
+        <div class="col-md-5">
+            <div class="sidebar">
+                {{TRENDING_HASHTAG}}
+
+                <!-- People Suggestion  -->
+                {{PEOPLE_SUGGESTION}}
+                <!-- End People Suggestion  -->
+
+                <!-- Sidebar Footer  -->
+                {{SIDEBAR_FOOTER}}
+                <!-- End Sidebar Footer  -->
+            </div>
+        </div>
+        <!-- End Sidebar  -->
+    </div>
+    <input type="hidden" id="profile-id" value="{{USER id}}">
+    <input type="hidden" id="loadmore_mode" value="hashtag">
+    <input type="hidden" id="hashtag" value="<?php echo Secure($_GET['hashtag']);?>">
+</div>
+

@@ -1,0 +1,39 @@
+<div class=" main_trnedin_pg">
+	<div class="ask_head_circle-1"></div>
+	<div class="ask_head_circle-2"></div>
+	<div class="ask_head_circle-3"></div>
+    <div class="gray_wrapper">
+        <div class="container">
+            <h1>{{LANG Trending Questions}}</h1>
+        </div>
+    </div>
+</div>
+<div class="container small_container page_margin">
+    <div class="row">
+        <div class="col-md-7">
+            {{POST_AREA}}
+        </div>
+        <!-- Sidebar  -->
+        <div class="col-md-5">
+            <div class="sidebar">
+                {{TRENDING_HASHTAG}}
+
+                <?php
+                    foreach (GetSideBarAds() as $wo['sidebar-ad']) {
+                        echo LoadPage('ads/includes/sidebar-ad' , ['AD_DATA' => $wo['sidebar-ad']]);
+                }
+                ?>
+
+                <!-- People Suggestion  -->
+                {{PEOPLE_SUGGESTION}}
+                <!-- End People Suggestion  -->
+
+                <!-- Sidebar Footer  -->
+                {{SIDEBAR_FOOTER}}
+                <!-- End Sidebar Footer  -->
+            </div>
+        </div> <!-- End Sidebar  -->
+    </div>
+    <input type="hidden" id="profile-id" value="{{USER id}}">
+    <input type="hidden" id="loadmore_mode" value="trending">
+</div>

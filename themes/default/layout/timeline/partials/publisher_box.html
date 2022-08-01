@@ -1,0 +1,514 @@
+<?php if($ask->mode == 'all'){ ?>
+
+    <!-- Publisher Box  --> 
+    <section class="ask_box">
+		<div class="msg_progress" id="loading_indicator"><div class="indeterminate"></div></div>
+        <div class="ab_head">
+            <div class="abh_options active"><svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 24 24"><path fill="currentColor" d="M4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2M12.19,5.5C11.3,5.5 10.59,5.68 10.05,6.04C9.5,6.4 9.22,7 9.27,7.69H11.24C11.24,7.41 11.34,7.2 11.5,7.06C11.7,6.92 11.92,6.85 12.19,6.85C12.5,6.85 12.77,6.93 12.95,7.11C13.13,7.28 13.22,7.5 13.22,7.8C13.22,8.08 13.14,8.33 13,8.54C12.83,8.76 12.62,8.94 12.36,9.08C11.84,9.4 11.5,9.68 11.29,9.92C11.1,10.16 11,10.5 11,11H13C13,10.72 13.05,10.5 13.14,10.32C13.23,10.15 13.4,10 13.66,9.85C14.12,9.64 14.5,9.36 14.79,9C15.08,8.63 15.23,8.24 15.23,7.8C15.23,7.1 14.96,6.54 14.42,6.12C13.88,5.71 13.13,5.5 12.19,5.5M11,12V14H13V12H11Z" /></svg> {{LANG Question}}</div>
+            <div class="abh_options" data-toggle="modal" data-target="#ask_polls"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M17,17H15V13H17M13,17H11V7H13M9,17H7V10H9M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3Z" /></svg> {{LANG Photo Poll}}</div>
+        </div>
+        <form class="ab_form" id="question-form" method="POST">
+            <div class="question-form-alert"></div>
+			
+		  
+            <textarea name="question" id="question_textarea" class="form-control postText" placeholder="{{LANG What's going on? Ask anything..}}" dir="auto" autocomplete="off"></textarea>
+
+
+		   <div id="results"></div>
+        
+            <div class="abf_foot">
+                <div>
+				<div class="ball-pulse">
+               <div></div>
+               <div></div>
+               <div></div>
+            </div>
+					<div class="media align-items-center">
+
+                        <?php if(isset($ask->profile_user)) {?>
+                            <?php if($ask->user->username !== $ask->profile_user->username){ ?>
+
+                                <div class="pp_mat_input" style="margin-bottom: 0px;">
+                                    <select id="view_type" name="view_type">
+                                        <option value="1" selected>{{LANG Public}}</option>
+                                        <option value="0">{{LANG Private}}</option>
+                                    </select>
+                                    <i class="fas fa-bars fab_w"></i>
+                                </div>
+                                <input type="hidden" name="question_type" value="user_ask">
+
+                            <?php } else { ?>
+
+                                <label class="u-checkbox-switch">
+                                    <input type="checkbox" class="u-checkbox-switch__input" id="ask_anonm" name="is_anonymously" checked="">
+                                    <span class="u-checkbox-switch__slider"></span>
+                                </label>
+                                <label class="chk_body" for="ask_anonm">
+                                    <span>{{LANG Ask anonymously}}</span>
+                                </label>
+                                <input type="hidden" name="question_type" value="me_ask">
+                                <input type="hidden" name="view_type" value="1">
+
+                            <?php } ?>
+                        <?php } else { ?>
+
+                            <label class="u-checkbox-switch">
+                                <input type="checkbox" class="u-checkbox-switch__input" id="ask_anonm" name="is_anonymously" checked="">
+                                <span class="u-checkbox-switch__slider"></span>
+                            </label>
+                            <label class="chk_body" for="ask_anonm">
+                                <span>{{LANG Ask anonymously}}</span>
+                            </label>
+                            <input type="hidden" name="question_type" value="me_ask">
+                            <input type="hidden" name="view_type" value="1">
+
+                        <?php } ?>
+                        
+
+                </div>
+				</div>
+             
+                <div>
+                <input type="hidden" name="hash_id" value="<?php echo CreateSession()?>">
+                <input type="hidden" name="user_id" value="{{ME id}}">
+                <input type="hidden" name="profile_user_id" value="{{USER id}}">
+					<span data-toggle="dropdown" role="button" aria-expanded="false" style="margin: 0 5px;cursor: pointer;" onclick="load_ajax_emojii();" class="emo-comment2" >
+                     <svg fill="#009da0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" class="feather feather-user-plus">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
+                     </svg>
+               </span>
+               <ul class="dropdown-menu dropdown-menu-right emo-comment-container" id="wo_comm_emojis"></ul>
+                <button name="button" type="submit" class="btn btn-primary">{{LANG Ask}}</button>
+				</div>
+            </div>
+        </form>
+        <div id="hidden_inputbox"></div>
+    </section>
+    <!-- End Publisher Box  -->
+
+    <!-- Poll Modal  -->
+    <div class="modal fade matdialog" id="ask_polls" tabindex="-1" role="dialog" aria-labelledby="ask_polls-Label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ask_polls-Label">{{LANG Create photo poll}}</h5>
+                </div>
+                <div class="modal-body">
+                    <form class="ask_photo_poll" id="question-photo-form" method="POST">
+                        <div class="question-form-photo-alert"></div>
+							
+                        <textarea name="question_photo"  id="question_photo_textarea" placeholder="{{LANG What's going on? Ask anything..}}" rows="2" dir="auto" autocomplete="off"></textarea>
+						
+                        <div class="app_photos">
+                            <input type="file" id="choice1_img" class="upload_file" accept="image/*">
+                            <label class="drop-zone" for="choice1_img" id="choice1_img_preview">
+                                <span class="icon_upload_image">
+                                    <span><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="#222" d="M5,3A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H14.09C14.03,20.67 14,20.34 14,20C14,19.32 14.12,18.64 14.35,18H5L8.5,13.5L11,16.5L14.5,12L16.73,14.97C17.7,14.34 18.84,14 20,14C20.34,14 20.67,14.03 21,14.09V5C21,3.89 20.1,3 19,3H5M19,16V19H16V21H19V24H21V21H24V19H21V16H19Z"></path></svg></span>{{LANG Choice 1}}
+                                </span>
+                                <span>{{LANG Click to upload your image}}</span>
+                            </label>
+                            <input type="file" id="choice2_img" class="upload_file" accept="image/*">
+                            <label class="drop-zone" for="choice2_img" id="choice2_img_preview">
+                                <span class="icon_upload_image">
+                                    <span><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="#222" d="M5,3A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H14.09C14.03,20.67 14,20.34 14,20C14,19.32 14.12,18.64 14.35,18H5L8.5,13.5L11,16.5L14.5,12L16.73,14.97C17.7,14.34 18.84,14 20,14C20.34,14 20.67,14.03 21,14.09V5C21,3.89 20.1,3 19,3H5M19,16V19H16V21H19V24H21V21H24V19H21V16H19Z"></path></svg></span>{{LANG Choice 2}}
+                                </span>
+                                <span>{{LANG Click to upload your image}}</span>
+                            </label>
+                        </div>
+                        <small style="font-size: 10px;line-height: 15px;display: block;">{{LANG It’s not recommended to make a poll with photos of your friends without their consent. We will remove such a poll, if it’s reported.}}</small>
+                        <div class="progress hidden" id="img_poll_upload_progress">
+                            <div id="img_poll_upload_progress_bar" class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                        </div>
+                        <input type="hidden" name="hash_id" value="<?php echo CreateSession()?>">
+                        <input type="hidden" name="user_id" value="{{ME id}}">
+                        <input type="hidden" name="view_type" value="1">
+                        <div class="app_foot">
+                            <div class="media align-items-center">
+                                <label class="u-checkbox-switch">
+                                    <input type="checkbox" class="u-checkbox-switch__input" id="ask_photo_anonm" name="is_anonymously_photo" checked="">
+                                    <span class="u-checkbox-switch__slider"></span>
+                                </label>
+                                <label class="chk_body" for="ask_photo_anonm">
+                                    <span> {{LANG Ask anonymously}}</span>
+                                </label>
+                            </div>
+                            <button type="button" class="btn matbtn" id="btn-cancel">{{LANG Cancel}}</button>
+                            <button name="button" type="submit" class="btn btn-primary" disabled="disabled">{{LANG ASK}}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Poll Modal  -->
+
+    <script>
+
+ function RemoveFetchedUrl() {
+
+              fetch_url = 0;
+              var content = $('form.ab_form').find('.extracted_url');
+              content.slideUp(function () {
+                $(this).remove();
+                if ($('form-control.postText').val() != '') {
+                    $('form-control.postText').focus();
+                    
+                }                
+                
+              });
+            }  
+
+
+  
+$(function() {
+
+      var fetch_url = 1;
+ 
+  var getUrl  = $('.form-control.postText'); //url to extract from text field
+  var sent = 0;
+
+  
+  
+  $('.form-control.postText').bind("paste keyup input propertychange", function(e) {    
+    // if ($(this).val() == '') {
+    //     fetch_url = 1;
+    //  }
+    if (($(".extracted_url").length > 0)){
+      return false;
+    }
+
+    else if (/(https?:\/\/(?:.*)\.(?:png|jpg|gif|jpeg))/ig.test(getUrl.val())) {
+      /* pass */
+    }
+
+    else{
+        
+      var match_url = /(https?:\/\/[^\s]+)/g;
+      if (match_url.test(getUrl.val()) && sent == 0 && fetch_url == 1) {
+
+          sent = 1;
+
+          $("#results").hide();
+          $("#loading_indicator").show(); 
+          var extracted_url = getUrl.val().match(match_url)[0];
+
+          $.post('{{LINK aj/fetch_post?first=posts&second=fetch_url}}',{'url': extracted_url}, function(data){       
+         
+            extracted_images = data.images;
+            total_images     = parseInt(data.images.length-1);
+            img_arr_pos      = total_images;
+            if(extracted_images != ''){
+              inc_image   = '<div class="extracted_thumb" id="extracted_thumb"><img src="'+data.images[img_arr_pos]+'"></div>';
+              input_image = data.images[img_arr_pos];
+            } 
+
+            else {
+              inc_image   = '';
+              input_image = '';
+            }
+            
+            var img_content = '';
+            if (total_images > 1) {
+              img_content = '<div class="thumb_select"><div class="thumb_sel"><span class="prev_thumb" id="thumb_next"><i class="fa fa-arrow-circle-right"></i></span><span class="next_thumb" id="thumb_prev"><i class="fa fa-arrow-circle-left"></i></span> </div><span class="small_text" id="total_imgs">'+img_arr_pos+' of '+total_images+'</span></div></div></div>';
+            }
+
+            var content = '<div class="extracted_url"><span class="remove-fetched-url" onclick="RemoveFetchedUrl();"><i class="fa fa-times"></i></span>'+ inc_image +'<div class="extracted_content"><input class="form-control url-input" type="text" name="url_title" value="'+data.title+'" dir="auto"><br><textarea onkeyup="textAreaAdjust(this, 70)" class="form-control url-input-textarea url-input" name="url_content" placeholder="{{LANG Description}}" dir="auto">' + data.content + '</textarea><input type="hidden" id="url_image" name="url_image" value="'+ input_image +'"><input type="hidden" id="url_link" name="url_link" value="'+data.url+'"><div class="clear"></div>' + img_content;
+       
+
+            $("#results").html(content); 
+            $("#results").fadeIn(); 
+            $("#loading_indicator").hide();
+            sent = 0;
+
+          },'json');
+      }
+    }
+    $("body").on("click","#thumb_prev", function(e){    
+    if(img_arr_pos>0) 
+    {
+      img_arr_pos--; 
+      
+      $("#extracted_thumb").html('<img src="'+extracted_images[img_arr_pos]+'">');
+
+      $("#url_image").attr('value', extracted_images[img_arr_pos]);
+      
+      $("#total_imgs").html((img_arr_pos) +' of '+ total_images);
+    }
+  });
+  
+  $("body").on("click","#thumb_next", function(e){    
+    if(img_arr_pos<total_images)
+    {
+      img_arr_pos++;
+      
+      $("#extracted_thumb").html('<img src="'+extracted_images[img_arr_pos]+'">');
+
+      $("#url_image").attr('value', extracted_images[img_arr_pos]);
+      
+      $("#total_imgs").html((img_arr_pos) +' of '+ total_images);
+    }
+  });
+
+
+        
+  });
+
+
+ 
+
+ $('form').submit(function(){
+                $(this).find('button[type=submit]').attr('disabled','disabled');
+            });
+            var form = $('form#question-form');
+            form.ajaxForm({
+                url: '{{LINK aj/question/normal}}?hash=' + $('.main_session').val(),
+                beforeSend: function() {
+                    form.find('button').text("{{LANG please_wait}}");
+                },
+                success: function(data) {
+                    //scrollToTop();
+                    if (data.status == 200) {
+                        if( data.question_html !== '' ){
+                            $('.ask_post_block').prepend(data.question_html);
+                            if( $('.no_post').length > 0 ){
+                                $('.no_post').remove();
+                            }
+                        }
+                         RemoveFetchedUrl();
+                        $('#question_textarea').val('');
+
+
+                    } else if (data.errors) {
+                        var errors = data.errors.join("<br>");
+                        $('.question-form-alert').html('<div class="alert alert-danger">' + errors + '</div>');
+                        $('.alert-danger').fadeIn('fast', function() {
+                            $(this).delay(2500).slideUp(500, function() {
+                                $(this).remove();
+                            });
+                        });
+
+                    }
+                    form.find('button').replaceWith('<button name="button" type="submit" class="btn btn-primary">{{LANG Send}}</button>');
+                    fetch_url = 1;
+                }
+
+                 
+
+
+            });
+
+       
+
+            var choice1_img_chosen = false;
+            var choice2_img_chosen = false;
+            $("#choice1_img").change(function() {
+                if(this.files[0].size>528385){
+                    msgbox("{{LANG Image upload error}}.", "{{LANG img_size_not_greater}} {{CONFIG max_image_upload_size}}Kb");
+                    return false;
+                }
+                if(this.files[0].type.indexOf("image")==-1){
+                    msgbox("{{LANG Image upload error}}.", "{{LANG invalid_type_image}}");
+                    return false;
+                }
+
+                var attr_original = $('#choice1_img_preview').attr('original');
+                if (typeof attr_original !== typeof undefined && attr_original !== false) {
+                    //$('#choice1_img_preview').attr('original',$('#choice1_img_preview').html());
+                }else{
+                    $('#choice1_img_preview').attr('original',$('#choice1_img_preview').html());
+                }
+
+
+                $('#choice1_img_preview').html('');
+                if (this.files && this.files[0]) {
+                    choice1_img_chosen = true;
+                    if(choice1_img_chosen === true && choice2_img_chosen === true){
+                        $('form#question-photo-form').find('button[type=submit]').removeAttr('disabled');
+                    }
+                    let reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#choice1_img_preview').css({'background-image':'url(' + e.target.result + ')', 'width': '213px','background-position': 'center center','background-repeat': 'no-repeat','background-size': 'cover'});
+                    }
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+            $("#choice2_img").change(function() {
+                if(this.files[0].size>528385){
+                    msgbox("{{LANG Image upload error}}.", "{{LANG img_size_not_greater}} {{CONFIG max_image_upload_size}}Kb");
+                    return false;
+                }
+                if(this.files[0].type.indexOf("image")==-1){
+                    msgbox("{{LANG Image upload error}}.", "{{LANG invalid_type_image}}");
+                    return false;
+                }
+                var attr_original = $('#choice2_img_preview').attr('original');
+                if (typeof attr_original !== typeof undefined && attr_original !== false) {
+
+                }else{
+                    $('#choice2_img_preview').attr('original',$('#choice2_img_preview').html());
+                }
+                $('#choice2_img_preview').html('');
+                if (this.files && this.files[0]) {
+                    choice2_img_chosen = true;
+                    if(choice1_img_chosen === true && choice2_img_chosen === true){
+                        $('form#question-photo-form').find('button[type=submit]').removeAttr('disabled');
+                    }
+                    let reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#choice2_img_preview').css({'background-image':'url(' + e.target.result + ')', 'width': '213px','background-position': 'center center','background-repeat': 'no-repeat','background-size': 'cover'});
+                    }
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+            $("#btn-cancel").on('click', function(e) {
+                e.preventDefault();
+                $('#ask_polls').modal('hide');
+
+                $('#ask_photo_anonm').prop('checked', true).change();
+                $('#question_photo_textarea').val('');
+                $("#choice1_img").val("");
+                $("#choice2_img").val("");
+
+                $('#choice1_img_preview').html($('#choice1_img_preview').attr('original'));
+                $('#choice1_img_preview').css({'background-image':'inherit', 'width': '213px','background-position': 'center center','background-repeat': 'no-repeat','background-size': 'cover'});
+
+                $('#choice2_img_preview').html($('#choice2_img_preview').attr('original'));
+                $('#choice2_img_preview').css({'background-image':'inherit', 'width': '213px','background-position': 'center center','background-repeat': 'no-repeat','background-size': 'cover'});
+
+                choice1_img_chosen = false;
+                choice2_img_chosen = false;
+            });
+            $('form#question-photo-form').submit(function(e){
+                e.preventDefault();
+                if( !$("#choice1_img")[0].files[0] || !$("#choice2_img")[0].files[0]){
+                    $('.question-form-photo-alert').html('<div class="alert alert-danger">{{LANG You have to select two image.}}</div>');
+                    $('.alert-danger').fadeIn('fast', function() {
+                        $(this).delay(2500).slideUp(500, function() {
+                            $(this).remove();
+                        });
+                    });
+                    return false;
+                }
+                let submit_button = $(this).find('button[type=submit]');
+                submit_button.text("{{LANG please_wait}}");
+
+                let bar = $('#img_poll_upload_progress');
+                let percent = $('#img_poll_upload_progress_bar');
+
+                let formData = new FormData();
+                formData.append("user_id", '{{USER id}}');
+                formData.append("question", $('#question_photo_textarea').val());
+                formData.append("is_anonymously", $('#ask_photo_anonm').is(':checked'));
+                formData.append("hash_id", '<?php echo CreateSession()?>');
+                formData.append("choice1_img", $("#choice1_img")[0].files[0], $("#choice1_img")[0].files[0].value);
+                formData.append("choice2_img", $("#choice2_img")[0].files[0], $("#choice2_img")[0].files[0].value);
+                formData.append("view_type", 1);
+
+                bar.removeClass('hidden');
+                $.ajax({
+                    xhr: function() {
+                        let xhr = new window.XMLHttpRequest();
+                        xhr.upload.addEventListener("progress", function(evt){
+                            if (evt.lengthComputable) {
+                                let percentComplete = evt.loaded / evt.total;
+                                percentComplete = parseInt(percentComplete * 100);
+                                //status.html( percentComplete + "%");
+                                percent.width(percentComplete + '%');
+                                percent.html(percentComplete + '%');
+                                if (percentComplete === 100) {
+                                    bar.addClass('hidden');
+                                    percent.width('0%');
+                                    percent.html('0%');
+                                }
+                            }
+                        }, false);
+                        return xhr;
+                    },
+                    url: '{{LINK aj/question/photo}}?hash=' + $('.main_session').val(),
+                    type: "POST",
+                    async: true,
+                    enctype: 'multipart/form-data',
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 60000,
+                    dataType: false,
+                    data: formData,
+                    success: function(result) {
+                        if( result.status == 200 ){
+                            if( result.question_html !== '' ){
+                                $('.ask_post_block').prepend(result.question_html);
+                            }
+                            // $('.question-form-photo-alert').html('<div class="alert alert-success">' + result.message + '</div>');
+                            // $('.alert-success').fadeIn('fast', function() {
+                            //     $(this).delay(2500).slideUp(500, function() {
+                            //         $(this).remove();
+                            //
+                            //
+                            //     });
+                            // });
+
+                            $('#ask_polls').modal('hide');
+
+                            $('#question_photo_textarea').val('');
+                            $("#choice1_img").val("");
+                            $("#choice2_img").val("");
+
+                            $('#choice1_img_preview').html($('#choice1_img_preview').attr('original'));
+                            $('#choice1_img_preview').css({'background-image':'inherit', 'width': '213px','background-position': 'center center','background-repeat': 'no-repeat','background-size': 'cover'});
+
+                            $('#choice2_img_preview').html($('#choice2_img_preview').attr('original'));
+                            $('#choice2_img_preview').css({'background-image':'inherit', 'width': '213px','background-position': 'center center','background-repeat': 'no-repeat','background-size': 'cover'});
+                            choice1_img_chosen = false;
+                            choice2_img_chosen = false;
+
+                        } else if (result.errors) {
+                            var errors = result.errors.join("<br>");
+                            $('.question-form-photo-alert').html('<div class="alert alert-danger">' + errors + '</div>');
+                            $('.alert-danger').fadeIn('fast', function() {
+                                $(this).delay(2500).slideUp(500, function() {
+                                    $(this).remove();
+                                });
+                            });
+                        }
+                        submit_button.replaceWith('<button name="button" type="submit" class="btn btn-primary">{{LANG Send}}</button>');
+                    }
+                });
+            });
+
+
+
+
+            var is_anonymouslyCookie = getCookie("is_anonymously");
+            if (is_anonymouslyCookie == null) {
+                $('#ask_anonm').prop('checked', false).change();
+                $('#ask_photo_anonm').prop('checked', false).change();
+            }
+            else {
+                if (is_anonymouslyCookie == 'true') {
+                    $('#ask_anonm').prop('checked', true).change();
+                    $('#ask_photo_anonm').prop('checked', true).change();
+                }
+                else{
+                    $('#ask_anonm').prop('checked', false).change();
+                    $('#ask_photo_anonm').prop('checked', false).change();
+                }
+            }
+            $('#ask_anonm').on('change.bootstrapSwitch', function(e) {
+                setCookie("is_anonymously", e.target.checked,100000);
+                $('#ask_photo_anonm').prop('checked', e.target.checked).change();
+            });
+            $('#ask_photo_anonm').on('change.bootstrapSwitch', function(e) {
+                setCookie("is_anonymously", e.target.checked,100000);
+                $('#ask_anonm').prop('checked', e.target.checked).change();
+            });
+
+
+
+
+
+     });
+
+    </script>
+<?php } ?>

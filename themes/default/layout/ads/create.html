@@ -1,0 +1,227 @@
+<div class="container page_margin">
+    <div class="row">
+		<div class="col-md-3"><?php echo LoadPage('ads/includes/header'); ?></div>
+		<div class="col-md-9">
+        <div class="ask_side_widget ads-cont-wrapper">
+			<h2>{{LANG Create New}}</h2>
+			<div class="ask_settings">
+				<form class="as_form" method="get" id="create-ads">
+					<div id="create-ads-alert" class="w100"></div>
+					
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="pp_mat_input">
+								<input type="text" name="name" placeholder="{{LANG Company}}" max="50" autofocus>
+								<i class="fas fa-briefcase fab_w"></i>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="pp_mat_input">
+								<input type="text" name="website" placeholder="{{LANG website Url}}">
+								<i class="fas fa-link fab_w"></i>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="pp_mat_input">
+								<input type="text" name="headline" placeholder="{{LANG Title}}">
+								<i class="fas fa-font fab_w"></i>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="pp_mat_input" id="review-ads-location">
+								<input type="text" name="location" id="ads-location" placeholder="{{LANG Location}}">
+								<i class="fas fa-map-marker-alt fab_w"></i>
+							</div>
+						</div>
+					</div>
+					<div class="form-group" id="review-ads-location">
+                        <div id="place"></div>
+                    </div>
+					<div class="pp_mat_input">
+						<textarea name="description" placeholder="{{LANG Description}}" rows="3"></textarea>
+						<i class="fas fa-align-left fab_w"></i>
+					</div>
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="pp_mat_input">
+								<select name="gender" id="gender">
+									<option value="" disabled selected>{{LANG gender}}</option>
+									<option value="all">{{LANG All}}</option>
+									<option value="male">{{LANG Male}}</option>
+									<option value="female">{{LANG Female}}</option>
+                                </select>
+								<i class="fas fa-male fab_w"></i>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="pp_mat_input">
+								<select name="bidding" id="bidding">
+									<option value="" disabled selected>{{LANG Bidding}}</option>
+                                    <option value="clicks"><?php echo str_replace('${{PRICE}}',  GetCurrency($ask->config->ads_currency) . $ask->config->ad_c_price, __('pay_per_click')); ?></option>
+                                    <option value="views"><?php echo str_replace('${{PRICE}}', GetCurrency($ask->config->ads_currency) . $ask->config->ad_v_price, __('pay_per_imprssion')); ?></option>
+								</select>
+								<i class="fas fa-hand-point-up fab_w"></i>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6">
+							<label class="col-md-12">{{LANG Media}}</label>
+							<div class="pp_mat_input">
+								<div class="fcov_image">
+									<div id="fake_post_img_holder"></div>
+									<div class="upload_ad_image" onclick="document.getElementById('ad-media-file').click(); return false">
+										<div class="upload_ad_image_content">
+											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-camera"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg> {{LANG Choose File}}
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<label class="col-md-12">{{LANG Audience}}</label>
+							<div class="pp_mat_input">
+								<select data-live-search="true" data-actions-box="true" name="audience-list[]" id="ads-audience" class="selectpicker form-control" data-size="10" multiple>
+									<?php foreach ($ask->audience as $country_ids => $country): ?>
+									<?php if ($country_ids == 0): ?>
+										<option value="<?php echo $country_ids; ?>" disabled><?php echo $country; ?></option>
+									<?php else: ?>
+										<option value="<?php echo $country_ids; ?>"><?php echo $country; ?></option>
+									<?php endif; ?>
+									<?php endforeach;?>
+                                </select>
+								<i class="fas fa-user-circle fab_w"></i>
+							</div>
+						</div>
+					</div>
+						
+					<div class="form-group" id="estimated" style="display: none;">
+						<div class="estimated_ad_limit">
+							<p class="bold">{{LANG Estimated reach}}</p>
+							<p><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24"><path fill="currentColor" d="M16,13C15.71,13 15.38,13 15.03,13.05C16.19,13.89 17,15 17,16.5V19H23V16.5C23,14.17 18.33,13 16,13M8,13C5.67,13 1,14.17 1,16.5V19H15V16.5C15,14.17 10.33,13 8,13M8,11A3,3 0 0,0 11,8A3,3 0 0,0 8,5A3,3 0 0,0 5,8A3,3 0 0,0 8,11M16,11A3,3 0 0,0 19,8A3,3 0 0,0 16,5A3,3 0 0,0 13,8A3,3 0 0,0 16,11Z" /></svg> ~<span class="estimated_text"></span> {{LANG Users}}</p>
+						</div>
+					</div>
+					<div class="form-group">
+						<?php if ($ask->user->wallet == '0.00' || $ask->user->wallet == '0') { ?>
+							<div class="alert alert-warning">{{LANG Your current wallet balance is: 0, please top up your wallet to continue.}} <a href="{{LINK wallet}}" data-load="?link1=wallet">{{LANG Top up}}</a></div>
+						<?php } ?>
+					</div>
+					<div class="btn_footer">
+						<button type="submit" class="btn btn-primary u-btn-primary transition-3d-hover" <?php echo ($ask->user->wallet == '0.00' || $ask->user->wallet == '0') ? 'disabled' : ''; ?>>{{LANG Publish}}</button>
+					</div>
+
+                    <input type="hidden" name="appears" value="sidebar">
+					<input type="file" name="media" class="hidden" id="ad-media-file" accept="image/* video/*">
+					<input type="hidden" name="hash_id" value="<?php echo CreateSession()?>">
+					<input type="hidden" name="user_id" value="<?php echo $ask->user->id?>">
+				</form>
+				<div class="clear"></div>
+			</div>
+        </div>
+		</div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+	$("#ad-media-file").on('change', function() {
+	//Get count of selected files
+	var product_countFiles = $(this)[0].files.length;
+	var product_imgPath = $(this)[0].value;
+	var extn = product_imgPath.substring(product_imgPath.lastIndexOf('.') + 1).toLowerCase();
+	var product_image_holder = $("#fake_post_img_holder");
+	product_image_holder.empty();
+	if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+		if (typeof(FileReader) != "undefined") {
+		//loop for each file selected for uploaded.
+		for (var i = 0; i < product_countFiles; i++) 
+		{
+			var product_reader = new FileReader();
+			product_reader.onload = function(e) {
+				$("<img />", {
+                    "src": e.target.result,
+                    "class": "thumb-image"
+                  }).appendTo(product_image_holder);
+                }
+                product_image_holder.show();
+                product_reader.readAsDataURL($(this)[0].files[i]);
+              }
+            } else {
+              product_image_holder.html("<p>This browser does not support FileReader.</p>");
+            }
+         }
+	});
+});
+
+    jQuery(document).ready(function($) {
+
+        $('#create-ads').ajaxForm({
+            url: '{{LINK aj/ads/create}}?hash=' + $('.main_session').val(),
+            type:"POST",
+            beforeSend: function() {
+               
+            },
+            success: function(data) {
+                scrollToTop();
+                if (data['status'] == 200) {
+                    $("#create-ads-alert").html('<div class="alert alert-success">'+ data['message'] +'</div>');
+                    window.location = data.url;
+                }
+
+                else if (data['message']) {
+                    $("#create-ads-alert").html('<div class="alert alert-danger">' + data['message'] + '</div>');
+                }
+
+                
+            }
+        });
+
+        $("#ads-audience").change(function(event) {
+            var self = $(this);
+            get_estimated_users();
+        });
+
+        $("#gender").change(function(event) {
+            var self = $(this);
+            if (self.val() != '') {
+                get_estimated_users();
+            }
+        });
+
+        $("#ads-location").keyup(function(event) {
+            if ($(this).val().length >= 3) {
+                Delay(function(){$("#review-ads-location #place").html('<iframe width="100%" frameborder="0" style="border:0;margin-top: 10px;" src="https://www.google.com/maps/embed/v1/place?key=<?php echo $ask->config->google_map_api; ?>&q=' + $("#ads-location").val() + '&language=en"></iframe>')},1000)
+            }
+            else{
+                Delay(function(){$("#review-ads-location #place").html('<iframe width="100%" frameborder="0" style="border:0;margin-top: 10px;" src="https://www.google.com/maps/embed/v1/place?key=<?php echo $ask->config->google_map_api; ?>&q=us&language=en"></iframe>')},1000)
+            }
+        });
+
+        function get_estimated_users(){
+            var audience = null;
+            var gender = "ALL";
+            console.log($("#ads-audience").val());
+            if ( $("#ads-audience").val() !== null) {
+                audience = $("#ads-audience").val().join(',');
+            }
+            if ( $("#gender").val() != '') {
+                gender = $("#gender").val();
+            }
+
+            $.ajax({
+                url: '{{LINK aj/ads/get_estimated_users}}?hash=' + $('.main_session').val(),
+                type: 'POST',
+                dataType: 'json',
+                data: {estimated_audience:audience, estimated_gender:gender, user_id:<?php echo $ask->user->id?>},
+            }).done(function(data) {
+                if (data.status == 200) {
+                    $('.estimated_text').text(data.count);
+                    $("#estimated").show();
+                }
+            });
+        }
+
+    });
+</script>

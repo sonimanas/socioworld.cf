@@ -1,0 +1,46 @@
+<section class="ask_side_widget">
+    <div class="ask_usr_info">
+        <div class="aui_head">
+            <div class="profileBox_gradient"></div>
+            <img src="{{ME cover}}" alt="{{ME username}} Cover" />
+        </div>
+        <div class="aui_av_info">
+            <div class="aui_ava">
+                <a href="{{LINK @}}{{ME username}}" data-load="?link1=timeline&id={{ME username}}"><img src="{{ME avatar}}" alt="{{ME username}} {{LANG Avatar}}" /></a>
+            </div>
+           
+            <div class="aui_name">
+                <h3><a href="{{LINK @}}{{ME username}}" data-load="?link1=timeline&id={{ME username}}">
+                    <?php if( $ask->user->first_name . $ask->user->last_name == ''){ echo $ask->user->username; } else { echo $ask->user->first_name . ' ' . $ask->user->last_name; } ?>
+                    <?php if($ask->user->verified == 1) {   ?>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="verified-color feather feather-check-circle" title="Verified Page" data-toggle="tooltip"><path d="M23,12L20.56,9.22L20.9,5.54L17.29,4.72L15.4,1.54L12,3L8.6,1.54L6.71,4.72L3.1,5.53L3.44,9.21L1,12L3.44,14.78L3.1,18.47L6.71,19.29L8.6,22.47L12,21L15.4,22.46L17.29,19.28L20.9,18.46L20.56,14.78L23,12M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9L10,17Z"></path></svg>
+                        <?php } ?>
+                </a></h3>
+                <p>@{{ME username}}</p>
+            </div>
+        </div>
+
+        <div class="aui_info">
+            <ul>
+                <li>
+                    <a class="menu_list" href="{{LINK @}}{{ME username}}" data-load="?link1=timeline&id={{ME username}}">
+                        <span class="split-link">{{LANG Questions}}</span>
+                        <span><b>{{QUESTIONS}}</b></span>
+                    </a>
+                </li>
+                <li>
+                    <a class="menu_list" href="{{LINK /@}}{{ME username}}/followers" data-load="?link1=timeline&id={{ME username}}&page=followers">
+                        <span class="split-link">{{LANG Followers}}</span>
+                        <span><b>{{FOLLOWERS}}</b></span>
+                    </a>
+                </li>
+                <li>
+                    <a class="menu_list settings" href="{{LINK settings}}" data-load="?link1=settings&page=general">
+                        <i class="fas fa-cog fab_w"></i>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</section>

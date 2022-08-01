@@ -1,0 +1,135 @@
+<div class="container page_margin">
+    <div class="row">
+		<div class="col-md-3"><?php echo LoadPage('ads/includes/header'); ?></div>
+		<div class="col-md-9">
+        <div class="ask_side_widget ads-cont-wrapper">
+			<h2>{{LANG Create New}}</h2>
+			<div class="ask_settings">
+				<form class="as_form" method="get" id="update-ads">
+					<div id="update-ads-alert" class="w100"></div>
+					
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="pp_mat_input">
+								<input type="text" name="name" placeholder="{{LANG Company}}" max="50" autofocus value="{{AD name}}">
+								<i class="fas fa-briefcase fab_w"></i>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="pp_mat_input">
+								<input type="text" name="website" placeholder="{{LANG website Url}}" value="{{AD url}}">
+								<i class="fas fa-link fab_w"></i>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="pp_mat_input">
+								<input type="text" name="headline" placeholder="{{LANG Title}}" value="{{AD headline}}">
+								<i class="fas fa-font fab_w"></i>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="pp_mat_input" id="review-ads-location">
+								<input type="text" name="location" id="ads-location" placeholder="{{LANG Location}}" value="{{AD location}}">
+								<i class="fas fa-map-marker-alt fab_w"></i>
+							</div>
+						</div>
+					</div>
+					<div class="form-group" id="review-ads-location">
+                        <div id="place">
+							<iframe width="100%" frameborder="0" style="border:0;margin-top: 10px;" src="https://www.google.com/maps/embed/v1/place?key=<?php echo $ask->config->google_map_api; ?>&q={{AD location}}&language=en"></iframe>
+						</div>
+                    </div>
+					<div class="pp_mat_input">
+						<textarea name="description" placeholder="{{LANG Description}}" rows="3">{{AD description}}</textarea>
+						<i class="fas fa-align-left fab_w"></i>
+					</div>
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="pp_mat_input">
+								<select name="gender" id="gender">
+									<option value="all" <?php if ($data['AD_DATA']['gender'] == 'all') {echo "selected";}?> >{{LANG All}}</option>
+									<option value="male" <?php if ($data['AD_DATA']['gender'] == 'male') {echo "selected";}?>>{{LANG Male}}</option>
+									<option value="famale" <?php if ($data['AD_DATA']['gender'] == 'famale') {echo "selected";}?>>{{LANG Female}}</option>
+                                </select>
+								<i class="fas fa-male fab_w"></i>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="pp_mat_input">
+								<select name="bidding" id="bidding">
+									<option value="clicks" <?php echo ($data['AD_DATA']['bidding'] == 'clicks') ? 'selected' : ''; ?>>
+										<?php echo str_replace('{{PRICE}}', $ask->config->ad_c_price, __('pay_per_click')); ?>
+									</option>
+									<option value="views" <?php echo ($data['AD_DATA']['bidding'] == 'views') ? 'selected' : ''; ?>>
+										<?php echo str_replace('{{PRICE}}', $ask->config->ad_v_price, __('pay_per_imprssion')); ?>
+									</option>
+								</select>
+								<i class="fas fa-hand-point-up fab_w"></i>
+							</div>
+						</div>
+					</div>
+					<div class="pp_mat_input">
+						<select name="audience-list[]" class="form-control selectpicker" data-size="7" multiple data-live-search="true" data-actions-box="true">
+							<?php foreach ($ask->audience as $key => $value): ?>
+								<?php if ($key == 0): ?>
+									<option value="<?php echo $key; ?>" disabled><?php echo $value; ?></option>
+								<?php else: ?>
+									<option value="<?php echo $key; ?>" <?php if (in_array($key, $data['AD_DATA']['country_ids']) && $key != 0){ echo 'selected';}?>><?php echo $value; ?></option>
+								<?php endif; ?>
+							<?php endforeach;?>
+						</select>
+						<i class="fas fa-user-circle fab_w"></i>
+					</div>
+
+					<div class="btn_footer">
+						<button type="submit" class="btn btn-primary u-btn-primary transition-3d-hover">{{LANG Save}}</button>
+					</div>
+				
+                <input type="hidden" name="hash_id" value="<?php echo CreateSession()?>">
+                <input type="hidden" name="user_id" value="<?php echo $ask->user->id?>">
+            </form>
+            <div class="clear"></div>
+			</div>
+        </div>
+		</div>
+    </div>
+</div>
+
+<script>
+    jQuery(document).ready(function($) {
+        $("#ads-location").change(function(event) {
+            if ($(this).val().length >= 3) {
+                Delay(function(){$("#review-ads-location #place").html('<iframe width="100%" frameborder="0" style="border:0;margin-top: 10px;" src="https://www.google.com/maps/embed/v1/place?key=<?php echo $ask->config->google_map_api; ?>&q=' + $("#ads-location").val() + '&language=en"></iframe>')},1000)
+            }
+
+            else{
+                Delay(function(){$("#review-ads-location #place").html('<iframe width="100%" frameborder="0" style="border:0;margin-top: 10px;" src="https://www.google.com/maps/embed/v1/place?key=<?php echo $ask->config->google_map_api; ?>&q=us&language=en"></iframe>')},1000)
+            }
+        });
+
+
+        $('#update-ads').ajaxForm({
+            url: '{{LINK aj/ads/update}}?hash=' + $('.main_session').val()+'&ad-id=<?php echo $_GET['id']; ?>&a=0',
+            type:"POST",
+            beforeSend: function() {
+                
+            },
+            success: function(data) {
+                scrollToTop();
+                if (data['status'] == 200) {
+                    $("#create-ads-alert").html('<div class="alert alert-success">'+ data['message'] +'</div>');
+                    window.location = data.url;
+                }
+
+                else if (data['message']) {
+                    $("#create-ads-alert").html('<div class="alert alert-danger">' + data['message'] + '</div>');
+                }
+
+                
+            }
+        });
+
+    });
+</script>

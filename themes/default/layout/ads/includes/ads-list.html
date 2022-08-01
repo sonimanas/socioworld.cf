@@ -1,0 +1,30 @@
+<tr data-ad-id="{{AD id}}">
+    <td>{{AD id}}</td>
+    <!--<td width="100">
+        <img src="{{AD ad_media}}" style="max-width: 100px;max-height: 45px;width: 100px;height: 45px;object-fit: fill;" >
+    </td>-->
+	<td data-ad-status="{{AD id}}" width="100">
+		<span class="toggle-user-ad-status pointer" id="{{AD id}}" title="{{LANG status}}" data-status="{{AD status}}">
+			<?php if ($data['AD_DATA']['status'] == 1): ?>
+				<svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -107 512 512" width="30px"><path d="m0 149.332031c0 82.347657 67.007812 149.335938 149.332031 149.335938h213.335938c82.324219 0 149.332031-66.988281 149.332031-149.335938 0-82.34375-67.007812-149.332031-149.332031-149.332031h-213.335938c-82.324219 0-149.332031 66.988281-149.332031 149.332031zm0 0" fill="#00bcd4"/><path d="m448 149.332031c0 47.128907-38.203125 85.335938-85.332031 85.335938-47.128907 0-85.335938-38.207031-85.335938-85.335938 0-47.128906 38.207031-85.332031 85.335938-85.332031 47.128906 0 85.332031 38.203125 85.332031 85.332031zm0 0" fill="#fafafa"/></svg>
+            <?php else: ?>
+				<svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -107 512 512" width="30px"><path d="m362.667969 0h-213.335938c-82.324219 0-149.332031 66.988281-149.332031 149.332031 0 82.347657 67.007812 149.335938 149.332031 149.335938h213.335938c82.324219 0 149.332031-66.988281 149.332031-149.335938 0-82.34375-67.007812-149.332031-149.332031-149.332031zm0 0" fill="#607d8b"/><path d="m234.667969 149.332031c0 47.128907-38.207031 85.335938-85.335938 85.335938-47.128906 0-85.332031-38.207031-85.332031-85.335938 0-47.128906 38.203125-85.332031 85.332031-85.332031 47.128907 0 85.335938 38.203125 85.335938 85.332031zm0 0" fill="#fafafa"/></svg>
+            <?php endif;?>
+		</span>
+    </td>
+    <td width="200">{{AD name}}</td>
+    <td><?php echo __($data['AD_DATA']['bidding']); ?></td>
+    <td>{{AD clicks}}</td>
+    <td>{{AD views}}</td>
+    <td class="ad_action">
+        <a href="{{LINK ads/edit/}}{{AD id}}" data-load="?link1=edit-ads&id={{AD id}}">
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"></path></svg>
+        </a>
+        <span class="pointer delete-ad" id="{{AD id}}">
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"></path></svg>
+		</span>
+        <a href="{{LINK ads/chart/}}{{AD id}}" data-load="?link1=chart-ads&id={{AD id}}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M17,17H15V13H17M13,17H11V7H13M9,17H7V10H9M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3Z"></path></svg>
+        </a>
+    </td>
+</tr>

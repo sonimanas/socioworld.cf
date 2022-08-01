@@ -1,0 +1,19 @@
+<div class="ask_notifs <?php if( $data['SEEN'] == 0 ) { echo 'unseen_notf'; }else{ echo 'seen_notf';}?>" tabindex="0">
+    <?php if( $data['URL'] !== '' && $data['DATA_LOAD'] !== '' ) {?>
+        <a href="{{URL}}" data-load="{{DATA_LOAD}}">
+    <?php } else {?>
+        <a href="{{LINK @}}{{USER username}}" data-load="?link1=timeline&id={{USER username}}">
+    <?php } ?>
+        <div class="innder_prt">
+            <div class="avatar">
+                <img src="{{USER avatar}}" alt="user avatar">
+            </div>
+            <div class="n_detail">
+                <p><b>{{USER name}}</b> {{TITLE}} <span>{{TEXT}}</span> </p><br><time>{{TIME}}</time>
+            </div>
+            <?php if( $data['ACTION'] !== '' ) :?>
+                <span class="btn u-btn-primary--air" title="{{ACTION}}">{{ICON}}</span>
+            <?php endif;?>
+        </div>
+    </a>
+</div>

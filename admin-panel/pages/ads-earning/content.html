@@ -1,0 +1,424 @@
+<?php
+$types = array('today','this_week','this_month','this_year');
+$type = 'today';
+
+if (!empty($_GET['type']) && in_array($_GET['type'], $types)) {
+	$type = $_GET['type'];
+}
+
+?>
+<div class="container-fluid">
+    <div class="block-header">
+        <h2>Advertisements > Earnings</h2>
+    </div>
+    <!-- Widgets -->
+    <div class="row clearfix">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-black hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">attach_money</i>
+                </div>
+                <div class="content">
+                    <div class="text">TOTAL EARNINGS</div>
+                    <div class="number count-to" data-from="0" data-to="<?php echo GetTotalAdsEarning(); ?>" data-speed="1000" data-fresh-interval="20"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-green hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">attach_money</i>
+                </div>
+                <div class="content">
+                    <div class="text">EARNINGS THIS YEAR</div>
+                    <div class="number count-to" data-from="0" data-to="<?php echo GetCurrentYearAdsEarning(); ?>" data-speed="1000" data-fresh-interval="20"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-orange hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">attach_money</i>
+                </div>
+                <div class="content">
+                    <div class="text">EARNINGS THIS MONTH</div>
+                    <div class="number count-to" data-from="0" data-to="<?php echo GetCurrentMonthAdsEarning(); ?>" data-speed="1000" data-fresh-interval="20"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-blue hover-expand-effect">
+                <div class="icon">
+                    <i class="material-icons">attach_money</i>
+                </div>
+                <div class="content">
+                    <div class="text">EARNINGS THIS DAY</div>
+                    <div class="number count-to" data-from="0" data-to="<?php echo GetCurrentDayAdsEarning(); ?>" data-speed="1000" data-fresh-interval="20"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- #END# Widgets -->
+    <div class="row clearfix">
+        <!-- Bar Chart -->
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <h2>STATICS</h2>
+                </div>
+                <div class="body">
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <select id="type" name="type" class="form-control">
+                                <option value="today" <?php echo ($type == 'today') ? 'selected': '';?>>Today</option>
+                                <option value="this_week" <?php echo ($type == 'this_week') ? 'selected': '';?>>This week</option>
+                                <option value="this_month" <?php echo ($type == 'this_month') ? 'selected': '';?>>This month</option>
+                                <option value="this_year" <?php echo ($type == 'this_year') ? 'selected': '';?>>This year</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button id="submit" name="submit" class="btn btn-main setting-panel-mdbtn ">View report</button>
+                        </div>
+                    </div>
+
+
+                    <div id="container" style="min-width: 100%; height: 400px; margin: 0 auto;"></div>
+                </div>
+            </div>
+        </div>
+        <!-- #END# Bar Chart -->
+    </div>
+</div>
+<?php
+$click_array = array();
+
+if ($type == 'today') {
+	$start = strtotime(date('M')." ".date('d').", ".date('Y')." 12:00am");
+	$end = strtotime(date('M')." ".date('d').", ".date('Y')." 11:59pm");
+    $array = array();
+	$array = array('00' => 0 ,'01' => 0 ,'02' => 0 ,'03' => 0 ,'04' => 0 ,'05' => 0 ,'06' => 0 ,'07' => 0 ,'08' => 0 ,'09' => 0 ,'10' => 0 ,'11' => 0 ,'12' => 0 ,'13' => 0 ,'14' => 0 ,'15' => 0 ,'16' => 0 ,'17' => 0 ,'18' => 0 ,'19' => 0 ,'20' => 0 ,'21' => 0 ,'22' => 0 ,'23' => 0);
+    $click_array = $array;
+    $date_type = 'H';
+    $ask->cat_type = 'today';
+    $chart_title = 'Today';
+    $ask->chart_text = date("l");
+}
+elseif ($type == 'this_week') {
+
+    $array = array();
+    $time = strtotime(date('l').", ".date('M')." ".date('d').", ".date('Y'));
+    if (date('l') == 'Saturday') {
+        $start = strtotime(date('M')." ".date('d').", ".date('Y')." 12:00am");
+    }
+    else{
+        $start = strtotime('last saturday, 12:00am', $time);
+    }
+
+    if (date('l') == 'Friday') {
+        $end = strtotime(date('M')." ".date('d').", ".date('Y')." 11:59pm");
+    }
+    else{
+        $end = strtotime('next Friday, 11:59pm', $time);
+    }
+
+    $array = array('"Saturday"' => 0 , '"Sunday"' => 0 , '"Monday"' => 0 , '"Tuesday"' => 0 , '"Wednesday"' => 0 , '"Thursday"' => 0 , '"Friday"' => 0);
+    $click_array = $array;
+    $date_type = 'l';
+    $ask->cat_type = 'this_week';
+    $chart_title = 'This week';
+    $ask->chart_text = date('y/M/d',$start)." To ".date('y/M/d',$end);
+
+}
+elseif ($type == 'this_month') {
+
+    $array = array();
+    $start = strtotime("1 ".date('M')." ".date('Y')." 12:00am");
+    $end = strtotime(cal_days_in_month(CAL_GREGORIAN, date('m'), date('Y'))." ".date('M')." ".date('Y')." 11:59pm");
+    if (cal_days_in_month(CAL_GREGORIAN, date('m'), date('Y')) == 31) {
+        $array = array('01' => 0 ,'02' => 0 ,'03' => 0 ,'04' => 0 ,'05' => 0 ,'06' => 0 ,'07' => 0 ,'08' => 0 ,'09' => 0 ,'10' => 0 ,'11' => 0 ,'12' => 0 ,'13' => 0 ,'14' => 0 ,'15' => 0 ,'16' => 0 ,'17' => 0 ,'18' => 0 ,'19' => 0 ,'20' => 0 ,'21' => 0 ,'22' => 0 ,'23' => 0,'24' => 0 ,'25' => 0 ,'26' => 0 ,'27' => 0 ,'28' => 0 ,'29' => 0 ,'30' => 0 ,'31' => 0);
+    }elseif (cal_days_in_month(CAL_GREGORIAN, date('m'), date('Y')) == 30) {
+        $array = array('01' => 0 ,'02' => 0 ,'03' => 0 ,'04' => 0 ,'05' => 0 ,'06' => 0 ,'07' => 0 ,'08' => 0 ,'09' => 0 ,'10' => 0 ,'11' => 0 ,'12' => 0 ,'13' => 0 ,'14' => 0 ,'15' => 0 ,'16' => 0 ,'17' => 0 ,'18' => 0 ,'19' => 0 ,'20' => 0 ,'21' => 0 ,'22' => 0 ,'23' => 0,'24' => 0 ,'25' => 0 ,'26' => 0 ,'27' => 0 ,'28' => 0 ,'29' => 0 ,'30' => 0);
+    }elseif (cal_days_in_month(CAL_GREGORIAN, date('m'), date('Y')) == 29) {
+        $array = array('01' => 0 ,'02' => 0 ,'03' => 0 ,'04' => 0 ,'05' => 0 ,'06' => 0 ,'07' => 0 ,'08' => 0 ,'09' => 0 ,'10' => 0 ,'11' => 0 ,'12' => 0 ,'13' => 0 ,'14' => 0 ,'15' => 0 ,'16' => 0 ,'17' => 0 ,'18' => 0 ,'19' => 0 ,'20' => 0 ,'21' => 0 ,'22' => 0 ,'23' => 0,'24' => 0 ,'25' => 0 ,'26' => 0 ,'27' => 0 ,'28' => 0 ,'29' => 0);
+    }elseif (cal_days_in_month(CAL_GREGORIAN, date('m'), date('Y')) == 28) {
+        $array = array('01' => 0 ,'02' => 0 ,'03' => 0 ,'04' => 0 ,'05' => 0 ,'06' => 0 ,'07' => 0 ,'08' => 0 ,'09' => 0 ,'10' => 0 ,'11' => 0 ,'12' => 0 ,'13' => 0 ,'14' => 0 ,'15' => 0 ,'16' => 0 ,'17' => 0 ,'18' => 0 ,'19' => 0 ,'20' => 0 ,'21' => 0 ,'22' => 0 ,'23' => 0,'24' => 0 ,'25' => 0 ,'26' => 0 ,'27' => 0 ,'28' => 0);
+    }
+    $click_array = $array;
+    $ask->month_days = count($array);
+    $date_type = 'd';
+    $ask->cat_type = 'this_month';
+    $chart_title = 'This month';
+    $ask->chart_text = date("M");
+
+}
+elseif ($type == 'this_year') {
+
+    $array = array();
+    $start = strtotime("1 January ".date('Y')." 12:00am");
+    $end = strtotime("31 December ".date('Y')." 11:59pm");
+    $array = array('01' => 0 ,'02' => 0 ,'03' => 0 ,'04' => 0 ,'05' => 0 ,'06' => 0 ,'07' => 0 ,'08' => 0 ,'09' => 0 ,'10' => 0 ,'11' => 0 ,'12' => 0);
+    $click_array = $array;
+    $date_type = 'm';
+    $ask->cat_type = 'this_year';
+    $chart_title = 'This year';
+    $ask->chart_text = date("Y");
+
+}
+$text = '';
+
+
+
+
+$ads_spents = $db->where('dt',date('Y-m-d H:i:s A', $start),'>=')->where('dt',date('Y-m-d H:i:s A', $end),'<=')->get(T_USERADS_DATA);
+
+//var_dump(date('Y-m-d H:i:s A', $start));
+//var_dump(date('Y-m-d H:i:s A', $end));
+
+//var_dump($ads_spents);
+//exit();
+
+
+if (!empty($ads_spents)) {
+    foreach ($ads_spents as $key => $ad) {
+        if ($ad->dt >= date('Y-m-d H:i:s A', $start) && $ad->dt <= date('Y-m-d H:i:s A', $end)) {
+            $day = date($date_type,strtotime($ad->dt));
+            if($date_type === 'l'){ $day = '"'.$day.'"';}
+
+            if (in_array($day, array_keys($array))) {
+                $array[$day] += $ad->spend;
+            }
+        }
+    }
+}
+
+$currency        = '$';
+if ($ask->config->ads_currency == 'EUR') {
+    $currency    = '€';
+}
+$ask->array = implode(', ', $array);
+?>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script>
+    $(document).on('click', '#submit', function(event) {
+        var type = $('#type').val();
+        window.location.href = '<?php echo LoadAdminLinkSettings("ads-earning"); ?>'+"?type="+type;
+    });
+    Highcharts.chart('container', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: '<?php echo $chart_title; ?>'
+        },
+        subtitle: {
+            text: ''
+        },
+        xAxis: {
+            <?php if ($ask->cat_type == 'today') { ?>
+            categories: [
+                '00 AM',
+                '1 AM',
+                '2 AM',
+                '3 AM',
+                '4 AM',
+                '5 AM',
+                '6 AM',
+                '7 AM',
+                '8 AM',
+                '9 AM',
+                '10 AM',
+                '11 AM',
+                '12 PM',
+                '1 PM',
+                '2 PM',
+                '3 PM',
+                '4 PM',
+                '5 PM',
+                '6 PM',
+                '7 PM',
+                '8 PM',
+                '9 PM',
+                '10 PM',
+                '11 PM'
+            ]
+            <?php }elseif ($ask->cat_type == 'this_week') { ?>
+            categories: [
+                'Saturday',
+                'Sunday',
+                'Monday',
+                'Tuesday',
+                'Wednesday',
+                'Thursday',
+                'Friday'
+            ]
+            <?php }elseif ($ask->cat_type == 'this_month') { ?>
+        <?php if ($ask->month_days == 31) { ?>
+                categories: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
+                <?php }elseif ($ask->month_days == 30) { ?>
+                categories: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
+                <?php }elseif ($ask->month_days == 29) { ?>
+                categories: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]
+                <?php }elseif ($ask->month_days == 28) {  ?>
+                categories: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28]
+                <?php } ?>
+        <?php }elseif ($ask->cat_type == 'this_year') { ?>
+            categories: [
+                'Jan',
+                'Feb',
+                'Mar',
+                'Apr',
+                'May',
+                'Jun',
+                'Jul',
+                'Aug',
+                'Sep',
+                'Oct',
+                'Nov',
+                'Dec'
+            ]
+            <?php } ?>,
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: '<?php echo $ask->chart_text;?>'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px;color:#fff;">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:#fff;padding:0">{series.name}: </td>' +
+            '<td style="padding:0;color:#fff;"><b><?php echo $currency;?>{point.y}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true,
+                backgroundColor: '#444'
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [{
+            name: 'Spent',
+            data: [<?php echo $ask->array;?>]
+
+    }]
+    });
+    // $(function() {
+    "use strict";
+    //     Highcharts.setOptions({
+    //         colors: ['#6abd46', '#ce3d3d', '#f2b92b', '#6abd46']
+    //     });
+    //     $('#admin-chart-container').Highcharts({
+    //         chart: {
+    //             type: 'column'
+    //         },
+    //         title: {
+    //             text: '<?php echo $chart_title; ?>'
+    //         },
+    //         xAxis: {
+    //         <?php if ($ask->cat_type == 'today') { ?>
+    //         categories: [
+    //             '00 AM',
+    //             '1 AM',
+    //             '2 AM',
+    //             '3 AM',
+    //             '4 AM',
+    //             '5 AM',
+    //             '6 AM',
+    //             '7 AM',
+    //             '8 AM',
+    //             '9 AM',
+    //             '10 AM',
+    //             '11 AM',
+    //             '12 PM',
+    //             '1 PM',
+    //             '2 PM',
+    //             '3 PM',
+    //             '4 PM',
+    //             '5 PM',
+    //             '6 PM',
+    //             '7 PM',
+    //             '8 PM',
+    //             '9 PM',
+    //             '10 PM',
+    //             '11 PM'
+    //         ]
+    //         <?php }elseif ($ask->cat_type == 'this_week') { ?>
+    //         categories: [
+    //             'Saturday',
+    //             'Sunday',
+    //             'Monday',
+    //             'Tuesday',
+    //             'Wednesday',
+    //             'Thursday',
+    //             'Friday'
+    //         ]
+    //         <?php }elseif ($ask->cat_type == 'this_month') { ?>
+    //     <?php if ($ask->month_days == 31) { ?>
+    //             categories: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
+    //             <?php }elseif ($ask->month_days == 30) { ?>
+    //             categories: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
+    //             <?php }elseif ($ask->month_days == 29) { ?>
+    //             categories: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29]
+    //             <?php }elseif ($ask->month_days == 28) {  ?>
+    //             categories: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28]
+    //             <?php } ?>
+    //     <?php }elseif ($ask->cat_type == 'this_year') { ?>
+    //         categories: [
+    //             'Jan',
+    //             'Feb',
+    //             'Mar',
+    //             'Apr',
+    //             'May',
+    //             'Jun',
+    //             'Jul',
+    //             'Aug',
+    //             'Sep',
+    //             'Oct',
+    //             'Nov',
+    //             'Dec'
+    //         ]
+    //         <?php } ?>,
+    //     crosshair: true
+    // },
+    //     yAxis: {
+    //         min: 0,
+    //             title: {
+    //             text: '<?php echo $ask->chart_text;?>'
+    //         }
+    //     },
+    //     tooltip: {
+    //         headerFormat: '<span style="font-size:10px;color:#fff;">{point.key}</span><table>',
+    //             pointFormat: '<tr><td style="color:#fff;padding:0">{series.name}: </td>' +
+    //         '<td style="padding:0;color:#fff;"><b>{point.y}</b></td></tr>',
+    //             footerFormat: '</table>',
+    //             shared: true,
+    //             useHTML: true,
+    //             backgroundColor: '#444'
+    //     },
+    //     plotOptions: {
+    //         column: {
+    //             pointPadding: 0.2,
+    //                 borderWidth: 0
+    //         }
+    //     },
+    //     series: [{
+    //         name: 'Spent',
+    //         data: [<?php echo $ask->array;?>]
+    //
+    // }, {
+    //         name: 'fdgdfg',
+    //             data: [<?php echo implode(', ', $click_array);?>]
+    //
+    //     }]
+    // });
+    // });
+
+
+</script>

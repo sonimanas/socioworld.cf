@@ -1,0 +1,140 @@
+<div class="container page_margin">
+    <div class="row">
+		<div class="col-md-3"><?php echo LoadPage('ads/includes/header'); ?></div>
+		<div class="col-md-9">
+			<div class="ask_side_widget ads-cont-wrapper"><br>
+				<a href="{{LINK ads}}" data-load="?link1=ads">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{LANG Back to your ads.}}</a><br><br>
+				<div class="row clearfix">
+					<!-- Bar Chart -->
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="card">
+							<div class="header">
+								<h2><?php echo $ask->ad_data['name']; ?></h2>
+							</div>
+							<div class="body">
+								<div id="admin-chart-container" style="min-width: 100%; height: 400px; margin: 0 auto;"></div>
+							</div>
+						</div>
+					</div>
+					<!-- #END# Bar Chart -->
+				</div>
+			</div>
+		</div>
+    </div>
+</div>
+<?php
+
+$categories = "";
+$views = "";
+$clicks = "";
+$spend = "";
+
+if( $ask->ad_data['bidding'] == "views" && ( !empty($ask->clicks) || !empty($ask->views) ) ){
+    foreach ($ask->views as $key => $value) {
+        $categories .= '"' . $value["DateOnly"] . '", ';
+        $views .= $value["ADviews"] . ', ';
+        $spend .= number_format($value["Spend"], 2) . ', ';
+    }
+}
+
+if( $ask->ad_data['bidding'] == "clicks" && ( !empty($ask->clicks) || !empty($ask->views) ) ){
+    foreach ($ask->clicks as $key => $value) {
+        $categories .= '"' . $value["DateOnly"] . '", ';
+        $clicks .= $value["ADClicks"] . ', ';
+        $spend .= number_format($value["Spend"], 2) . ', ';
+    }
+}
+
+if( !empty($ask->clicks) && !empty($ask->views) ){
+$spend = "";
+    foreach ($ask->views as $key => $value) {
+        $categories .= '"' . $value["DateOnly"] . '", ';
+        $views .= $value["ADviews"] . ', ';
+    }
+
+    foreach ($ask->clicks as $key => $value) {
+        $categories .= '"' . $value["DateOnly"] . '", ';
+        $clicks .= $value["ADClicks"] . ', ';
+    }
+
+    foreach ($ask->spends as $key => $value) {
+        $spend .= number_format($value["Spend"], 2) . ', ';
+    }
+
+}
+
+$title = "";
+?>
+
+<?php
+global $lang;
+if( $ask->ad_data['bidding'] == "views" ){
+    $title = __('views');
+}else{
+    $title = __('clicks');
+}
+
+if( !empty($ask->clicks) && !empty($ask->views) ){
+    $title = __('views') . " & " . __('clicks');
+}
+
+?>
+
+<script>
+
+    $(function() {
+    "use strict";
+        Highcharts.setOptions({
+            colors: ['#4c75a3', '#ce3d3d', '#f2b92b', '#6abd46']
+        });
+        $('#admin-chart-container').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Monthly <?php echo $title;?>'
+            },
+            xAxis: {
+                categories: [ <?php echo $categories; ?> ],
+        crosshair: true
+    },
+        yAxis: {
+            min: 0,
+                title: {
+                text: 'Last 30 Days'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+        },
+        plotOptions: {
+            series: {
+                minPointLength: 10
+            },
+            column: {
+                pointPadding: 0.2,
+                    borderWidth: 0
+            }
+        },
+        series: [
+            {
+                name: '<?php echo ucfirst(__("views"));?>',
+                data: [ <?php echo $views; ?> ]
+            },
+            {
+                name: '<?php echo ucfirst(__("clicks"));?>',
+                    data: [ <?php echo $clicks; ?> ]
+            },
+            {
+                name: '<?php echo ucfirst(__("spend"));?>',
+                data: [ <?php echo $spend; ?> ]
+            }
+        ]
+    });
+    });
+</script>

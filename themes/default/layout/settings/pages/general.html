@@ -1,0 +1,97 @@
+<form class="as_form" id="general-settings" method="POST">
+    <div class="setting-general-alert"></div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="pp_mat_input">
+                <input type="text" name="first_name" id="first_name" placeholder="{{LANG first_name}}" value="{{USER first_name}}" autofocus>
+                <i class="fas fa-user-circle fab_w"></i>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="pp_mat_input">
+                <input type="text" name="last_name" id="last_name" placeholder="{{LANG last_name}}" value="{{USER last_name}}">
+                <i class="fas fa-user-circle fab_w"></i>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="pp_mat_input">
+                <input type="text" name="username" id="username" placeholder="{{LANG username}}" value="{{USER username}}">
+                <i class="fas fa-user fab_w"></i>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="pp_mat_input">
+                <input type="email" name="email" id="email" placeholder="{{LANG Email}}" value="{{USER email}}">
+                <i class="fas fa-envelope fab_w"></i>
+            </div>
+        </div>
+    </div>
+    <div class="pp_mat_input">
+        <select id="country" name="country">
+            {{COUNTRIES_LAYOUT}}
+        </select>
+        <i class="fas fa-globe-americas fab_w"></i>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="pp_mat_input">
+                <input type="text" name="birth_date" id="birth_date" placeholder="{{LANG Birth date}}" value="{{USER birth_date}}">
+                <i class="fas fa-calendar-alt fab_w"></i>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="pp_mat_input">
+                <select id="gender" name="gender">
+                    <option value="male" <?php echo ($ask->settings->gender == 'male') ? 'selected': '';?>>{{LANG Male}}</option>
+                    <option value="female" <?php echo ($ask->settings->gender == 'female') ? 'selected': '';?>>{{LANG Female}}</option>
+                </select>
+                <i class="fas fa-male fab_w"></i>
+            </div>
+        </div>
+         <div class="clear"></div>
+        <?php if ($ask->is_admin == true) { ?>
+            {{ADMIN_LAYOUT}}
+        <?php } ?>
+        <hr>
+    </div>
+    <input type="hidden" name="hash_id" value="<?php echo CreateSession()?>">
+    <input type="hidden" name="user_id" value="{{USER id}}">
+    <div class="btn_footer">
+        <button type="submit" class="btn btn-primary u-btn-primary transition-3d-hover">{{LANG save}}</button>
+    </div>
+</form>
+<script>
+    $(function() {
+    "use strict";
+        $("#birth_date").flatpickr({
+            dateFormat: "d-m-Y",
+        });
+
+        var form = $('form#general-settings');
+
+        form.ajaxForm({
+            url: '{{LINK aj/user/general}}?hash=' + $('.main_session').val(),
+            beforeSend: function() {
+                form.find('button').text("{{LANG please_wait}}");
+            },
+            success: function(data) {
+                scrollToTop();
+                if (data.status == 200) {
+                    $('.setting-general-alert').html('<div class="alert alert-success">' + data.message + '</div>');
+                    $('.alert-success').fadeIn('fast', function() {
+                        $(this).delay(2500).slideUp(500, function() {
+                            $(this).remove();
+                        });
+                    });
+                } else if (data.errors) {
+                    var errors = data.errors.join("<br>");
+                    $('.setting-general-alert').html('<div class="alert alert-danger">' + errors + '</div>');
+                    $('.alert-danger').fadeIn(300);
+                }
+                form.find('button').replaceWith('<button type="submit" class="btn btn-primary u-btn-primary transition-3d-hover">{{LANG save}}</button>');
+            }
+        });
+    });
+</script>

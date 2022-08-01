@@ -1,0 +1,19 @@
+<!-- Home  -->
+<div class="home_page">
+    <div class="content_page">
+        <img src="{{CONFIG theme_url}}/img/logo_white.png" alt="Logo">
+        <p>{{LANG curious}} <strong>{{LANG just_ask}}</strong></p>
+        <p><strong>{{LANG openly_or_anonymously}}.</strong></p>
+		<a class="btn btn-block u-btn-white--air transition-3d-hover" data-load="?link1=login" href="{{LINK login}}">{{LANG login}}</a>
+        <?php if ($config['user_registration'] == 'on') : ?>
+			<a class="btn btn-block u-btn-white transition-3d-hover" data-load="?link1=register" href="{{LINK register}}">{{LANG get_started}}</a>
+        <?php endif; ?>
+    </div>
+    <div class="content_users container">
+        <?php foreach($data['RANDOM_USERS_DATA'] as $user){?>
+            <a style="background-image:url(<?php echo $user->avatar;?>)" href="{{LINK @}}<?php echo $user->username;?>" data-load="?link1=timeline&id=<?php echo $user->username;?>"></a>
+        <?php } ?>
+    </div>
+    <div class="bottom_bg"></div>
+</div>
+<!-- End Home  -->

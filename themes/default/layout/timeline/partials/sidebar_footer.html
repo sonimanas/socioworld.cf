@@ -1,0 +1,53 @@
+<?php if (IS_LOGGED == true) {?>
+<section class="sidebar_foot">
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="list-unstyled mb-0 imp_links">
+                <li><a href="{{LINK terms/about-us}}" data-load="?link1=terms&type=about-us">{{LANG about_us}}</a></li>
+                <li><a href="{{LINK terms/terms}}" data-load="?link1=terms&type=terms">{{LANG terms}}</a></li>
+                <li><a href="{{LINK terms/privacy-policy}}" data-load="?link1=terms&type=privacy-policy">{{LANG privacy_policy}}</a></li>
+                <li><a href="{{LINK contact-us}}" data-load="?link1=contact">{{LANG contact}}</a></li>
+                <?php if (!empty($ask->custom_pages)) {
+                    foreach ($ask->custom_pages as $key => $value) { ?>
+                        <li><a href="<?php echo UrlLink("site-pages/" . $value->page_name); ?>" target="_blank"><?php echo $value->page_title;?></a></li>
+                <?php } } ?>
+            </ul>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="list-unstyled mb-0">
+                <li class="social_links">
+                    <a class="u-icon u-icon-white transition-3d-hover" href="{{CONFIG facebook_url}}"><span class="fab fa-facebook-f u-icon__inner"></span></a>
+                    <a class="u-icon u-icon-white transition-3d-hover" href="{{CONFIG twitter_url}}"><span class="fab fa-twitter u-icon__inner"></span></a>
+                    <a class="u-icon u-icon-white transition-3d-hover" href="{{CONFIG google_url}}"><span class="fab fa-google-plus-g u-icon__inner"></span></a>
+                </li>
+                <li>
+                    <div class="lang_select dropup">
+                        <button type="button" class="btn dropdown-toggle" data-display="static" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="ask_lang_dropdown" onclick="$('.dropdown-toggle').dropdown()">
+                            <img class="u-unfold__icon u-list__link-icon mr-2" src="{{CONFIG theme_url}}/img/flags/{{ACTIVE_LANG}}.svg" alt="{{ACTIVE_LANG}}"> {{ACTIVE_LANGNAME}}
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="ask_lang_dropdown">
+                            <div class="p-6">
+                                <h4 class="h6 font-weight-bold mb-3"><?php echo str_replace('{0}',$ask->config->title, $ask->lang->available_in);?></h4>
+                                <div class="row">
+                                    <div class="col-6">
+                                        {{LANGS_RIGHT}}
+                                    </div>
+                                    <div class="col-6">
+                                        {{LANGS_LEFT}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-12">
+            <p><?php echo str_replace(array('{0}','{1}'),array($ask->config->title,date('Y')), $ask->lang->copyright);?></p>
+        </div>
+    </div>
+</section>
+<?php } ?>

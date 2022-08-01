@@ -1,0 +1,515 @@
+<script>
+    current_width = $(window).width();
+    scrolled = 0;
+    if(current_width > 900 ) {
+        $(window).scroll(function () {
+            var nearToBottom = 100;
+            if($('.ask_post_block').length > 0) {
+                if ($(window).scrollTop() + $(window).height() > $(document).height() - nearToBottom) {
+                    if (scrolled == 0) {
+                        scrolled = 1;
+                        if( $('.no-more-posts-to-show').length === 0 ) {
+                            //GetMoreQuestions();
+                        }
+                    }
+                }
+            }
+        });
+    }
+    var Delay = (function(){
+        var timer = 0;
+        return function(callback, ms){
+            clearTimeout (timer);
+            timer = setTimeout(callback, ms);
+        };
+    })();
+
+    function GetMoreUsers(){
+        var more_posts = $('#load-more-users');
+        let container = $('.search_user_wrapper');
+        let last_id = 0;
+        let posts_count = 0;
+        let user_id = 0;
+        let uid = $('#profile-id').val();
+        if (uid) {
+            user_id = uid;
+        }
+
+        let hashtag = '';
+        if ($('#searchtag').length > 0) {
+            hashtag = $('#searchtag').val();
+        }
+        if (container.length > 0) {
+            posts_count = container.length;
+            last_id = $('.srch_users:last').attr('data-id');
+        }
+        if(last_id != 0) {
+            more_posts.show();
+        }
+        container.append('<div class="hidden loading-status loading-single"></div>');
+        $('#load-more-users').hide();
+        $('.loading-status').hide().html('<div class="loading_post"><div class="loading_post_child2"></div></div>').removeClass('hidden').show();
+
+        view_ids = {};
+        $('div.srch_users').each(function(index, el) {
+            view_ids[index] = $(this).attr('data-id')
+        });
+
+        $.post('{{LINK aj/load-more/search_users}}', {last_id: last_id, ids: view_ids, user_id: user_id,hashtag: hashtag}, function(data, textStatus, xhr) {
+            if (data.status == 200) {
+                if (data.html !== '') {
+                    container.append(data.html);
+                }else{
+                    $('#load-more-users').html('<div class="white-loading list-group"><div class="cs-loader"><div class="no-more-posts-to-show">'+"{{LANG No more users}}"+'</div></div>');
+                }
+            }
+            $('#load-more-users').show();
+            $('.loading-status').remove();
+            scrolled = 0;
+        });
+    }
+    function GetMoreQuestions(){
+        var more_posts = $('#load-more-posts');
+        let container = $('.ask_post_block');
+        let last_id = 0;
+        let posts_count = 0;
+        let user_id = 0;
+        let uid = $('#profile-id').val();
+        if (uid) {
+            user_id = uid;
+        }
+
+        let hashtag = '';
+        if ($('#hashtag').length > 0) {
+            hashtag = $('#hashtag').val();
+        }
+
+        let loadmore_mode = $('#loadmore_mode').val();
+        if (container.length > 0) {
+            posts_count = container.length;
+            last_id = $('.ask_post:last').attr('data-id');
+        }
+        if(last_id != 0) {
+            more_posts.show();
+        }
+        container.append('<div class="hidden loading-status loading-single"></div>');
+        $('#load-more-posts').hide();
+        $('.loading-status').hide().html('<div class="loading_post"><div class="loading_post_child2"></div></div>').removeClass('hidden').show();
+
+        view_ids = {};
+        $('div.ask_post').each(function(index, el) {
+            view_ids[index] = $(this).attr('data-id')
+        });
+
+        $.post('{{LINK aj/load-more/questions}}', {last_id: last_id, ids: view_ids, user_id: user_id, hashtag: hashtag, loadmore_mode: loadmore_mode}, function(data, textStatus, xhr) {
+            if (data.status == 200) {
+                if (data.html !== '') {
+                    container.append(data.html);
+                }else{
+					$('#load-more-posts').html('<div class="ask_post"><div class="no_post"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#444" d="M4,2A2,2 0 0,0 2,4V16A2,2 0 0,0 4,18H8V21A1,1 0 0,0 9,22H9.5V22C9.75,22 10,21.9 10.2,21.71L13.9,18H20A2,2 0 0,0 22,16V4C22,2.89 21.1,2 20,2H4M4,4H20V16H13.08L10,19.08V16H4V4M12.19,5.5C11.3,5.5 10.59,5.68 10.05,6.04C9.5,6.4 9.22,7 9.27,7.69C0.21,7.69 6.57,7.69 11.24,7.69C11.24,7.41 11.34,7.2 11.5,7.06C11.7,6.92 11.92,6.85 12.19,6.85C12.5,6.85 12.77,6.93 12.95,7.11C13.13,7.28 13.22,7.5 13.22,7.8C13.22,8.08 13.14,8.33 13,8.54C12.83,8.76 12.62,8.94 12.36,9.08C11.84,9.4 11.5,9.68 11.29,9.92C11.1,10.16 11,10.5 11,11H13C13,10.72 13.05,10.5 13.14,10.32C13.23,10.15 13.4,10 13.66,9.85C14.12,9.64 14.5,9.36 14.79,9C15.08,8.63 15.23,8.24 15.23,7.8C15.23,7.1 14.96,6.54 14.42,6.12C13.88,5.71 13.13,5.5 12.19,5.5M11,12V14H13V12H11Z"></path></svg> {{LANG No more questions}}</div></div>');
+                }
+            }
+            $('#load-more-posts').show();
+            $('.loading-status').remove();
+            scrolled = 0;
+        });
+    }
+    function hide_announcement(id){
+        if (!id) { return false; }
+        $("#announcement-"+id).slideUp('fast',function(){
+            $(this).remove();
+            $.post('{{LINK aj/commen/hide-announcement}}', {id: id}, function(data, textStatus, xhr) { /* pass */ });
+        })
+    }
+    $(document).on('click', '#night_mode_toggle', function(event) {
+        mode = $(this).attr('data-mode');
+        if (mode == 'night') {
+            $('head').append('<link rel="stylesheet" href="{{CONFIG theme_url}}/css/night-mode.css<?php echo $ask->update_cache; ?>" id="night-mode-css">');
+            $('#night_mode_toggle').attr('data-mode', 'day');
+            $('#night-mode-text').text('{{LANG Day mode}}');
+        } else {
+            $('#night-mode-css').remove();
+            $('#night_mode_toggle').attr('data-mode', 'night');
+            $('#night-mode-text').text('{{LANG Night mode}}');
+        }
+        $.post('{{LINK aj/commen/change_display_mode}}?mode=' + mode);
+    });
+    // Answer It
+    function Ask_AnswerIt(that) {
+        $question_id = $(that).attr('data-question-id');
+
+        $('.ab_answer').addClass('hidden');
+
+        $('#ques_answer_it[data-question-id="'+$question_id+'"]').removeClass('hidden').find('textarea').focus();
+        $('form.question-answer[data-question-id="'+$question_id+'"]').removeClass('hidden').find('textarea').focus();
+    }
+
+    function ReloadSideBarUsers(element) {
+        var loader = '<div class="spinner-grow"><span class="sr-only"></span></div>';
+        var original =  $(element).html();
+
+        $(element).html(loader);
+        $.post('{{LINK aj/load-more/user_suggestions}}', {last_id: 10}, function (data) {
+            if(data.status == 200) {
+                if(data.html !== ''){
+                    $('.user_suggestions_container').html(data.html);
+                }else{
+                    $('.user_suggestions_container').html('<div class="not-data">'+"{{LANG No more users to show}}"+'</div>');
+                }
+            }
+            $(element).html(original);
+        });
+    }
+    function FollowSuggestion(user_id, type) {
+        if (!user_id || !type) { return false; }
+        // if (!$('#main-container').attr('data-logged') && $('#main-url').val()) {
+        //     window.location.href = Ajax_Requests_File() + 'login?to=' + $('#main-url').val();
+        //     return false;
+        // }
+        var follow_button = $('.follow-id-' + user_id);
+        if (type == 'default') {
+            follow_button.find('.user').attr('class','user hidden');
+            follow_button.find('.true').attr('class','true');
+            follow_button.removeClass('btn-follow-default').addClass('btn-follow-primary');
+            follow_button.css({'color': '#fff', 'background-color': '#0ca678'});
+            follow_button.attr('onclick', 'FollowSuggestion(' + user_id + ', "primary")');
+        } else {
+            follow_button.find('.user').attr('class','user');
+            follow_button.find('.true').attr('class','true hidden');
+            follow_button.removeClass('btn-follow-primary').addClass('btn-follow-default');
+            follow_button.css({'color': '#0ca678', 'background-color': '#fff'});
+            follow_button.attr('onclick', 'FollowSuggestion(' + user_id + ', "default")');
+        }
+        $.post('{{LINK aj/follow}}?hash=' + $('.main_session').val(), {user_id: user_id});
+    }
+    function Follow(user_id, type) {
+        if (!user_id || !type) { return false; }
+        // if (!$('#main-container').attr('data-logged') && $('#main-url').val()) {
+        //     window.location.href = Ajax_Requests_File() + 'login?to=' + $('#main-url').val();
+        //     return false;
+        // }
+        var follow_button = $('.follow-id-' + user_id);
+        if (type == 'default') {
+            follow_button.removeClass('btn-follow-default').addClass('btn-follow-primary');
+            follow_button.html('{{LANG Following}}');
+            follow_button.attr('onclick', 'Follow(' + user_id + ', "primary")');
+        } else {
+            follow_button.removeClass('btn-follow-primary').addClass('btn-follow-default');
+            follow_button.html('{{LANG Follow}}');
+            follow_button.attr('onclick', 'Follow(' + user_id + ', "default")');
+            //
+            // setTimeout(function () {
+            //     $('.following-wrapper[data-id='+user_id+']').remove();
+            // },500);
+        }
+        $.post('{{LINK aj/follow}}?hash=' + $('.main_session').val(), {user_id: user_id});
+    }
+    if ($(window).width() < 720) {
+        $('ul li').on('click', function(e) {
+            e.stopPropagation();
+        });
+    }
+    $(function() {
+    "use strict";
+
+        $(document).ready(function() {
+            $(".fancybox").fancybox({
+                helpers: {
+                    title : {
+                        type : 'float'
+                    }
+                }
+            });
+        });
+
+        var hash = $('.main_session').val();
+        $.ajaxSetup({
+            data: {
+                hash: hash
+            },
+            cache: false
+        });
+        $(document).on('click','.load-more' , function(event) {
+            event.preventDefault();
+            let $type = $(this).attr('data-type');
+            let $container = $('.'+$type+'-wrapper:last').parent();
+            let $empty = $(this).attr('data-empty-message');
+            let last_id = $('.'+$type+'-wrapper:last').attr('data-id');
+            let views = 0;
+            if ($('.'+$type+'-wrapper:last').attr('data-views')) {
+                let views = $('.'+$type+'-wrapper:last').attr('data-views');
+                    $type = $type + '?views=' + views;
+            }
+            let user_id = 0;
+            let uid = $('#profile-id').val();
+            if (uid) {
+                user_id = uid;
+            }
+            let data1 = {};
+            if (views) {
+                $('div[data-views=' + views + ']').each(function(index, el) {
+                    data1[index] = $(this).attr('data-id')
+                });
+            }
+            let load_more = $(this);
+                load_more.text("{{LANG please_wait}}");
+            $.post('{{LINK aj/load-more/' + $type + '}}', {last_id: last_id, ids: data1, user_id: user_id}, function(data, textStatus, xhr) {
+                if (data.status == 200) {
+                    $container.append(data.html);
+                    load_more.text("{{LANG Show more}}");
+                } else {
+                    load_more.text($empty);
+                }
+                scrolled = 0;
+            });
+        });
+    });
+    var h, i;
+    var dataValues = [];
+    var svgs = document.querySelectorAll('.progress_cont');
+    for (i = 0; i < svgs.length; i++) {
+        dataValues.push(svgs[i].dataset["value"]);
+    }
+    function drawcircles(duration = '1.3s') {
+        var circlelines = document.querySelectorAll('.load-circle');
+        for (h = 0; h < circlelines.length; h++) {
+            var totalLength = circlelines[h].getTotalLength();
+            var offset = totalLength - ((dataValues[h] / 100) * totalLength);
+            circlelines[h].style.transitionDuration = duration;
+            circlelines[h].style.strokeDashoffset = offset + "px";
+        }
+    }
+
+
+
+    var site_url = '{{CONFIG site_url}}';
+    function Page_Loading_File() {
+        return site_url + '/page_loading.php';
+    }
+    function setCookie(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        var expires = "expires="+d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+    function getCookie(name) {
+        var dc = document.cookie;
+        var prefix = name + "=";
+        var begin = dc.indexOf("; " + prefix);
+        if (begin == -1) {
+            begin = dc.indexOf(prefix);
+            if (begin != 0) return null;
+        }
+        else
+        {
+            begin += 2;
+            var end = document.cookie.indexOf(";", begin);
+            if (end == -1) {
+                end = dc.length;
+            }
+        }
+        // because unescape has been deprecated, replaced with decodeURI
+        //return unescape(dc.substring(begin + prefix.length, end));
+        return decodeURI(dc.substring(begin + prefix.length, end));
+    }
+    function initAutocomplete() {
+        if (typeof google === 'object' && typeof google.maps === 'object') {
+            if ($('#location').length > 0) {
+                var input1 = document.getElementById('location');
+                var autocomplete1 = new google.maps.places.Autocomplete(input1);
+            }
+        }
+    }
+    function searchLoaded() {
+
+        if( $('#keyword_search').length > 0 && $('form#search-form').length > 0 && $('#keyword_search').attr('data-id-search-performed') == 'no') {
+            if ($('#keyword_search').attr('data-id-search-tag') !== '' ) {
+                $('#keyword_search').attr('data-id-search-performed', 'yes');
+                $('form#search-form').trigger('submit');
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
+
+    function custom_footer_js(normal){
+        <?php if( $ask->config->google_place_api !== '' ){ ?>
+            initAutocomplete();
+        <?php } ?>
+        drawcircles();
+
+        $('.postText').triggeredAutocomplete({
+            hidden: '#hidden_inputbox',
+            source: '{{LINK aj/user/mention}}?user_id={{ME id}}',
+            trigger: "@"
+        });
+
+        $('.answer_text').triggeredAutocomplete({
+            hidden: '#hidden_inputbox',
+            source: '{{LINK aj/user/mention}}?user_id={{ME id}}',
+            trigger: "@"
+        });
+
+        $('#question_edit_textarea').triggeredAutocomplete({
+            hidden: '#hidden_inputbox',
+            source: '{{LINK aj/user/mention}}?user_id={{ME id}}',
+            trigger: "@"
+        });
+
+        if( normal == true ){
+            $(window).load(function () {
+                searchLoaded();
+            });
+        }else{
+            searchLoaded();
+        }
+    }
+    function isFunction(possibleFunction) {
+        return typeof(possibleFunction) === typeof(Function);
+    }
+    function InjectAPI(data, e) {
+        if (isFunction(csharp)) {
+            csharp(data);
+            e.preventDefault();
+            return false;
+        }
+    }
+    $(document).on('click', '.rads-clicks', function(event) {
+        var self  = $(this);
+        var ad_id = self.attr('id');
+        if (ad_id) {
+            $.ajax({
+                url: '{{LINK aj/ads/rads-c}}?user_id={{ME id}}',
+                type: 'GET',
+                dataType: 'json',
+                data: {ad_id:ad_id},
+            })
+                .done(function(data) {
+                    if (data.status == 200) {
+                        var link = "{type: 'url', link: '" + self.find('a').attr('href') + "'}";
+                        //InjectAPI(link, event);
+                    }
+                })
+                .fail(function() {
+                    console.log("Something went wrong. Try again later");
+                })
+        }
+        //event.preventDefault();
+    });
+
+    $(document).on('click', '.rads-views', function(event) {
+        var self  = $(this);
+        var ad_id = self.attr('id');
+        if (ad_id) {
+            $.ajax({
+                url: '{{LINK aj/ads/rads-v}}?user_id={{ME id}}',
+                type: 'GET',
+                dataType: 'json',
+                data: {ad_id:ad_id},
+            })
+                .done(function(data) {
+                    if (data.status == 200) {
+                        var link = "{type: 'url', link: '" + self.find('a').attr('href') + "'}";
+                        //InjectAPI(link, event);
+                    }
+                })
+                .fail(function() {
+                    console.log("Something went wrong. Try again later");
+                })
+        }
+        event.preventDefault();
+    });
+    // $( document ).ajaxComplete(function() {
+    //     custom_footer_js();
+    // });
+    $(document).on('click', 'a[data-load]', function(event) {
+        $('#bar_loading').show().animate({width:20 + 80 * Math.random() + "%"}, 500);
+        event.preventDefault();
+        var url = $(this).attr('data-load');
+        $.ajax({
+            url: Page_Loading_File()+url,
+            type: 'GET',
+            dataType: 'html'
+        })
+        .done(function(data_html) {
+            data = JSON.parse($(data_html).filter('#json-data').val());
+
+
+            (data.page == 'home') ? $('#home_menu_').addClass('active') : $('#home_menu_').removeClass('active');
+            // (data.page == 'latest') ? $('#latest_menu_').addClass('active') : $('#latest_menu_').removeClass('active');
+            // (data.page == 'top') ? $('#top_menu_').addClass('active') : $('#top_menu_').removeClass('active');
+            // (data.page == 'trending') ? $('#trending_menu_').addClass('active') : $('#trending_menu_').removeClass('active');
+            // (data.page == 'category') ? $('#category_menu_').addClass('active') : $('#category_menu_').removeClass('active');
+            // (data.page == 'articles') ? $('#articles_menu_').addClass('active') : $('#articles_menu_').removeClass('active');
+
+            window.history.pushState({state:'new'},'', data.url );
+
+            $('#container_content').html(data_html);
+            $('meta[name=title]').attr('content', data.title);
+            $('meta[name=description]').attr('content', data.description);
+            $('meta[name=keywords]').attr('content', data.keyword);
+            $('title').text(data.title);
+            document.title = decodeHtml( data.title );
+            window.title = decodeHtml( data.title );
+            document.getElementsByTagName('title')[0].innerHTML = decodeHtml( data.title );
+
+            var main_container_class = 'main-content ';
+            if(data.page == 'login' || data.page == 'terms' || data.page == 'contact_us' || data.page == 'steps' ){
+                $('.home_footer').hide();
+                $('.ask_footer').show();
+            }else{
+                $('.home_footer').show();
+                $('.ask_footer').hide();
+            }
+            if( data.page == 'timeline' || data.page == 'search' || data.page == 'trending' || data.page == 'settings' ){
+                $('.home_footer').hide();
+                $('.ask_footer').hide();
+            }
+            // (data.page != 'login') ? main_container_class += ' container ' : main_container_class += ' welcome-page ';
+            // (data.page == 'watch') ? main_container_class += ' watch-container ' : main_container_class += ' ';
+            // (data.page == 'go_pro') ? main_container_class += ' p-relative ' : main_container_class += ' ';
+            // $('#main-container').attr('class',main_container_class);
+            // (data.page == 'messages') ? $('#header_ad_').attr('class','hidden') : $('#header_ad_').attr('class','ads-placment');
+            // (data.page == 'messages') ? $('#footer_ad_').attr('class','hidden') : $('#footer_ad_').attr('class','ads-placment');
+            // (data.page == 'watch') ? $('#header_change').attr('class','container watch-container') : $('#header_change').attr('class','container');
+            // (data.page == 'watch') ? $('#header_change_2').attr('class','container watch-container') : $('#header_change_2').attr('class','container');
+            // (data.page == 'watch') ? $('#header_change_3').attr('class','container watch-container') : $('#header_change_3').attr('class','container');
+
+            if( $('.modal-backdrop').length > 0 ){
+                $('.modal-backdrop').remove();
+            }
+
+            window.onpopstate = function(event) {
+                $(window).unbind('popstate');
+                window.location.href = document.location;
+            };
+
+            custom_footer_js(false);
+
+        })
+        .fail(function() {
+            if (typeof(getCookie('user_id')) == 'undefined') {
+                window.location.href = site_url+'/login';
+            }
+            else{
+                window.location.href = site_url+'/404';
+            }
+        })
+        .always(function() {
+            $("html, body").animate({ scrollTop: 0 }, 150);
+            $('#bar_loading').animate({width:"100%"}, 500).delay(300).fadeOut(300, function() {
+                $(this).width("0px");
+            });
+        });
+    });
+    custom_footer_js(true);
+    $(window).on("popstate", function (e) {
+        location.reload();
+    });
+	function getHashID() {
+    return $('.main_session').val();
+}
+
+	
+</script>

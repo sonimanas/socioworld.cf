@@ -1,0 +1,351 @@
+<div class="ask_post <?php if(IsQuestionPromoted( $data['QUESTION_DATA']->id)){ echo 'promoted';}?>" id="question-{{QUESTION id}}" data-id="{{QUESTION id}}">
+    <?php if(IsQuestionPromoted( $data['QUESTION_DATA']->id)){ ?>
+        <small class="promot_text"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2M12.19,5.5C11.3,5.5 10.59,5.68 10.05,6.04C9.5,6.4 9.22,7 9.27,7.69H11.24C11.24,7.41 11.34,7.2 11.5,7.06C11.7,6.92 11.92,6.85 12.19,6.85C12.5,6.85 12.77,6.93 12.95,7.11C13.13,7.28 13.22,7.5 13.22,7.8C13.22,8.08 13.14,8.33 13,8.54C12.83,8.76 12.62,8.94 12.36,9.08C11.84,9.4 11.5,9.68 11.29,9.92C11.1,10.16 11,10.5 11,11H13C13,10.72 13.05,10.5 13.14,10.32C13.23,10.15 13.4,10 13.66,9.85C14.12,9.64 14.5,9.36 14.79,9C15.08,8.63 15.23,8.24 15.23,7.8C15.23,7.1 14.96,6.54 14.42,6.12C13.88,5.71 13.13,5.5 12.19,5.5M11,12V14H13V12H11Z" /></svg> {{LANG Promoted for 24 hours}}</small>
+    <?php } ?>
+    <div class="ap_head" style="margin-bottom: 0px;">
+        <?php if (IS_LOGGED == true && ( (int)$data['QUESTION_DATA']->user_id === (int)$ask->user->id ) ){?>
+            <div class="post_option dropdown">
+                <button type="button" class="btn" data-display="static" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M16,12A2,2 0 0,1 18,10A2,2 0 0,1 20,12A2,2 0 0,1 18,14A2,2 0 0,1 16,12M10,12A2,2 0 0,1 12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12M4,12A2,2 0 0,1 6,10A2,2 0 0,1 8,12A2,2 0 0,1 6,14A2,2 0 0,1 4,12Z" /></svg>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <ul class="list-unstyled mb-0">
+                        <?php if( ( $data['QUESTION_DATA']->isowner == 1 || $ask->user->admin == 1 ) && ( $data['QUESTION_DATA']->ask_user_id > 0 && $data['QUESTION_DATA']->ask_question_id ) === false ) {?>
+                            <li><a href="javascript:void(0);" onclick="EditQuestion({{QUESTION id}},this,{{QUESTION is_anonymously}});" data-question="<?php echo strip_tags(preg_replace('~<a(.*?)</a>~Usi', '', $data['QUESTION_DATA']->question));?>">{{LANG Edit}}</a></li>
+                        <?php }?>
+                        <?php if($data['QUESTION_DATA']->isowner == 1 || $ask->user->admin == 1) {?>
+                            <li><a href="javascript:void(0);" onclick="DeleteQuestion({{QUESTION id}});">{{LANG Delete}}</a></li>
+                        <?php }?>
+
+                        <?php if( !( in_array('reply',$data['QUESTION_DATA']->post_type) && in_array('owner',$data['QUESTION_DATA']->post_type) ) ){ ?>
+
+                            <?php if( ($data['QUESTION_DATA']->isowner == 1 && (int)$ask->config->promote_question_cost > 0 ) || $ask->user->admin == 1) {?>
+                                <?php if(IsQuestionPromoted( $data['QUESTION_DATA']->id)){ ?>
+                                    <li><a href="javascript:void(0);" onclick="UnPromoteQuestion({{QUESTION id}});" id="promote_btn_{{QUESTION id}}">{{LANG UnPromote}}</a></li>
+                                <?php }else{ ?>
+                                    <li><a href="javascript:void(0);" onclick="PromoteQuestion({{QUESTION id}});" id="promote_btn_{{QUESTION id}}">{{LANG Promote}}</a></li>
+                                <?php } ?>
+                            <?php }?>
+                            <?php if($data['QUESTION_DATA']->isowner == 0 && !$ask->user->admin) {?>
+                                <?php if(IsQuestionReported($ask->user->id, $data['QUESTION_DATA']->id)){ ?>
+                                    <li><a href="javascript:void(0);" onclick="UnReportQuestion({{QUESTION id}});" id="report_btn_{{QUESTION id}}">{{LANG Unreport}}</a></li>
+                                <?php }else{ ?>
+                                    <li><a href="javascript:void(0);" onclick="ReportQuestion({{QUESTION id}});" id="report_btn_{{QUESTION id}}">{{LANG Report}}</a></li>
+                                <?php } ?>
+                            <?php }?>
+                            <?php if($data['QUESTION_DATA']->is_anonymously == 0){?>
+                                <li><a href="{{LINK post/}}{{QUESTION id}}" target="_blank">{{LANG Open in new tab}}</a></li>
+                            <?php } ?>
+
+                        <?php } ?>
+
+                    </ul>
+                </div>
+            </div>
+        <?php } ?>
+
+        <?php if( 0 === (int)$data['QUESTION_DATA']->is_anonymously ){?>
+
+            <div class="user_info">
+                <a href="{{LINK @}}{{QUESTION user_username}}" data-load="?link1=timeline&id={{QUESTION user_username}}" id="#{{QUESTION id}}">
+                    <img src="{{QUESTION user_avatar}}" alt="{{QUESTION user_full_name}} Avatar" />
+                    <span>{{QUESTION user_full_name}}</span>
+                    <?php if($ask->user->verified == 1) {   ?>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="verified-color feather feather-check-circle" title="Verified Page" data-toggle="tooltip"><path d="M23,12L20.56,9.22L20.9,5.54L17.29,4.72L15.4,1.54L12,3L8.6,1.54L6.71,4.72L3.1,5.53L3.44,9.21L1,12L3.44,14.78L3.1,18.47L6.71,19.29L8.6,22.47L12,21L15.4,22.46L17.29,19.28L20.9,18.46L20.56,14.78L23,12M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9L10,17Z"></path></svg>
+                        <?php } ?>
+                </a>
+
+                <?php if( $data['QUESTION_DATA']->type == 'photo_poll' && !in_array('reply',$data['QUESTION_DATA']->post_type) && !in_array('answer',$data['QUESTION_DATA']->post_type) ){?>
+                <span>&nbsp;{{LANG created a new poll.}} </span>
+                <?php } ?>
+
+                <?php if( $data['QUESTION_DATA']->ask_user_name !== '' && $data['QUESTION_DATA']->shared_user_id > 0 ){?>
+                    <span>&nbsp;{{LANG shared}} <b><a href="{{LINK @}}{{QUESTION ask_user_username}}" data-load="?link1=timeline&id={{QUESTION ask_user_username}}" style="color: #676767;">{{QUESTION ask_user_name}}'s</a></b> <a href="{{LINK post}}/{{QUESTION shared_question_id}}" data-load="?link1=timeline&id=null&postid={{QUESTION shared_question_id}}" style="color: #676767;">{{LANG question.}}</a></span>
+                <?php } ?>
+
+                <?php if( $data['QUESTION_DATA']->ask_user_name !== '' && $data['QUESTION_DATA']->ask_user_id > 0 && $data['QUESTION_DATA']->ask_question_id > 0 ){?>
+                    <span>&nbsp;{{LANG answered}} <b><a href="{{LINK @}}{{QUESTION ask_user_username}}" data-load="?link1=timeline&id={{QUESTION ask_user_username}}" style="color: #676767;">{{QUESTION ask_user_name}}'s</a></b> <a href="{{LINK post}}/{{QUESTION ask_question_id}}" data-load="?link1=timeline&id=null&postid={{QUESTION ask_question_id}}" style="color: #676767;">{{LANG question.}}</a></span>
+                <?php } ?>
+
+                <?php if( $data['QUESTION_DATA']->ask_user_name !== '' && $data['QUESTION_DATA']->ask_user_id > 0 && $data['QUESTION_DATA']->ask_question_id == 0 ){?>
+                <span>&nbsp;{{LANG asked}} <b><a href="{{LINK @}}{{QUESTION ask_user_username}}" data-load="?link1=timeline&id={{QUESTION ask_user_username}}" style="color: #676767;">{{QUESTION ask_user_name}}</a></b> </span>
+                <?php } ?>
+
+                <span class="ajax-time question-time" title="<?php echo date('c',$data['QUESTION_DATA']->time); ?>">
+                    <?php echo Time_Elapsed_String($data['QUESTION_DATA']->time);?>
+                </span>
+            </div>
+
+
+
+        <?php }else{ ?>
+
+            <?php if( (int)$data['QUESTION_DATA']->shared_user_id > 0 && (int)$data['QUESTION_DATA']->shared_question_id > 0 && 0 === (int)$data['QUESTION_DATA']->is_anonymously ){?>
+
+                <div class="user_info">
+                    <a href="{{LINK @}}{{QUESTION user_username}}" data-load="?link1=timeline&id={{QUESTION user_username}}" id="#{{QUESTION id}}">
+                        <img src="{{QUESTION user_avatar}}" alt="{{QUESTION user_full_name}} Avatar" />
+                        <span>{{QUESTION user_full_name}}</span>
+                    </a>
+                    <span>&nbsp;{{LANG shared}} {{LANG this}} <a href="{{LINK post}}/{{QUESTION shared_question_id}}" data-load="?link1=timeline&id=null&postid={{QUESTION shared_question_id}}" style="color: #676767;">{{LANG question.}}</a></span>
+                    <span class="ajax-time question-time" title="<?php echo date('c',$data['QUESTION_DATA']->time); ?>">
+                        <?php echo Time_Elapsed_String($data['QUESTION_DATA']->time);?>
+                    </span>
+                </div>
+
+            <?php }else{ ?>
+
+                <?php if( IsReplyQuestionOwner($data['QUESTION_DATA']) === false && 0 === (int)$data['QUESTION_DATA']->is_anonymously ){ ?>
+
+                    <div class="user_info">
+                        <a href="{{LINK @}}{{QUESTION user_username}}" data-load="?link1=timeline&id={{QUESTION user_username}}">
+                            <img src="{{QUESTION user_avatar}}" alt="{{QUESTION user_full_name}} Avatar" />
+                            <span>{{QUESTION user_full_name}}</span>
+                        </a>
+                        <span class="ajax-time question-time" title="<?php echo date('c',$data['QUESTION_DATA']->time); ?>">
+                            <?php echo Time_Elapsed_String($data['QUESTION_DATA']->time);?>
+                        </span>
+                    </div>
+
+                <?php }else if( $data['QUESTION_DATA']->ask_user_name !== '' && $data['QUESTION_DATA']->ask_user_id > 0 && $data['QUESTION_DATA']->ask_question_id > 0 ){?>
+
+                    <div class="user_info">
+                        <a href="{{LINK @}}{{QUESTION user_username}}" data-load="?link1=timeline&id={{QUESTION user_username}}" id="#{{QUESTION id}}">
+                            <img src="{{QUESTION user_avatar}}" alt="{{QUESTION user_full_name}} Avatar" />
+                            <span>{{QUESTION user_full_name}} {{LANG answered an anonymous question.}}</span>
+                        </a>
+                        <span class="ajax-time question-time" title="<?php echo date('c',$data['QUESTION_DATA']->time); ?>">
+                            <?php echo Time_Elapsed_String($data['QUESTION_DATA']->time);?>
+                        </span>
+                    </div>
+
+                <?php }else if( $data['QUESTION_DATA']->replay_user_id > 0 && $data['QUESTION_DATA']->replay_question_id > 0 ){?>
+
+                    <div class="user_info">
+                        <a href="{{LINK @}}{{QUESTION user_username}}" data-load="?link1=timeline&id={{QUESTION user_username}}" id="#{{QUESTION id}}">
+                            <img src="{{QUESTION user_avatar}}" alt="{{QUESTION user_full_name}} Avatar" />
+                            <span>{{QUESTION user_full_name}}</span>
+                        </a>
+                        <span class="ajax-time question-time" title="<?php echo date('c',$data['QUESTION_DATA']->time); ?>">
+                            <?php echo Time_Elapsed_String($data['QUESTION_DATA']->time);?>
+                        </span>
+                    </div>
+
+                <?php }else{ ?>
+
+                    <div class="user_info">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#666" d="M12,19.2C9.5,19.2 7.29,17.92 6,16C6.03,14 10,12.9 12,12.9C14,12.9 17.97,14 18,16C16.71,17.92 14.5,19.2 12,19.2M12,5A3,3 0 0,1 15,8A3,3 0 0,1 12,11A3,3 0 0,1 9,8A3,3 0 0,1 12,5M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2Z" /></svg>
+                        <span>{{LANG Anonymous}}</span>
+                        <span class="ajax-time question-time" title="<?php echo date('c',$data['QUESTION_DATA']->time); ?>">
+                            <?php echo Time_Elapsed_String($data['QUESTION_DATA']->time);?>
+                        </span>
+                    </div>
+
+                <?php } ?>
+
+            <?php } ?>
+
+        <?php } ?>
+    </div>
+
+    <?php
+        if( $data['QUESTION_DATA']->type == 'question' ){
+            echo LoadPage('timeline/question_type/question', ['QUESTION_DATA' => $data['QUESTION_DATA']]);
+            if(!empty($data['QUESTION_DATA']->postLink)) {
+        echo LoadPage('timeline/partials/fetched_url', ['QUESTION_DATA' => $data['QUESTION_DATA']]);
+    }
+        }else if( $data['QUESTION_DATA']->type == 'photo_poll' && $data['QUESTION_DATA']->replay_question_id == 0 ){
+            echo LoadPage('timeline/question_type/photo_poll', ['QUESTION_DATA' => $data['QUESTION_DATA']]);
+        }else if( $data['QUESTION_DATA']->type == 'photo_poll' && $data['QUESTION_DATA']->replay_question_id > 0 ){
+            echo LoadPage('timeline/question_type/question', ['QUESTION_DATA' => $data['QUESTION_DATA']]);
+        }
+    ?>
+
+    <div class="ap_foot">
+        <?php if (IS_LOGGED == true && ( $data['QUESTION_DATA']->type == 'question' || $data['QUESTION_DATA']->type == 'photo_poll' ) ) {?>
+
+            <?php
+             if( BtnAnswerItVisible( $data['QUESTION_DATA'] ) === true ){
+
+             //if(
+             //           (
+             //               false == $data['QUESTION_DATA']->isowner &&
+             //               false == UserCanComment($data['QUESTION_DATA']->user_id,$data['QUESTION_DATA']->ask_user_id, $data['QUESTION_DATA']->ask_question_id)
+             //           )
+             //){
+            ?>
+                <div class="answer_it">
+                    <button type="button" onclick="Ask_AnswerIt(this);" data-question-id="{{QUESTION id}}" class="btn u-btn-primary--air">
+                            {{LANG Answer It}}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512"><path fill="currentColor" d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z"/></svg>
+                    </button>
+                </div>
+            <?php } ?>
+
+            <?php
+            if( BtnReplyItVisible( $data['QUESTION_DATA'] ) === true ){
+            //if(UserCanComment($data['QUESTION_DATA']->user_id,$data['QUESTION_DATA']->ask_user_id, $data['QUESTION_DATA']->ask_question_id)){ ?>
+                <div class="answer_it">
+                    <button type="button" onclick="Ask_AnswerIt(this);" data-question-id="{{QUESTION id}}" class="btn u-btn-primary--air">
+                        {{LANG Reply}}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512"><path fill="currentColor" d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z"/></svg>
+                    </button>
+                </div>
+            <?php } ?>
+
+        <?php } ?>
+        <div class="post_action">
+            <?php if (IS_LOGGED == true) {?>
+                <?php if(IsQuestionLiked($ask->user->id, $data['QUESTION_DATA']->id)){ ?>
+                    <span class="btn stat-item like_question<?php if($data['QUESTION_DATA']->is_replay ){ echo '_replay';}?>" data-question-id="{{QUESTION id}}" data-user-id="{{ME id}}" data-like-user-id="{{QUESTION user_id}}" style="color: #f44336;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z" /></svg>                    </span>
+                    </span>
+                        <!-- <span class="like_text" data-question-id="{{QUESTION id}}" style="color: #0ca678;font-size: 13px;font-weight: bold;">{{LANG Liked}}</span> -->
+                <?php }else{ ?>
+                    <span class="btn stat-item like_question<?php if($data['QUESTION_DATA']->is_replay ){ echo 'Reply';}?>" data-question-id="{{QUESTION id}}" data-user-id="{{ME id}}" data-like-user-id="{{QUESTION user_id}}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z" /></svg>
+                    </span>
+                    <!-- <span class="like_text" data-question-id="{{QUESTION id}}" style="color: #616770;font-size: 13px;font-weight: bold;">{{LANG Like}}</span> -->
+                <?php } ?>
+
+                <span class="ques_lik_usrs user_like_question" data-question-id="{{QUESTION id}}">{{QUESTION like_count}}</span>
+            <?php } ?>
+
+            <?php if(!$data['QUESTION_DATA']->is_replay){ ?>
+
+                <?php if(IS_LOGGED == true && !in_array('reply',$data['QUESTION_DATA']->post_type)) {?>
+                <span class="btn stat-item share_question_btn" data-question-id="{{QUESTION id}}" title="{{LANG Share}}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M18,16.08C17.24,16.08 16.56,16.38 16.04,16.85L8.91,12.7C8.96,12.47 9,12.24 9,12C9,11.76 8.96,11.53 8.91,11.3L15.96,7.19C16.5,7.69 17.21,8 18,8A3,3 0 0,0 21,5A3,3 0 0,0 18,2A3,3 0 0,0 15,5C15,5.24 15.04,5.47 15.09,5.7L8.04,9.81C7.5,9.31 6.79,9 6,9A3,3 0 0,0 3,12A3,3 0 0,0 6,15C6.79,15 7.5,14.69 8.04,14.19L15.16,18.34C15.11,18.55 15.08,18.77 15.08,19C15.08,20.61 16.39,21.91 18,21.91C19.61,21.91 20.92,20.61 20.92,19A2.92,2.92 0 0,0 18,16.08Z" /></svg>
+                </span>
+
+                <div class="modal fade in question_share_modal matdialog" data-question-id="{{QUESTION id}}" role="dialog">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content modal-col-red">
+                            <div class="modal-body">
+
+                                <!-- <p class="copylink" data-question-id="{{QUESTION id}}">{{LANG Click on link to Copy}}</p> -->
+                                <input type="text" name="question_share_link" onfocus="this.select();" onmouseup="return false;"  class="question_share_link"  data-question-id="{{QUESTION id}}" placeholder="{{LINK post/}}{{QUESTION id}}" dir="auto" autocomplete="off" value="{{LINK post/}}{{QUESTION id}}" >
+                                <div class="question_share_container">
+                                    <?php if (IS_LOGGED == true) {?>
+                                        <?php
+                                         if(
+                                            (int)$data['QUESTION_DATA']->user_id !== (int)$ask->user->id
+                                            && $data['QUESTION_DATA']->is_anonymously == 0
+                                            && ( (int)$data['QUESTION_DATA']->ask_user_id > 0 && (int)$data['QUESTION_DATA']->ask_question_id > 0 )
+                                         ){?>
+                                            <span class="btn share_question" data-question-id="{{QUESTION id}}" data-uid="{{ME id}}" data-question-uid="{{QUESTION user_id}}" title="{{LANG timeline}}" style="width: 300px;justify-content: left;display: block;width: 40px!important;float: left;">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#444" d="M5,2V8H3V2H5M3,22H5V16H3V22M6,12A2,2 0 0,0 4,10A2,2 0 0,0 2,12A2,2 0 0,0 4,14A2,2 0 0,0 6,12M22,7V17A2,2 0 0,1 20,19H11A2,2 0 0,1 9,17V14L7,12L9,10V7A2,2 0 0,1 11,5H20A2,2 0 0,1 22,7M17,13H12V15H17V13M19,9H12V11H19V9Z" /></svg>
+                                            </span>
+                                        <?php } ?>
+                                    <?php } ?>
+
+                                    <a rel="publisher" href="https://www.facebook.com/sharer/sharer.php?u={{LINK post/}}{{QUESTION id}}" target="_blank">
+                                        <span class="btn share_question_facebook" data-question-id="{{QUESTION id}}" data-uid="{{ME id}}" data-question-uid="{{QUESTION user_id}}" title="{{LANG Facebook}}" style="width: 300px;justify-content: left;display: block;width: 40px!important;float: left;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#3A559F" d="M13.397,20.997v-8.196h2.765l0.411-3.209h-3.176V7.548c0-0.926,0.258-1.56,1.587-1.56h1.684V3.127	C15.849,3.039,15.025,2.997,14.201,3c-2.444,0-4.122,1.492-4.122,4.231v2.355H7.332v3.209h2.753v8.202H13.397z" /></svg>
+                                        </span>
+                                    </a>
+
+                                    <a rel="publisher" href="https://plus.google.com/share?url={{LINK post/}}{{QUESTION id}}" target="_blank">
+                                        <span class="btn share_question_google" data-question-id="{{QUESTION id}}" data-uid="{{ME id}}" data-question-uid="{{QUESTION user_id}}" title="{{LANG Google}}" style="width: 300px;justify-content: left;display: block;width: 40px!important;float: left;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#DD4B39" d="M23,11H21V9H19V11H17V13H19V15H21V13H23M8,11V13.4H12C11.8,14.4 10.8,16.4 8,16.4C5.6,16.4 3.7,14.4 3.7,12C3.7,9.6 5.6,7.6 8,7.6C9.4,7.6 10.3,8.2 10.8,8.7L12.7,6.9C11.5,5.7 9.9,5 8,5C4.1,5 1,8.1 1,12C1,15.9 4.1,19 8,19C12,19 14.7,16.2 14.7,12.2C14.7,11.7 14.7,11.4 14.6,11H8Z" /></svg>
+                                        </span>
+                                    </a>
+
+                                    <a rel="publisher" href="https://twitter.com/intent/tweet?text={{LINK post/}}{{QUESTION id}}" target="_blank">
+                                        <span class="btn  share_question_twitter" data-question-id="{{QUESTION id}}" data-uid="{{ME id}}" data-question-uid="{{QUESTION user_id}}" title="{{LANG Twitter}}" style="width: 300px;justify-content: left;display: block;width: 40px!important;float: left;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#50ABF1" d="M22.46,6C21.69,6.35 20.86,6.58 20,6.69C20.88,6.16 21.56,5.32 21.88,4.31C21.05,4.81 20.13,5.16 19.16,5.36C18.37,4.5 17.26,4 16,4C13.65,4 11.73,5.92 11.73,8.29C11.73,8.63 11.77,8.96 11.84,9.27C8.28,9.09 5.11,7.38 3,4.79C2.63,5.42 2.42,6.16 2.42,6.94C2.42,8.43 3.17,9.75 4.33,10.5C3.62,10.5 2.96,10.3 2.38,10C2.38,10 2.38,10 2.38,10.03C2.38,12.11 3.86,13.85 5.82,14.24C5.46,14.34 5.08,14.39 4.69,14.39C4.42,14.39 4.15,14.36 3.89,14.31C4.43,16 6,17.26 7.89,17.29C6.43,18.45 4.58,19.13 2.56,19.13C2.22,19.13 1.88,19.11 1.54,19.07C3.44,20.29 5.7,21 8.12,21C16,21 20.33,14.46 20.33,8.79C20.33,8.6 20.33,8.42 20.32,8.23C21.16,7.63 21.88,6.87 22.46,6Z" /></svg>
+                                        </span>
+                                    </a>
+
+                                </div>
+                                <div class="share_question_alert" data-question-id="{{QUESTION id}}"></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php } ?>
+
+            <?php } ?>
+
+            <?php if( $data['QUESTION_DATA']->type == 'photo_poll' && ($data['QUESTION_DATA']->replay_user_id > 0 && $data['QUESTION_DATA']->replay_question_id > 0) === false ){?>
+                <span class="btn stat-item vote_itm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M17,17H15V13H17M13,17H11V7H13M9,17H7V10H9M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3Z" /></svg>
+                </span>
+                <?php if(($data['QUESTION_DATA']->ask_user_id > 0 && $data['QUESTION_DATA']->ask_question_id > 0) === false){?>
+                    <span class="ques_lik_usrs vote_count" data-question-id="{{QUESTION id}}"><?= QuestionVotes($data['QUESTION_DATA']->id);?> {{LANG Votes}}</span>
+                <?php }else{?>
+                    <span class="ques_lik_usrs vote_count" data-question-id="{{QUESTION id}}"><?= QuestionVotes($data['QUESTION_DATA']->ask_question_id);?> {{LANG Votes}}</span>
+                <?php }?>
+            <?php } ?>
+
+        </div>
+    </div>
+    <?php if( $data['QUESTION_DATA']->type == 'question' || $data['QUESTION_DATA']->type == 'photo_poll' ){?>
+        <div class="ab_answer <?php if ($ask->mode == 'all') { echo 'hidden'; }?>" id="ques_answer_it" data-question-id="{{QUESTION id}}">
+            <span class="show_answers " data-question-id="{{QUESTION id}}"></span>
+
+            <?php if( BtnAnswerItVisible( $data['QUESTION_DATA'] ) === false && BtnReplyItVisible( $data['QUESTION_DATA'] ) === true ){ ?>
+
+
+
+            <?php //if(UserCanComment($data['QUESTION_DATA']->user_id,$data['QUESTION_DATA']->ask_user_id, $data['QUESTION_DATA']->ask_question_id)){ ?>
+
+                <div class="replies">
+                    <?php if( $replies = GetQuestionReplies($data['QUESTION_DATA']->id) ){?>
+                         <?php
+                             foreach($replies as $replay){
+                                echo LoadPage('timeline/partials/question', ['QUESTION_DATA' => QuestionData($replay)]);
+                             }
+                         ?>
+                    <?php } ?>
+                </div>
+               
+
+                <form class="aba_form question-replay" method="POST" data-question-id="{{QUESTION id}}" data-question-uid="{{QUESTION user_id}}" data-ask-user-id="{{QUESTION ask_user_id}}" data-ask-question-id="{{QUESTION ask_question_id}}" data-uid="{{ME id}}" >
+                    <div class="question-replay-alert" data-question-id="{{QUESTION id}}"></div>
+                    <div class="aba_foot">
+                                       <textarea name="answer_text" id="answer_text{{QUESTION id}}" class="answer_text" placeholder="{{LANG Write your reply here.}}" dir="auto" rows="1" autocomplete="off"></textarea>
+                       <span data-toggle="dropdown" role="button" aria-expanded="false" style="margin: 0 10px;cursor: pointer;" onclick="load_ajax_emojiiAnswer('{{QUESTION id}}');" class="emo-comment2" >
+                                                 <svg fill="#009da0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" class="feather feather-user-plus">
+                                                    <path d="M0 0h24v24H0z" fill="none"/>
+                                                    <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
+                                                 </svg>
+                                                </span>
+                                                <ul class="dropdown-menu dropdown-menu-right emo-comment-container" id="wo_comm_emojis"></ul>
+                        <button name="button" type="submit" class="btn btn-primary">{{LANG Reply}}</button>
+                    </div>
+                     
+                </form>
+            
+
+            <?php }else{ ?>
+                
+                <form class="aba_form question-answer <?php if ($ask->mode == 'single') { echo 'hidden'; }?>"  method="POST" data-question-id="{{QUESTION id}}" data-question-uid="<?php if($data['QUESTION_DATA']->ask_user_id > 0){ echo $data['QUESTION_DATA']->ask_user_id; }else{ echo $data['QUESTION_DATA']->user_id; }?>" data-uid="{{ME id}}" >
+                    <div class="question-answer-alert" data-question-id="{{QUESTION id}}"></div>
+                    <div class="aba_foot">
+						
+                        <textarea name="answer_text" id="answer_text{{QUESTION id}}" class="answer_text" placeholder="{{LANG Write your answer here.}}" dir="auto" rows="1" autocomplete="off"></textarea>
+					<span data-toggle="dropdown" role="button" aria-expanded="false" style="margin: 0 10px;cursor: pointer;" onclick="load_ajax_emojiiAnswer('{{QUESTION id}}');" class="emo-comment2" >
+                                                 <svg fill="#009da0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" class="feather feather-user-plus">
+                                                    <path d="M0 0h24v24H0z" fill="none"/>
+                                                    <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
+                                                 </svg>
+                                                </span>
+                                                <ul class="dropdown-menu dropdown-menu-right emo-comment-container" id="wo_comm_emojis"></ul>
+                        <button name="button" type="submit" class="btn btn-primary">{{LANG Answer}}</button>
+                    </div>
+                     
+                </form>
+
+            <?php } ?>
+        </div>
+    <?php } ?>
+</div>
+<?php if (IS_LOGGED == false && $ask->mode == 'single') {?>
+<a class="lnk" data-load="?link1=login" href="{{LINK login}}">{{LANG Please login to ask, answer, share, like, and vote.}}</a>
+<?php } ?>
+<script>
+    
+ 
+</script>

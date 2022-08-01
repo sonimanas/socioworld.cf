@@ -1,0 +1,213 @@
+<div class="login_page">
+    <div class="login-page ask_steps <?php echo ($ask->step_type == 'avatar') ? 'slider-one-active' : 'slider-two-active';?>">
+        <div class="steps_header">
+            <div class="steps">
+                <div class="step step-one">
+                    <div class="liner"></div>
+                    <span>{{LANG avatar}}</span>
+                </div>
+                <div class="step step-two">
+                    <div class="liner"></div>
+                    <span>{{LANG info}}</span>
+                </div>
+            </div>
+            <div class="line">
+                <div class="line_sec"></div>
+                <div class="dot-move"></div>
+                <div class="dot zero"></div>
+                <div class="dot full"></div>
+            </div>
+        </div>
+        <div class="step_parent">
+            <div class="login-form step_one">
+                <h4>{{LANG add_profile_picture}}</h4>
+                <p>{{LANG show_unique_personality}}</p>
+                <div class="avatar-alert"></div>
+                <form class="avatar-form" method="POST">
+                    <div class="choose_photo mb-5">
+                        <span class="dt_selct_avatar hidden" id="avatar_preview" onclick="document.getElementById('avatar_img').click(); return false">
+
+                        </span>
+                        <span class="dt_selct_avatar" id="avatar_select" onclick="document.getElementById('avatar_img').click(); return false">
+                            <span><i class="fas fa-camera"></i></span>
+                        </span>
+                        <input type="file" id="avatar_img" class="d-none" accept="image/x-png, image/gif, image/jpeg" name="avatar">
+                    </div>
+                    <div class="progress hidden" id="img_upload_progress">
+                        <div id="img_upload_progress_bar" class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                    </div>
+                    <div class="login_signup_combo">
+                        <div class="login__">
+                            <button type="submit" class="btn btn-block btn-primary u-btn-primary transition-3d-hover" id="next_step">{{LANG next}}</button>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </form>
+            </div>
+            <div class="login-form step_two">
+                <h4>{{LANG about_you}}</h4>
+                <p>{{LANG share_your_information}}</p>
+                <div class="info-alert"></div>
+                <form class="info-form" method="POST">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="pp_mat_input">
+                                <input type="text" name="first_name" id="first_name" value="{{USER first_name}}" placeholder="{{LANG first_name}}" autofocus>
+                                <i class="fas fa-user-circle fab_w"></i>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="pp_mat_input">
+                                <input type="text" name="last_name" id="last_name" value="{{USER last_name}}" placeholder="{{LANG last_name}}">
+                                <i class="fas fa-user-circle fab_w"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="pp_mat_input">
+                                <select id="gender" name="gender">
+                                    <option value="male" selected>{{LANG male}}</option>
+                                    <option value="female">{{LANG female}}</option>
+                                </select>
+                                <i class="fas fa-male fab_w"></i>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="pp_mat_input">
+                                <select id="country" name="country">
+                                    {{COUNTRIES_LAYOUT}}
+                                </select>
+                                <i class="fas fa-globe-americas fab_w"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="login_signup_combo">
+                        <div class="login__">
+                            <button type="submit" class="btn btn-block btn-primary u-btn-primary transition-3d-hover">{{LANG finish}}</button>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                    <input type="hidden" name="hash_id" value="<?php echo CreateSession()?>">
+                    <input type="hidden" name="user_id" value="{{USER id}}">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function() {
+    "use strict";
+        $("#avatar_img").change(function() {
+            if(this.files[0].size>528385){
+                msgbox("{{LANG Image upload error}}.", "{{LANG img_size_not_greater}} {{CONFIG max_image_upload_size}}Kb");
+                return false;
+            }
+            if(this.files[0].type.indexOf("image")==-1){
+                msgbox("{{LANG Image upload error}}.", "{{LANG invalid_type_image}}");
+                return false;
+            }
+            $('#avatar_select').addClass('hidden');
+            $('#avatar_preview').removeClass('hidden');
+            if (this.files && this.files[0]) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#avatar_preview').css('background-image', 'url(' + e.target.result + ')');
+                }
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+
+        $('form.avatar-form').submit(function(e){
+            e.preventDefault();
+            let submit_button = $(this).find('button');
+            submit_button.text("{{LANG please_wait}}");
+            submit_button.attr("disabled",true);
+
+            let bar = $('#img_upload_progress');
+            let percent = $('#img_upload_progress_bar');
+
+            let formData = new FormData();
+                formData.append("user_id", '{{USER id}}');
+                formData.append("mode", 'step');
+                formData.append("hash_id", '<?php echo CreateSession()?>');
+                if (typeof($("#avatar_img")[0].files[0]) != 'undefined') {
+                    formData.append("avatar", $("#avatar_img")[0].files[0], $("#avatar_img")[0].files[0].value);
+                }
+
+                
+
+            bar.removeClass('hidden');
+            $.ajax({
+                xhr: function() {
+                    let xhr = new window.XMLHttpRequest();
+                        xhr.upload.addEventListener("progress", function(evt){
+                            if (evt.lengthComputable) {
+                                let percentComplete = evt.loaded / evt.total;
+                                    percentComplete = parseInt(percentComplete * 100);
+                                    //status.html( percentComplete + "%");
+                                    percent.width(percentComplete + '%');
+                                    percent.html(percentComplete + '%');
+                                    if (percentComplete === 100) {
+                                        bar.addClass('hidden');
+                                        percent.width('0%');
+                                        percent.html('0%');
+                                    }
+                            }
+                        }, false);
+                        return xhr;
+                },
+                url: '{{LINK aj/user/avatar}}?hash=' + $('.main_session').val(),
+                type: "POST",
+                async: true,
+                enctype: 'multipart/form-data',
+                processData: false,
+                contentType: false,
+                cache: false,
+                timeout: 60000,
+                dataType: false,
+                data: formData,
+                success: function(result) {
+                    if( result.status == 200 ){
+                        if(result.avatar_url !== ''){
+                            $('.small_avatar_container').attr('src',result.avatar_url);
+                        }
+                        submit_button.text("{{LANG next}}");
+                        submit_button.attr("disabled",false);
+                        $(".ask_steps").addClass("slider-two-active").removeClass("slider-one-active");
+                    }
+                }
+            });
+        });
+
+
+        let form = $('form.info-form');
+        form.ajaxForm({
+            url: '{{LINK aj/user/step_info}}?hash=' + $('.main_session').val(),
+            beforeSend: function() {
+                form.find('button').text("{{LANG please_wait}}");
+            },
+            success: function(data) {
+                if (data.status == 200) {
+                    $("#ajaxRedirect").attr("data-load", '');
+                    $("#ajaxRedirect").attr("data-load", '?link1=timeline&id={{USER username}}');
+                    $("#ajaxRedirect").click();
+                    $('.info-alert').html($('<div>',{
+                        class: "alert alert-success",
+                        html: data.message
+                    }));
+                    $('.info-alert').fadeIn(300);
+                }
+                else {
+                    $('.info-alert').html($('<div>',{
+                        class: "alert alert-danger",
+                        html: data.message
+                    }));
+                }
+                form.find('button').replaceWith('<button type="submit" class="btn btn-block btn-primary u-btn-primary transition-3d-hover">{{LANG finish}}</button>');
+            }
+        });
+
+
+    });
+</script>

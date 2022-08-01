@@ -1,0 +1,19 @@
+<tr class="setting-invitation" data-invitation="<?php echo $ask->invitation['id']; ?>">
+  <td >
+    <time><?php echo Time_Elapsed_String($ask->invitation["posted"]); ?></time>
+  </td>
+  <td>
+ <span><?php echo $ask->invitation['code']; ?></span>
+  </td>
+  <td class="request-status">
+    <?php if ($ask->invitation['status'] == 0) { ?>
+      <span class="label label-danger">Pending</span>
+    <?php }else{ ?>
+      <span class="label label-success">Invited</span>
+    <?php } ?>
+  </td>
+  <td>
+     <button class="btn btn-info waves-effect copy-invitation-url" id="<?php echo $ask->invitation['id']; ?>_copy" data-link="<?php echo $ask->invitation['url']; ?>">COPY LINK</button>
+     <button class="btn btn-danger waves-effect delete-admin-invitation" id="<?php echo $ask->invitation['id']; ?>">DELETE</button>
+  </td>
+</tr>

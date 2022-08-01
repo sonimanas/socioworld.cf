@@ -1,0 +1,250 @@
+<div class=" trend_tags search_head">
+        <div class="ask_head_circle-1"></div>
+        <div class="ask_head_circle-2"></div>
+        <div class="ask_head_circle-3"></div>
+    <div class="gray_wrapper">
+        <div class="container">
+            <h1>{{LANG advanced_search}}</h1>
+            <form method="post" id="search-form" method="POST" class="tren_search">
+                <div class="search-form-alert"></div>
+                <div>
+                    <input autocomplete="off" placeholder="{{LANG search_questions_and_users}}" value="{{SEARCH_TAG}}" id="keyword_search" name="keyword_search" data-id-search-tag="{{SEARCH_TAG}}" data-id-search-performed="no" autofocus >
+                    <i class="fas fa-search fab_w"></i>
+                    <span class="spinner hidden"></span>
+                </div>
+                <input type="hidden" name="hash_id" value="<?php echo CreateSession()?>">
+                <input type="hidden" name="user_id" value="{{ME id}}">
+            </form>
+        </div>
+    </div>
+</div>
+<div class="container small_container page_margin">
+    <div class="row">
+        <div class="col-md-7">
+            <!-- Upper Tabs -->
+            <ul class="nav nav-tabs ask_search_tabs" id="searchTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="question-tab" data-toggle="tab" href="#question" role="tab" aria-controls="question" aria-selected="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2M12.19,5.5C11.3,5.5 10.59,5.68 10.05,6.04C9.5,6.4 9.22,7 9.27,7.69H11.24C11.24,7.41 11.34,7.2 11.5,7.06C11.7,6.92 11.92,6.85 12.19,6.85C12.5,6.85 12.77,6.93 12.95,7.11C13.13,7.28 13.22,7.5 13.22,7.8C13.22,8.08 13.14,8.33 13,8.54C12.83,8.76 12.62,8.94 12.36,9.08C11.84,9.4 11.5,9.68 11.29,9.92C11.1,10.16 11,10.5 11,11H13C13,10.72 13.05,10.5 13.14,10.32C13.23,10.15 13.4,10 13.66,9.85C14.12,9.64 14.5,9.36 14.79,9C15.08,8.63 15.23,8.24 15.23,7.8C15.23,7.1 14.96,6.54 14.42,6.12C13.88,5.71 13.13,5.5 12.19,5.5M11,12V14H13V12H11Z"></path></svg>
+                        {{LANG questions}}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="user-tab" data-toggle="tab" href="#user" role="tab" aria-controls="user" aria-selected="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M16,13C15.71,13 15.38,13 15.03,13.05C16.19,13.89 17,15 17,16.5V19H23V16.5C23,14.17 18.33,13 16,13M8,13C5.67,13 1,14.17 1,16.5V19H15V16.5C15,14.17 10.33,13 8,13M8,11A3,3 0 0,0 11,8A3,3 0 0,0 8,5A3,3 0 0,0 5,8A3,3 0 0,0 8,11M16,11A3,3 0 0,0 19,8A3,3 0 0,0 16,5A3,3 0 0,0 13,8A3,3 0 0,0 16,11Z"></path></svg>
+                        {{LANG users}}
+                    </a>
+                </li>
+            </ul> <!-- End Upper Tabs -->
+
+            <!-- Upper Tabs Content -->
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="question" role="tabpanel" aria-labelledby="question-tab">
+                    <!-- Post Area  -->
+                    <div class="ask_post_block">
+                        <div class="not-data">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#444" d="M4,2A2,2 0 0,0 2,4V16A2,2 0 0,0 4,18H8V21A1,1 0 0,0 9,22H9.5V22C9.75,22 10,21.9 10.2,21.71L13.9,18H20A2,2 0 0,0 22,16V4C22,2.89 21.1,2 20,2H4M4,4H20V16H13.08L10,19.08V16H4V4M12.19,5.5C11.3,5.5 10.59,5.68 10.05,6.04C9.5,6.4 9.22,7 9.27,7.69C0.21,7.69 6.57,7.69 11.24,7.69C11.24,7.41 11.34,7.2 11.5,7.06C11.7,6.92 11.92,6.85 12.19,6.85C12.5,6.85 12.77,6.93 12.95,7.11C13.13,7.28 13.22,7.5 13.22,7.8C13.22,8.08 13.14,8.33 13,8.54C12.83,8.76 12.62,8.94 12.36,9.08C11.84,9.4 11.5,9.68 11.29,9.92C11.1,10.16 11,10.5 11,11H13C13,10.72 13.05,10.5 13.14,10.32C13.23,10.15 13.4,10 13.66,9.85C14.12,9.64 14.5,9.36 14.79,9C15.08,8.63 15.23,8.24 15.23,7.8C15.23,7.1 14.96,6.54 14.42,6.12C13.88,5.71 13.13,5.5 12.19,5.5M11,12V14H13V12H11Z"></path></svg> {{LANG No question found.}}
+                        </div>
+                    </div>
+                    <input type="hidden" id="searchtag" value="{{SEARCH_TAG}}">
+                    <input type="hidden" id="hashtag" value="{{SEARCH_TAG}}">
+                    <input type="hidden" id="loadmore_mode" value="search">
+                    <div class=" pointer hidden" id="load-more-posts" onclick="GetMoreQuestions();">
+                        <span class="btn btn-default btn_load_more">
+                            <i class="fa fa-chevron-circle-down progress-icon" data-icon="chevron-circle-down"></i> {{LANG Load more questions}}
+                        </span>
+                    </div>
+                    <!-- End Post Area  -->
+                </div>
+
+                <div class="tab-pane fade" id="user" role="tabpanel" aria-labelledby="user-tab">
+                    <!-- User Area  -->
+                    <div class="search_user_wrapper">
+                        <div class="not-data">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#444" d="M16,13C15.71,13 15.38,13 15.03,13.05C16.19,13.89 17,15 17,16.5V19H23V16.5C23,14.17 18.33,13 16,13M8,13C5.67,13 1,14.17 1,16.5V19H15V16.5C15,14.17 10.33,13 8,13M8,11A3,3 0 0,0 11,8A3,3 0 0,0 8,5A3,3 0 0,0 5,8A3,3 0 0,0 8,11M16,11A3,3 0 0,0 19,8A3,3 0 0,0 16,5A3,3 0 0,0 13,8A3,3 0 0,0 16,11Z"></path></svg>
+                             {{LANG No users found.}}
+                        </div>
+                    </div>
+                    <input type="hidden" id="profile-id" value="<?php echo $ask->user->id;?>">
+                    <div class=" pointer hidden" id="load-more-users" onclick="GetMoreUsers();">
+                        <span class="btn btn-default btn_load_more">
+                            <i class="fa fa-chevron-circle-down progress-icon" data-icon="chevron-circle-down"></i> {{LANG Load more users}}
+                        </span>
+                    </div>
+                    <!-- End User Area  -->
+                </div>
+            </div> <!-- End Upper Tabs Content -->
+        </div>
+
+        <!-- Sidebar  -->
+        <div class="col-md-5">
+            <div class="sidebar">
+                <?php
+                    foreach (GetSideBarAds() as $wo['sidebar-ad']) {
+                        echo LoadPage('ads/includes/sidebar-ad' , ['AD_DATA' => $wo['sidebar-ad']]);
+                }
+                ?>
+                <!-- Recent searches  -->
+                <section class="ask_side_widget">
+                    <div class="asw_head">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="23" height="23"><path fill="currentColor" d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" /></svg> {{LANG Recent searches}}
+                        <div class="clear_search" id="clear_recent_search" data-user-id="{{ME id}}">{{LANG Clear}}</div>
+                        <span class="spinner spinner_clear_recent_search hidden" style="float: right;margin-left: auto;"></span>
+                    </div>
+                    <div class="asw_body">
+                        <ul class="list-unstyled mb-0 side_trend_tags" id="recent_search_list">
+                            <?php echo LoadPage('search/recent_search' , ['RECENT_SEARCH' => $data['RECENT_SEARCH']]);?>
+                        </ul>
+                    </div>
+                </section>
+                <!-- End Recent searches  -->
+
+                <!-- Trending searches  -->
+                <section class="ask_side_widget">
+                    <div class="asw_head"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="23" height="23"><path fill="currentColor" d="M16,6L18.29,8.29L13.41,13.17L9.41,9.17L2,16.59L3.41,18L9.41,12L13.41,16L19.71,9.71L22,12V6H16Z" /></svg> {{LANG Trending searches}}</div>
+                    <div class="asw_body">
+                        <ul class="list-unstyled mb-0 side_trend_tags">
+                            <?php
+                            if(!empty($data['TREND_SEARCH'])){
+                                foreach($data['TREND_SEARCH'] as $key => $trend_search){?>
+                                <li>
+                                    <a href="{{LINK search}}/<?php echo $trend_search->keyword;?>" data-load="?link1=search&id=<?php echo $trend_search->keyword;?>">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                            <path fill="currentColor" d="M16,6L18.29,8.29L13.41,13.17L9.41,9.17L2,16.59L3.41,18L9.41,12L13.41,16L19.71,9.71L22,12V6H16Z"></path>
+                                        </svg>
+                                        <?php echo $trend_search->keyword;?>
+                                    </a>
+                                </li>
+                            <?php
+                                }
+                            }else{
+                            ?>
+                            <div class="not-data"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#444" d="M4,4H9.5C9.25,4.64 9.09,5.31 9.04,6H4V16H10V19.08L13.08,16H18V13.23L20,15.23V16A2,2 0 0,1 18,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22H9A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V6C2,4.89 2.9,4 4,4M15.5,2C18,2 20,4 20,6.5C20,7.38 19.75,8.2 19.31,8.89L22.41,12L21,13.39L17.89,10.31C17.2,10.75 16.38,11 15.5,11C13,11 11,9 11,6.5C11,4 13,2 15.5,2M15.5,4A2.5,2.5 0 0,0 13,6.5A2.5,2.5 0 0,0 15.5,9A2.5,2.5 0 0,0 18,6.5A2.5,2.5 0 0,0 15.5,4Z"></path></svg> {{LANG Not trending search found}}</div>                            <?php } ?>
+                        </ul>
+                    </div>
+                </section>
+                <!-- End Trending searches  -->
+
+                <!-- Sidebar Footer  -->
+                {{SIDEBAR_FOOTER}}
+                <!-- End Sidebar Footer  -->
+            </div>
+        </div> <!-- End Sidebar  -->
+    </div>
+</div>
+<!-- End Search Tags  -->
+
+<script>
+
+    $(function() {
+    "use strict";
+
+        $(document).on('click','#clear_recent_search',function(e){
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            let user_id = $(this).attr('data-user-id');
+            let spinner = $('.spinner_clear_recent_search');
+            let that = $(this);
+                that.hide();
+                spinner.removeClass('hidden');
+            $.ajax({
+                type: 'POST',
+                url: '{{LINK aj/question/clear_recent_search}}?hash=' + $('.main_session').val(),
+                data: {'user_id':user_id},
+                processData: true,
+                success: function(data) {
+                    if( data.status == 200 ){
+                        that.show();
+                        spinner.addClass('hidden');
+                        $('#recent_search_list').html('<div class="not-data" style="padding: 80px 50px;">{{LANG Not recent search found}}</div>');
+                    }
+                }
+            });
+        });
+        var form = $('form#search-form');
+        form.ajaxForm({
+            url: '{{LINK aj/question/search}}?hash=' + $('.main_session').val(),
+            beforeSend: function() {
+                form.find('.spinner').removeClass('hidden');
+            },
+            success: function(data) {
+                scrollToTop();
+                if (data.status == 200) {
+                    $('#searchtag').val($('#keyword_search').val());
+                    $('#hashtag').val($('#keyword_search').val());
+                    $('#keyword_search').val('');
+                    if(data.questions !== ''){
+                        $('#question-tab').addClass('active');
+                        $('#user-tab').removeClass('active');
+
+                        $('#question').addClass('active').addClass('show');
+                        $('#user').removeClass('active').removeClass('show');
+
+                        $('#load-more-posts').removeClass('hidden');
+                    }
+                    if(data.users !== ''){
+                        $('#question-tab').removeClass('active');
+                        $('#user-tab').addClass('active');
+
+                        $('#question').removeClass('active').removeClass('show');
+                        $('#user').addClass('active').addClass('show');
+                    }
+                    if(data.questions !== '' && data.users == ''){
+                        $('#question-tab').addClass('active');
+                        $('#user-tab').removeClass('active');
+
+                        $('#question').addClass('active').addClass('show');
+                        $('#user').removeClass('active').removeClass('show');
+                        $('#load-more-posts').removeClass('hidden');
+                    }
+                    if(data.questions == '' && data.users !== ''){
+                        $('#question-tab').removeClass('active');
+                        $('#user-tab').addClass('active');
+
+                        $('#question').removeClass('active').removeClass('show');
+                        $('#user').addClass('active').addClass('show');
+                    }
+
+                    if(data.questions == '' && data.users == ''){
+                        $('#question-tab').addClass('active');
+                        $('#user-tab').removeClass('active');
+
+                        $('#question').addClass('active').addClass('show');
+                        $('#user').removeClass('active').removeClass('show');
+                        $('.ask_post_block').html('<div class="not-data">{{LANG No question found.}}</div>');
+                        $('#load-more-posts').addClass('hidden');
+
+                    }
+
+                    if( data.questions !== '' ){
+                         $('.ask_post_block').html(data.questions);
+                         $('#load-more-posts').removeClass('hidden');
+                         if( $('.no_post').length > 0 ){
+                             $('.no_post').remove();
+                         }
+                    }
+
+                    if( data.users !== '' ){
+                        $('.search_user_wrapper').html(data.users);
+                        $('#load-more-users').removeClass('hidden');
+                    }
+
+                    if( data.recent_search_html !== '' ){
+                        $('#recent_search_list').html(data.recent_search_html);
+                    }
+
+                } else if (data.errors) {
+                    var errors = data.errors.join("<br>");
+                    $('.search-form-alert').html('<div class="alert alert-danger">' + errors + '</div>');
+                    $('.alert-danger').fadeIn('fast', function() {
+                        $(this).delay(2500).slideUp(500, function() {
+                            $(this).remove();
+                        });
+                    });
+
+                }
+                form.find('.spinner').addClass('hidden');
+            }
+        });
+    });
+</script>

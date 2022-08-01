@@ -1,0 +1,35 @@
+<?php $Percentages = GetVotePercentages($data['QUESTION_DATA']->choice1_id, $data['QUESTION_DATA']->choice2_id);?>
+<div class="ap_ques">
+    <h2>{{QUESTION oreinal_question}}</h2>
+    <p class="ask_ques_answered">{{QUESTION answer}}</p>
+</div>
+
+<div class="ap_poll">
+    <div class="choice c_1 fancybox" href="{{QUESTION choice1_url}}" style="background-image:url('{{QUESTION choice1_url}}')" data-choice-id="{{QUESTION choice1_id}}">
+        <div class="progress_bg">
+            <div class="progress_cont" data-choice-id="{{QUESTION choice1_id}}" data-value="<?php echo $Percentages[$data['QUESTION_DATA']->choice1_id];?>">
+                <svg width="90px" height="90px" viewBox="0 0 80 80"><path class="load-bg cir1" d="M40,10C57.351,10,71,23.649,71,40.5S57.351,71,40.5,71 S10,57.351,10,40.5S23.649,10,40.5,10z"></path><path id="load-line1" class="load-circle" style="stroke-dashoffset: 192.6168975830078px; stroke-dasharray: 192.6168975830078px;" d="M40,10C57.351,10,71,23.649,71,40.5S57.351,71,40.5,71 S10,57.351,10,40.5S23.649,10,40.5,10z" ></path></svg>
+            </div>
+        </div>
+    </div>
+    <div class="choice c_2 fancybox" href="{{QUESTION choice2_url}}"  style="background-image:url('{{QUESTION choice2_url}}')" data-choice-id="{{QUESTION choice2_id}}">
+        <div class="progress_bg">
+            <div class="progress_cont" data-choice-id="{{QUESTION choice2_id}}" data-value="<?php echo $Percentages[$data['QUESTION_DATA']->choice2_id];?>">
+                <svg width="90px" height="90px" viewBox="0 0 80 80"><path class="load-bg cir1" d="M40,10C57.351,10,71,23.649,71,40.5S57.351,71,40.5,71 S10,57.351,10,40.5S23.649,10,40.5,10z"></path><path id="load-line1" class="load-circle" style="stroke-dashoffset: 192.6168975830078px; stroke-dasharray: 192.6168975830078px;" d="M40,10C57.351,10,71,23.649,71,40.5S57.351,71,40.5,71 S10,57.351,10,40.5S23.649,10,40.5,10z" ></path></svg>
+            </div>
+        </div>
+    </div>
+    <div class="vs">{{LANG vs}}</div>
+</div>
+
+<?php if(IsQuestionVoted($data['QUESTION_DATA']->id) === false && IS_LOGGED && ($data['QUESTION_DATA']->ask_user_id > 0 && $data['QUESTION_DATA']->ask_question_id > 0) === false){?>
+<div class="row ask_photo_vote">
+    <div class="col-6">
+        <button class="btn btn-primary photo_choice_button" data-question-id="{{QUESTION id}}" data-choice-id="{{QUESTION choice1_id}}" data-other-choice-id="{{QUESTION choice2_id}}" name="choice1_button" type="button">{{LANG Vote}}</button>
+    </div>
+    <div class="col-6">
+        <button class="btn btn-primary photo_choice_button" data-question-id="{{QUESTION id}}" data-choice-id="{{QUESTION choice2_id}}" data-other-choice-id="{{QUESTION choice1_id}}" name="choice2_button" type="button">{{LANG Vote}}</button>
+    </div>
+</div>
+<br>
+<?php } ?>

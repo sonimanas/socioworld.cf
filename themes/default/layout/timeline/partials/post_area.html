@@ -1,0 +1,733 @@
+<?php if( !empty($data['QUESTIONS_DATA']) ) {?>
+    <div class="ask_post_block">
+        <?php
+            if( isset( $data['PROMOTED_DATA'][0] ) && $ask->mode == 'all' ){
+                echo LoadPage('timeline/partials/question' , ['QUESTION_DATA' => $data['PROMOTED_DATA'][0] ]);
+            }
+        ?>
+        <?php
+            foreach($data['QUESTIONS_DATA'] as $key => $question){
+                echo LoadPage('timeline/partials/question', ['QUESTION_DATA' => QuestionData($question)]);
+            }
+        ?>
+    </div>
+    <?php if($ask->mode == 'all'){ ?>
+        <div class=" pointer" id="load-more-posts" onclick="GetMoreQuestions();">
+            <span class="btn btn-default btn_load_more">
+                <i class="fa fa-chevron-circle-down progress-icon" data-icon="chevron-circle-down"></i> {{LANG Load more questions}}
+            </span>
+        </div>
+    <?php } ?>
+<?php } else { ?>
+    <div class="ask_post_block">
+        <?php
+            if( isset( $data['PROMOTED_DATA'][0] ) && $ask->mode == 'all' ){
+                echo LoadPage('timeline/partials/question' , ['QUESTION_DATA' => $data['PROMOTED_DATA'][0] ]);
+        }
+        ?>
+        <div class="ask_post">
+            <div class="no_post">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#444" d="M4,2A2,2 0 0,0 2,4V16A2,2 0 0,0 4,18H8V21A1,1 0 0,0 9,22H9.5V22C9.75,22 10,21.9 10.2,21.71L13.9,18H20A2,2 0 0,0 22,16V4C22,2.89 21.1,2 20,2H4M4,4H20V16H13.08L10,19.08V16H4V4M12.19,5.5C11.3,5.5 10.59,5.68 10.05,6.04C9.5,6.4 9.22,7 9.27,7.69C0.21,7.69 6.57,7.69 11.24,7.69C11.24,7.41 11.34,7.2 11.5,7.06C11.7,6.92 11.92,6.85 12.19,6.85C12.5,6.85 12.77,6.93 12.95,7.11C13.13,7.28 13.22,7.5 13.22,7.8C13.22,8.08 13.14,8.33 13,8.54C12.83,8.76 12.62,8.94 12.36,9.08C11.84,9.4 11.5,9.68 11.29,9.92C11.1,10.16 11,10.5 11,11H13C13,10.72 13.05,10.5 13.14,10.32C13.23,10.15 13.4,10 13.66,9.85C14.12,9.64 14.5,9.36 14.79,9C15.08,8.63 15.23,8.24 15.23,7.8C15.23,7.1 14.96,6.54 14.42,6.12C13.88,5.71 13.13,5.5 12.19,5.5M11,12V14H13V12H11Z" /></svg>
+                <?php if(IS_LOGGED == true && $ask->page == 'timeline' ) {?>
+                {{LANG You haven’t posted any questions yet}}
+                <?php }else if(IS_LOGGED == true && $ask->page == 'nearby-questions' ) {?>
+                {{LANG There is no near by questions yet}}
+                <?php }else if(IS_LOGGED == true && $ask->page == 'trending' ) {?>
+                {{LANG There is no trending questions yet}}
+                <?php }else{?>
+                {{USER name}} {{LANG haven’t posted any questions yet}}
+                <?php }?>
+            </div>
+        </div>
+        <div class="no-more-posts-to-show"></div>
+    </div>
+<?php } ?>
+
+<?php if(IS_LOGGED == true) {?>
+
+    <div id="ask_promote" class="modal fade in matdialog" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content modal-col-red">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{LANG Promote question}}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{{LANG Your question will be promoted for 24 hours for }} <b><?php echo GetCurrency($ask->config->ads_currency); ?>{{CONFIG promote_question_cost}}</b></p>
+                    <p>{{LANG Your balance is }} <b><?php echo GetCurrency($ask->config->ads_currency); ?><?php echo sprintf('%.2f',$ask->user->wallet);?></b></p>
+                    <div class="question-promote-alert"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect matbtn" data-dismiss="modal">{{LANG cancel}}</button>
+                    <?php if($ask->user->wallet > 0){?>
+                        <button type="button" class="btn btn-primary waves-effect question-promote-button matbtn" data-id="">{{LANG PROMOTE}}</button>
+                    <?php } else { ?>
+                       
+                            <a href="{{LINK wallet}}" class="btn btn-primary matbtn question-promote-wallet" data-load="?link1=wallet" data-dismiss="modal">{{LANG Wallet Payment Recharge}} </a>
+
+                      
+                        
+                        
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="ask_delete" class="modal fade in matdialog" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content modal-col-red">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{LANG Delete question}}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{{LANG Are you sure you want to continue? this action can't be undo}}</p>
+                    <div class="question-delete-alert"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect matbtn" data-dismiss="modal">{{LANG cancel}}</button>
+                    <button type="button" class="btn btn-primary waves-effect question-delete-button matbtn" data-id="">{{LANG DELETE}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="ask_edit_question" class="modal fade in matdialog" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content modal-col-red">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{LANG Edit question}}</h4>
+                </div>
+                <div class="modal-body ask_photo_poll">
+                    <div class="question-edit-alert"></div>
+                    <textarea name="question_edit_textarea" class="textarea" id="question_edit_textarea" placeholder="{{LANG What's going on? Ask anything..}}" rows="3" dir="auto" autocomplete="off"></textarea>
+                    <div class="media align-items-center">
+                        <label class="u-checkbox-switch">
+                            <input type="checkbox" class="u-checkbox-switch__input" id="is_anonymously_question_edit" name="is_anonymously_question_edit" checked="">
+                            <span class="u-checkbox-switch__slider"></span>
+                        </label>
+                        <label class="chk_body" for="is_anonymously_question_edit">
+                            <span>{{LANG Ask anonymously}}</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect matbtn" data-dismiss="modal">{{LANG cancel}}</button>
+                    <button type="button" class="btn btn-primary waves-effect matbtn question-edit-button" data-id="">{{LANG EDIT}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="ask_report_question" class="modal fade in matdialog" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content modal-col-red">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{LANG Report question}}</h4>
+                </div>
+                <div class="modal-body ask_photo_poll">
+                    <div class="question-report-alert"></div>
+                    <textarea name="question_report_textarea" class="textarea" id="question_report_textarea" placeholder="{{LANG Write here the reason of reporting.}}" rows="3" dir="auto" autocomplete="off"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect matbtn" data-dismiss="modal">{{LANG cancel}}</button>
+                    <button type="button" class="btn btn-primary waves-effect question-report-button matbtn" data-id="">{{LANG REPORT}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="ask_report_delete" class="modal fade in matdialog" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content modal-col-red">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{LANG Delete report}}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{{LANG Are you sure you want to continue? this action can't be undo}}</p>
+                    <div class="question-report-delete-alert"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect matbtn" data-dismiss="modal">{{LANG cancel}}</button>
+                    <button type="button" class="btn btn-primary waves-effect question-report-delete-button matbtn" data-id="" data-userid="">{{LANG DELETE}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="ask_likes_list" class="modal fade in matdialog" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content modal-col-red">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{LANG Likes}}</h4>
+                </div>
+                <div class="modal-body ask_side_widget">
+                    <div class="asw_body user_suggestions_container" id="question_user_likes_container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <?php if(isset($_GET['promoted'])){ ?>
+    <div class="modal fade in matdialog" id="prom" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <b style="color: #0ca678;font-size: 19px;">{{LANG Your post is now being promoted}}</b>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function() {
+    "use strict";
+
+            $(document).ready(function() {
+                $('#prom').modal('show');
+                setTimeout(function (){
+                    $('#prom').modal('hide');
+                },2000);
+            });
+
+        });
+    </script>
+    <?php } ?>
+
+    <script>
+     
+
+        $( document ).on( 'click', '.photo_choice_button', function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            let question_id = $(this).attr('data-question-id');
+            let choice_id = $(this).attr('data-choice-id');
+            let other_choice_id = $(this).attr('data-other-choice-id');
+            let btn = $(this);
+            //btn.text("{{LANG please_wait}}");stat-item
+            //$('.photo_choice_button[data-question-id="'+question_id+'"]').attr('disabled',true);
+            $('.photo_choice_button[data-question-id="'+question_id+'"]').hide();
+            $.ajax({
+                type: 'POST',
+                url: '{{LINK aj/question/vote}}?hash=' + $('.main_session').val(),
+                data: {'question_id': question_id,'choice_id': choice_id,'other_choice_id': other_choice_id,'user_id':'{{USER id}}'},
+                processData: true,
+                success: function(data) {
+                    if( data.status == 200 ){
+                        console.log(data.new_percentages);
+                        $('.vote_count[data-question-id="'+question_id+'"]').html(data.votes_count);
+                        if(typeof data.new_percentages !== "undefined"){
+                            Object.keys(data.new_percentages).forEach(function(k){
+                                console.log(k + ' - ' + data.new_percentages[k]);
+                                var new_value = data.new_percentages[k];
+                                var totalLength = $('.progress_cont[data-choice-id="'+k+'"] .load-circle')[0].getTotalLength();
+                                var offset = totalLength - ((new_value / 100) * totalLength);
+                                $('.progress_cont[data-choice-id="'+k+'"] .load-circle').css({'strokeDashoffset':offset});
+                                $('.progress_cont[data-choice-id="'+k+'"]').attr('data-value',new_value);
+
+                            });
+
+                        }
+
+
+
+
+                        $('.photo_choice_button[data-question-id="'+question_id+'"]').remove();
+                    }
+                }
+            });
+        });
+
+        $( document ).on( 'click', '.share_question_btn', function(e) {
+            let question_id = $(this).attr('data-question-id');
+            $('.question_share_modal[data-question-id="'+question_id+'"]').removeClass('hidden').modal('show');
+            $('.question_share_link[data-question-id="'+question_id+'"]').focus(function() {
+                $(this).select();
+                document.execCommand('copy');
+                //$('.copylink[data-question-id="'+question_id+'"]').text('{{LANG Link copied.}}');
+            });
+            e.preventDefault();
+            e.stopImmediatePropagation();
+        });
+        $( document ).on( 'submit', '.question-answer', function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            let that = $(this);
+            let uid = that.attr('data-uid');
+            let question_id = that.attr('data-question-id');
+            let question_uid = that.attr('data-question-uid');
+            let answer = that.find('.answer_text').val();
+            let btn = that.find('button[type="submit"]');
+                btn.text("{{LANG please_wait}}");
+                btn.attr('disabled',true);
+            $.ajax({
+                type: 'POST',
+                url: '{{LINK aj/question/answer}}?hash=' + $('.main_session').val(),
+                data: {'question_id': question_id,'user_id':uid,'question_user_id':question_uid,'answer':answer},
+                processData: true,
+                success: function(data) {
+                    if( data.status == 200 ){
+                        $('#answer_text'+question_id).val('');
+                       
+                        $('.show_answers[data-question-id="'+question_id+'"]').html(data.question_html);
+                        //$('.question-answer-alert[data-question-id="'+question_id+'"]').css({'color':'#0ca678'});
+                        //$('.question-answer-alert[data-question-id="'+question_id+'"]').html('<div class="alert alert-success" style="padding: 5px;font-size: 10px;margin-bottom: inherit;">' + data.message + '</div>');
+                        btn.attr('disabled',false);
+                        btn.text("{{LANG Answer}}");
+                        that.find(".emojionearea-editor").html('');
+
+                    }else if (data.errors) {
+                        $('.question-answer-alert[data-question-id="'+question_id+'"]').css({'color':'#616770'});
+                        var errors = data.errors.join("<br>");
+                        $('.question-answer-alert[data-question-id="'+question_id+'"]').html('<div class="alert alert-danger" style="padding: 5px;font-size: 10px;margin-bottom: inherit;">' + errors + '</div>');
+                        $('.alert-danger').fadeIn('fast', function() {
+                            $(this).delay(500).slideUp(500, function() {
+                                $(this).remove();
+                                btn.attr('disabled',false);
+                                btn.text("{{LANG Answer}}");
+                            });
+                        });
+                    }
+                    btn.replaceWith('<button name="button" type="submit" class="btn btn-primary">{{LANG Answer}}</button>');
+                }
+            });
+        });
+
+
+
+        $( document ).on( 'submit', '.question-replay', function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            let that = $(this);
+            let uid = that.attr('data-uid');
+            let question_id = that.attr('data-question-id');
+            let question_uid = that.attr('data-question-uid');
+
+            let ask_user_id = that.attr('data-ask-user-id');
+            let ask_question_id = that.attr('data-ask-question-id');
+
+            let answer = that.find('.answer_text').val();
+            let btn = that.find('button[type="submit"]');
+            btn.text("{{LANG please_wait}}");
+            btn.attr('disabled',true);
+            $.ajax({
+                type: 'POST',
+                url: '{{LINK aj/question/replay}}?hash=' + $('.main_session').val(),
+                data: {'question_id': question_id,'user_id':uid,'ask_user_id':ask_user_id,'ask_question_id':ask_question_id,'question_user_id':question_uid,'answer':answer},
+                processData: true,
+                success: function(data) {
+                    if( data.status == 200 ){
+                        if( data.question_html !== '' ){
+                            $('.replies').prepend(data.question_html);
+                            if( $('.not-data').length > 0 ){
+                                $('.not-data').remove();
+                            }
+                        }
+                       $('#answer_text'+question_id).val('');
+
+                        //$('.question-replay-alert[data-question-id="'+question_id+'"]').css({'color':'#0ca678'});
+                        //$('.question-replay-alert[data-question-id="'+question_id+'"]').html('<div class="alert alert-success" style="padding: 5px;font-size: 10px;margin-bottom: inherit;">' + data.message + '</div>');
+                        btn.attr('disabled',false);
+                        btn.text("{{LANG Reply}}");
+                        that.find(".answer_text").html('');
+                    }else if (data.errors) {
+                        $('.question-replay-alert[data-question-id="'+question_id+'"]').css({'color':'#616770'});
+                        var errors = data.errors.join("<br>");
+                        $('.question-replay-alert[data-question-id="'+question_id+'"]').html('<div class="alert alert-danger" style="padding: 5px;font-size: 10px;margin-bottom: inherit;">' + errors + '</div>');
+                        $('.alert-danger').fadeIn('fast', function() {
+                            $(this).delay(500).slideUp(500, function() {
+                                $(this).remove();
+                                btn.attr('disabled',false);
+                                btn.text("{{LANG Reply}}");
+                            });
+                        });
+                    }
+                    btn.replaceWith('<button name="button" type="submit" class="btn btn-primary">{{LANG Reply}}</button>');
+                }
+            });
+        });
+        $( document ).on( 'click', '.share_question', function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            let uid = $(this).attr('data-uid');
+            let question_id = $(this).attr('data-question-id');
+            let question_uid = $(this).attr('data-question-uid');
+            let that = $(this);
+            $.ajax({
+                type: 'POST',
+                url: '{{LINK aj/question/share}}?hash=' + $('.main_session').val(),
+                data: {'question_id': question_id,'user_id':uid,'question_user_id':question_uid},
+                processData: true,
+                success: function(data) {
+                    if( data.status == 200 ){
+                        $('.share_question_alert[data-question-id="'+question_id+'"]').css({'color':'#0ca678'});
+                        $('.share_question_alert[data-question-id="'+question_id+'"]').html('<div class="alert alert-success" style="padding: 5px;font-size: 10px;margin-bottom: inherit;">' + data.message + '</div>');
+                        $('.alert-success').fadeIn('fast', function() {
+                            $(this).delay(500).slideUp(500, function() {
+                                $(this).remove();
+                                $('.question_share_modal[data-question-id="'+question_id+'"]').addClass('hidden').modal('hide');
+                            });
+                        });
+                    }else if (data.errors) {
+                        $('.share_question_alert[data-question-id="'+question_id+'"]').css({'color':'#616770'});
+                        var errors = data.errors.join("<br>");
+                        $('.share_question_alert[data-question-id="'+question_id+'"]').html('<div class="alert alert-danger" style="padding: 5px;font-size: 10px;margin-bottom: inherit;">' + errors + '</div>');
+                        $('.alert-danger').fadeIn('fast', function() {
+                            $(this).delay(500).slideUp(500, function() {
+                                $(this).remove();
+                            });
+                        });
+                    }
+                }
+            });
+        });
+        $( document ).on( 'click', '.like_question', function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            let question_id = $(this).attr('data-question-id');
+            let user_id = $(this).attr('data-user-id');
+            let like_user_id = $(this).attr('data-like-user-id');
+            let that = $(this);
+            $.ajax({
+                type: 'POST',
+                url: '{{LINK aj/question/like}}?hash=' + $('.main_session').val(),
+                data: {'question_id': question_id,'user_id':user_id,'like_user_id':like_user_id},
+                processData: true,
+                success: function(data) {
+                    if( data.status == 200 ){
+                        if(data.likes_count > 0 ) {
+                            $('.user_like_question[data-question-id="' + question_id + '"]').html(data.likes_count);
+                        }else{
+                            $('.user_like_question[data-question-id="' + question_id + '"]').html('');
+                        }
+                        if( data.mode == 'like' ){
+                            that.css({'color':'#f44336'});
+                            $('.like_text[data-question-id="'+question_id+'"]').css({'color':'#f44336'});
+                            $('.like_text[data-question-id="'+question_id+'"]').html('{{LANG Liked}}');
+                        }else{
+                            that.css({'color':'#616770'});
+                            $('.like_text[data-question-id="'+question_id+'"]').css({'color':'#616770'});
+                            $('.like_text[data-question-id="'+question_id+'"]').html('{{LANG Like}}');
+                        }
+                    }
+                }
+            });
+        });
+        $( document ).on( 'click', '.like_question_replay', function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            let question_id = $(this).attr('data-question-id');
+            let user_id = $(this).attr('data-user-id');
+            let like_user_id = $(this).attr('data-like-user-id');
+            let that = $(this);
+            $.ajax({
+                type: 'POST',
+                url: '{{LINK aj/question/like_replay}}?hash=' + $('.main_session').val(),
+                data: {'question_id': question_id,'user_id':user_id,'like_user_id':like_user_id},
+                processData: true,
+                success: function(data) {
+                    if( data.status == 200 ){
+                        $('.user_like_question[data-question-id="'+question_id+'"]').html(data.likes_count);
+                        if( data.mode == 'like' ){
+                            that.css({'color':'#0ca678'});
+                        }else{
+                            that.css({'color':'#616770'});
+                        }
+                    }
+                }
+            });
+        });
+        $( document ).on( 'click', '.user_like_question', function(e) {
+            e.preventDefault();
+            let question_id = $(this).attr('data-question-id');
+            let user_id = $(this).attr('data-question-uid');
+            $.ajax({
+                type: 'POST',
+                url: '{{LINK aj/question/likes_list}}?hash=' + $('.main_session').val(),
+                data: {'question_id': question_id,'user_id':'{{USER id}}'},
+                processData: true,
+                success: function(data) {
+                    if( data.status == 200 ){
+                        if( data.html !== '' ){
+                            $('#question_user_likes_container').html(data.html);
+                            $('#ask_likes_list').modal('show');
+                        }
+                    }
+                }
+            });
+        });
+        function UnReportQuestion(id,userid){
+            $('#ask_report_delete').find('.question-report-delete-button').attr('data-id',id);
+            $('#ask_report_delete').find('.question-report-delete-button').attr('data-userid',userid);
+            $('#ask_report_delete').modal('show');
+        }
+        $( document ).on( 'click', '.question-report-delete-button', function(e) {
+            e.preventDefault();
+            let question_id = $(this).attr('data-id');
+                let btn = $(this);
+                btn.text("{{LANG please_wait}}");
+                btn.attr('disabled',true);
+            $.ajax({
+                type: 'POST',
+                url: '{{LINK aj/question/delete_report}}?hash=' + $('.main_session').val(),
+                data: {'question_id': question_id,'user_id':'{{USER id}}'},
+                processData: true,
+                success: function(data) {
+                    if( data.status == 200 ){
+                        btn.text("{{LANG Delete}}");
+                        $('.question-report-delete-alert').html('<div class="alert alert-success">' + data.message + '</div>');
+                        $('.alert-success').fadeIn('fast', function() {
+                            $(this).delay(500).slideUp(500, function() {
+                                $(this).remove();
+                                $('#ask_report_delete').modal('hide');
+                                $('#report_btn_'+question_id).text('{{LANG Report}}');
+                                $('#report_btn_'+question_id).attr('onclick','ReportQuestion('+question_id+');');
+                                btn.attr('disabled',false);
+                            });
+                        });
+                    }else if (data.errors) {
+                        var errors = data.errors.join("<br>");
+                        $('.question-report-delete-alert').html('<div class="alert alert-danger">' + errors + '</div>');
+                        $('.alert-danger').fadeIn('fast', function() {
+                            $(this).delay(500).slideUp(500, function() {
+                                $(this).remove();
+                            });
+                        });
+                        btn.text("{{LANG Delete}}");
+                        btn.attr('disabled',false);
+                    }
+                }
+            });
+        });
+        function ReportQuestion(id){
+            $('#ask_report_question').find('.question-report-button').attr('data-id',id);
+            $('#ask_report_question').find('#question_report_textarea').val('');
+            $('#ask_report_question').modal('show');
+        }
+        $( document ).on( 'click', '.question-report-button', function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            let question_id = $(this).attr('data-id');
+            let question_report_textarea = $('#question_report_textarea').val();
+            let btn = $(this);
+                btn.text("{{LANG please_wait}}");
+                btn.attr('disabled',true);
+            $.ajax({
+                type: 'POST',
+                url: '{{LINK aj/question/report}}?hash=' + $('.main_session').val(),
+                data: {'question_id': question_id,'report_text': question_report_textarea,'user_id':'{{USER id}}'},
+                processData: true,
+                success: function(data) {
+                    if( data.status == 200 ){
+                        btn.text("{{LANG REPORT}}");
+                        $('.question-report-alert').html('<div class="alert alert-success">' + data.message + '</div>');
+                        $('.alert-success').fadeIn('fast', function() {
+                            $(this).delay(500).slideUp(500, function() {
+                                $(this).remove();
+                                $('#ask_report_question').modal('hide');
+                                $('#report_btn_'+question_id).text('{{LANG Unreport}}');
+                                $('#report_btn_'+question_id).attr('onclick','UnReportQuestion('+question_id+');');
+                                btn.attr('disabled',false);
+                            });
+                        });
+                    }else if (data.errors) {
+                        var errors = data.errors.join("<br>");
+                        $('.question-report-alert').html('<div class="alert alert-danger">' + errors + '</div>');
+                        $('.alert-danger').fadeIn('fast', function() {
+                            $(this).delay(500).slideUp(500, function() {
+                                $(this).remove();
+                            });
+                        });
+                        btn.text("{{LANG REPORT}}");
+                        btn.attr('disabled',false);
+                    }
+                }
+            });
+        });
+        function EditQuestion(id,question,is_anonymously){
+            $('#ask_edit_question').find('.question-edit-button').attr('data-id',id);
+            var question_text = $(question).attr('data-question');
+            //$('#ask_edit_question').find('#question_edit_textarea').val(question_text.replace(/<br\s*\/?>/mg,"\n"));
+            $('#ask_edit_question').find('#question_edit_textarea').val(question_text);
+            $('#ask_edit_question').modal('show');
+            if(is_anonymously === 1){
+                $('#is_anonymously_question_edit').prop('checked', true).change();
+            }else{
+                $('#is_anonymously_question_edit').prop('checked', false).change();
+            }
+            $('#ask_edit_question').find('#question_edit_textarea').focus();
+        }
+        $( document ).on( 'click', '.question-edit-button', function(e){
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            let question_id = $(this).attr('data-id');
+            let question_edit_textarea = $('#question_edit_textarea').val();
+            let btn = $(this);
+                btn.text("{{LANG please_wait}}");
+                btn.attr('disabled',true);
+            $.ajax({
+                type: 'POST',
+                url: '{{LINK aj/question/edit}}?hash=' + $('.main_session').val(),
+                data: {'question_id': question_id,'question': question_edit_textarea,'is_anonymously': $('#is_anonymously_question_edit').is(':checked'),'user_id':'{{USER id}}'},
+                processData: true,
+                success: function(data) {
+                    if( data.status == 200 ){
+                        if( data.question_html !== '' ){
+                            $('#question-'+question_id).replaceWith(data.question_html);
+                        }
+                        btn.text("{{LANG Edit}}");
+                        $('.question-edit-alert').html('<div class="alert alert-success">' + data.message + '</div>');
+                        $('.alert-success').fadeIn('fast', function() {
+                            $(this).delay(500).slideUp(500, function() {
+                                $(this).remove();
+                                $('#ask_edit_question').modal('hide');
+                                btn.attr('disabled',false);
+                            });
+                        });
+                    }else if (data.errors) {
+                        var errors = data.errors.join("<br>");
+                        $('.question-edit-alert').html('<div class="alert alert-danger">' + errors + '</div>');
+                        $('.alert-danger').fadeIn('fast', function() {
+                            $(this).delay(500).slideUp(500, function() {
+                                $(this).remove();
+                            });
+                        });
+                        btn.text("{{LANG Edit}}");
+                        btn.attr('disabled',false);
+                    }
+                }
+            });
+        });
+        function DeleteQuestion(id){
+            $('#ask_delete').find('.question-delete-button').attr('data-id',id);
+            $('#ask_delete').modal('show');
+        }
+        $( document ).on( 'click', '.question-delete-button', function(e){
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            let question_id = $(this).attr('data-id');
+            let btn = $(this);
+                btn.text("{{LANG please_wait}}");
+                btn.attr('disabled',true);
+            $.ajax({
+                type: 'POST',
+                url: '{{LINK aj/question/delete}}?hash=' + $('.main_session').val(),
+                data: {'question_id': question_id,'user_id':'{{USER id}}'},
+                processData: true,
+                success: function(data) {
+                    if( data.status == 200 ){
+                        btn.text("{{LANG Delete}}");
+
+                        $('.question-delete-alert').html('<div class="alert alert-success">' + data.message + '</div>');
+                        $('.alert-success').fadeIn('fast', function() {
+                            $(this).delay(500).slideUp(500, function() {
+                                $(this).remove();
+                                $('#ask_delete').modal('hide');
+                                $('#question-'+question_id).remove();
+                                btn.attr('disabled',false);
+                            });
+                        });
+                    }else if (data.errors) {
+                        var errors = data.errors.join("<br>");
+                        $('.question-delete-alert').html('<div class="alert alert-danger">' + errors + '</div>');
+                        $('.alert-danger').fadeIn('fast', function() {
+                            $(this).delay(500).slideUp(500, function() {
+                                $(this).remove();
+                            });
+                        });
+                        btn.text("{{LANG Delete}}");
+                        btn.attr('disabled',false);
+                    }
+                }
+            });
+        });
+
+        function UnPromoteQuestion(question_id){
+            $.ajax({
+                type: 'POST',
+                url: '{{LINK aj/question/unpromote}}?hash=' + $('.main_session').val(),
+                data: {'question_id': question_id,'user_id':'{{USER id}}'},
+                processData: true,
+                success: function(data) {
+                    if( data.status == 200 ){
+                        $('#promote_btn_'+question_id).text('{{LANG Promote}}');
+                        $('#promote_btn_'+question_id).attr('onclick','PromoteQuestion('+question_id+');');
+                        $("#ajaxRedirect").attr("data-load", '');
+                        $("#ajaxRedirect").attr("data-load", '?link1=home');
+                        $("#ajaxRedirect").click();
+
+                    }else if (data.errors) {
+                        var errors = data.errors.join("<br>");
+                       
+                    }
+                }
+            });
+        }
+
+     /*   function WalletQuestionPromo(){
+
+        $( document ).on( 'click', '.question-promote-wallet', function(e) {           
+           var question_id = $(this).attr('data-id');    
+           window.location = '{{LINK wallet}}?question_pro='+question_id;    
+         });
+      }*/
+
+
+        function PromoteQuestion(id){
+            $('#ask_promote').find('.question-promote-wallet').attr('data-id',id);
+            $('#ask_promote').find('.question-promote-button').attr('data-id',id);
+            $('#ask_promote').modal('show');       
+        }
+
+
+        $( document ).on( 'click', '.question-promote-button', function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            var question_id = $(this).attr('data-id');
+                          let btn = $(this);
+             
+
+                btn.text("{{LANG please_wait}}");
+                btn.attr('disabled',true);
+            $.ajax({
+                type: 'POST',
+                url: '{{LINK aj/question/promote}}?hash=' + $('.main_session').val(),
+                data: {'question_id': question_id,'user_id':'{{USER id}}'},
+                processData: true,
+                success: function(data) {
+                    if( data.status == 200 ){
+                        btn.text("{{LANG Promote}}");
+                        $('.question-promote-alert').html('<div class="alert alert-success">' + data.message + '</div>');
+                        $('.alert-success').fadeIn('fast', function() {
+                            $(this).delay(500).slideUp(500, function() {
+                                $(this).remove();
+                                $('#ask_promote').modal('hide');
+                                $('#promote_btn_'+question_id).text('{{LANG UnPromote}}');
+                                $('#promote_btn_'+question_id).attr('onclick','UnPromoteQuestion('+question_id+');');
+                                btn.attr('disabled',false);
+                                window.location = '{{LINK }}';
+                                // $("#ajaxRedirect").attr("data-load", '');
+                                // $("#ajaxRedirect").attr("data-load", '?link1=home');
+                                // $("#ajaxRedirect").click();
+                            });
+                        });
+                    }else if (data.errors) {
+                        var errors = data.errors.join("<br>");
+                        $('.question-promote-alert').html('<div class="alert alert-danger">' + errors + '</div>');
+                        $('.alert-danger').fadeIn('fast', function() {
+                            $(this).delay(500).slideUp(500, function() {
+                                $(this).remove();
+                            });
+                        });
+                        btn.text("{{LANG Promote}}");
+                        btn.attr('disabled',false);
+                    }
+                }
+            });
+        });
+
+          
+
+    </script>
+
+    
+
+<?php } ?>

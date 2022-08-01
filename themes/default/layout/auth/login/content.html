@@ -1,0 +1,147 @@
+<div class="login_page">
+    <div class="login-page">
+        <div class="login-form">
+            <h4>{{LANG welcome_pack}}</h4>
+            <p>{{LANG login_to_manage_our_account}}</p>
+            <div class="login-alert"></div>
+			
+            <form class="login-form" method="POST">
+                <div class="pp_mat_input">
+                    <input type="text" name="username" id="username" placeholder="{{LANG username}}" value="" required autofocus>
+                    <i class="fas fa-user-circle fab_w"></i>
+                </div>
+                <div class="pp_mat_input">
+                    <input type="password" name="password" id="password" value="" placeholder="{{LANG password}}" required>
+                    <i class="fas fa-lock fab_w"></i>
+                </div>
+                <div class="forgot_password">
+                    <a data-load="?link1=forget_password" href="{{LINK forget_password}}">{{LANG forget_your_password}}</a>
+                </div>
+                <div class="login_signup_combo">
+                    <div class="login__">
+                        <button type="submit" class="btn btn-block btn-primary u-btn-primary transition-3d-hover">{{LANG login}}</button>
+                    </div>
+                    <div class="signup__">
+                        <?php if ($config['user_registration'] == 'on') : ?>
+                        <p>{{LANG dont_have_account}} <a class="dec" data-load="?link1=register" href="{{LINK register}}">{{LANG sign_up_reg}}</a></p>
+                         <?php endif; ?>
+
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <span class="u-divider u-divider--xs u-divider--text mb-4">{{LANG or}}</span>
+                </div>
+                <div class="d-flex social_login">
+                    <?php if ($ask->config->fb_login == 'on') { ?>
+                        <a class="btn btn-block btn-sm u-btn-facebook--air transition-3d-hover" href="{{LINK social-login.php?provider=Facebook}}">
+                            <span class="fab fa-facebook-square mr-1"></span> {{LANG facebook}}
+                        </a>
+                    <?php } ?>
+                    <?php if ($ask->config->plus_login == 'on') { ?>
+                        <a class="btn btn-block btn-sm u-btn-google--air transition-3d-hover" href="{{LINK social-login.php?provider=Google}}">
+                            <span class="fab fa-google mr-1"></span> {{LANG Google}}
+                        </a>
+                    <?php } ?>
+                    <?php if ($ask->config->tw_login == 'on') { ?>
+                        <a class="btn btn-block btn-sm u-btn-twitter--air transition-3d-hover" href="{{LINK social-login.php?provider=Twitter}}">
+                            <span class="fab fa-twitter mr-1"></span> {{LANG Twitter}}
+                        </a>
+                    <?php } ?>
+					<?php if ($ask->config->vkontakte_login == 'on') { ?>
+                        <a class="btn btn-block btn-sm u-btn-instagram--air transition-3d-hover" href="{{LINK social-login.php?provider=Vkontakte}}">
+                            <span class="fab fa-vk mr-1"></span> {{LANG vkontakte}}
+                        </a>
+                    <?php } ?>
+					<?php if ($ask->config->wowonder_login == 'on') { ?>			
+						<a class="btn btn-block btn-sm u-btn-wowonder u-btn-github--air transition-3d-hover" href="{{CONFIG wowonder_domain_uri}}/oauth?app_id={{CONFIG wowonder_app_ID}}">
+							<img src="{{CONFIG wowonder_img}}" alt="" width="16" height="16" class="mr-1">{{LANG wowonder}}
+						</a>
+					<?php } ?>
+                </div>
+                <div class="clear"></div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(function() {
+    "use strict";
+        $('form').submit(function(){
+            $(this).find('button[type=submit]').attr('disabled','disabled');
+        });
+        $('.button').on('click', function () {
+            if ($('#username').val() && $('#password').val()) {
+                $(this).val("{{LANG please_wait}}");
+                $('button[type=submit], input[type=submit]').prop('disabled',true);
+            }
+        });
+        $(document).on('click','#resend_confirmation_email',function(e){
+            e.preventDefault();
+            let email_code = $(this).attr('data-email-code');
+            let username = $(this).attr('data-username');
+            let text_link = $(this);
+                text_link.replaceWith("<b>{{LANG please_wait}}</b>");
+
+            $.ajax({
+                type: 'GET',
+                url: '{{LINK aj/resend}}',
+                data: {
+                    hash: $('.main_session').val(),
+                    id: email_code,
+                    u_id: username
+                },
+                success: function(data){
+                    if( data.status == 200 ){
+                        $('.login-alert').html($('<div>',{
+                            class: "alert alert-success",
+                            html: data.message
+                        }));
+                        $('.alert-success').fadeIn(300);
+                    }else{
+                        $('.login-alert').html($('<div>',{
+                            class: "alert alert-danger",
+                            html: data.message
+                        }));
+                    }
+                },
+                error: function (data) {
+                    $('.login-alert').html($('<div>',{
+                        class: "alert alert-danger",
+                        html: data.message
+                    }));
+                },
+            });
+        });
+        let form = $('form.login-form');
+        form.ajaxForm({
+            url: '{{LINK aj/login}}?hash=' + $('.main_session').val(),
+            dataTyep:'json',
+            beforeSend: function() {
+                form.find('button').text("{{LANG please_wait}}");
+            },
+            success: function(data) {
+                if (data.status == 200) {
+                    if( data.session_id !== '' ){
+                        window.location = '{{LINK session_login}}?sid='+data.session_id;
+                        return false;
+                    }
+                    $('.login-alert').html($('<div>',{
+                        class: "alert alert-success",
+                        html: data.message
+                    }));
+                    $('.alert-success').fadeIn(300);
+                } else if (data.status == 600) {
+                location.href = data.location;
+            }
+                else {
+                    $('.login-alert').html($('<div>',{
+                        class: "alert alert-danger",
+                        html: data.message
+                    }));
+                    form.find('button').replaceWith('<button type="submit" class="btn btn-block btn-primary u-btn-primary transition-3d-hover">'+"{{LANG login}}"+'</button>');
+                }
+            }
+        });
+    });
+</script>
